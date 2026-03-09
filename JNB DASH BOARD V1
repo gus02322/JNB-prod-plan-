@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -18,212 +19,164 @@
     --now-line: #ffcc00;
     --done-bg: #0d1a0d;
     --done-border: #1e3a1e;
-    --done-text: #2a5a2a;
     --font-mono: 'Share Tech Mono', monospace;
     --font-ui: 'Barlow Condensed', sans-serif;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: var(--font-ui); min-height: 100vh; overflow-x: hidden; }
-  #topbar {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-    background: #0a0c10ee; border-bottom: 1px solid var(--border);
-    backdrop-filter: blur(8px); display: flex; align-items: center;
-    height: 52px;
-  }
-  .logo {
-    padding: 0 20px; font-family: var(--font-ui); font-weight: 900;
-    font-size: 17px; letter-spacing: 3px; text-transform: uppercase;
-    color: var(--accent); border-right: 1px solid var(--border);
-    height: 100%; display: flex; align-items: center; white-space: nowrap;
-  }
-  #date-str {
-    padding: 0 16px; font-family: var(--font-mono); font-size: 12px;
-    color: var(--text-dim); border-right: 1px solid var(--border);
-    height: 100%; display: flex; align-items: center;
-  }
-  #clock {
-    font-family: var(--font-mono); font-size: 21px; color: var(--now-line);
-    letter-spacing: 2px; padding: 0 18px; border-right: 1px solid var(--border);
-    height: 100%; display: flex; align-items: center;
-  }
-  #status-bar { display: flex; flex: 1; height: 100%; }
-  .spill {
-    padding: 0 16px; border-right: 1px solid var(--border);
-    height: 100%; display: flex; flex-direction: column; justify-content: center;
-  }
-  .spill .lbl { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); }
-  .spill .val { font-family: var(--font-mono); font-size: 12px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px; }
-  .spill .val.cur { color: #ffaa44; }
-  .spill .val.nxt { color: #44ffaa; }
-  #nav-tabs { display: flex; height: 100%; margin-left: auto; }
-  .ntab {
-    padding: 0 22px; font-family: var(--font-ui); font-size: 11px; font-weight: 700;
-    letter-spacing: 2px; text-transform: uppercase; cursor: pointer;
-    border-left: 1px solid var(--border); height: 100%;
-    display: flex; align-items: center; color: var(--text-dim); transition: all 0.15s;
-    user-select: none;
-  }
-  .ntab:hover { color: var(--text); background: var(--surface); }
-  .ntab.active { color: var(--accent); background: #001820; }
-  .view { display: none; }
-  .view.active { display: flex; }
-  #timeline-view { padding-top: 52px; height: 100vh; overflow: hidden; }
-  #tl-scroll { flex: 1; overflow-y: auto; overflow-x: auto; position: relative; }
-  #tl-scroll::-webkit-scrollbar { width: 5px; height: 5px; }
-  #tl-scroll::-webkit-scrollbar-thumb { background: #2a3040; border-radius: 3px; }
-  #tl-inner { position: relative; }
-  #now-line-el {
-    position: absolute; left: 0; right: 0; height: 2px;
-    background: var(--now-line); z-index: 100; pointer-events: none;
-  }
-  #now-line-el::before {
-    content: 'NOW'; position: absolute; left: 54px; top: -9px;
-    font-family: var(--font-mono); font-size: 9px; color: var(--now-line);
-    background: var(--bg); padding: 0 4px; letter-spacing: 1px;
-  }
-  #now-line-el::after {
-    content: ''; position: absolute; left: 48px; top: -3px;
-    width: 8px; height: 8px; border-radius: 50%; background: var(--now-line);
-  }
-  .hour-tick { position: absolute; left: 0; right: 0; height: 1px; background: var(--border); z-index: 1; }
-  .hour-lbl {
-    position: absolute; left: 0; width: 54px;
-    font-family: var(--font-mono); font-size: 10px; color: var(--text-muted);
-    padding-right: 8px; text-align: right; z-index: 5; background: var(--bg);
-  }
-  .eblock {
-    position: absolute; border-radius: 3px; border-left: 3px solid;
-    overflow: hidden; cursor: default; transition: filter 0.15s; z-index: 10;
-    background: rgba(20,24,32,0.96);
-  }
-  .eblock:hover { z-index: 50; filter: brightness(1.3); }
-  .eblock.done { background: var(--done-bg) !important; border-color: var(--done-border) !important; opacity: 0.4; }
-  .eblock.past:not(.done) { opacity: 0.55; }
-  .eb { padding: 4px 6px; height: 100%; display: flex; flex-direction: column; justify-content: center; gap: 1px; position: relative; }
-  .eb-time { font-family: var(--font-mono); font-size: 10px; color: rgba(255,255,255,0.45); line-height: 1; }
-  .eb-type { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; line-height: 1; }
-  .eb-flight { font-family: var(--font-mono); font-size: 13px; line-height: 1; white-space: nowrap; }
-  .eb-airline { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.35); line-height: 1; }
-  .eb-acts { display: flex; gap: 3px; margin-top: 3px; flex-wrap: wrap; }
-  .btn-done {
-    font-family: var(--font-ui); font-size: 9px; font-weight: 700;
-    letter-spacing: 1px; text-transform: uppercase; padding: 2px 6px;
-    border-radius: 2px; border: 1px solid rgba(255,255,255,0.12);
-    background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.45);
-    cursor: pointer; transition: all 0.1s; white-space: nowrap;
-  }
-  .btn-done:hover { background: rgba(255,255,255,0.1); color: #fff; }
-  .eblock.done .btn-done { color: #1e3a1e; border-color: #1e3a1e; pointer-events: none; }
-  .btn-fr {
-    font-family: var(--font-ui); font-size: 9px; font-weight: 700;
-    letter-spacing: 1px; text-transform: uppercase; padding: 2px 6px;
-    border-radius: 2px; border: 1px solid rgba(0,212,255,0.2);
-    background: rgba(0,212,255,0.05); color: rgba(0,212,255,0.55);
-    cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 3px;
-    transition: all 0.1s; white-space: nowrap;
-  }
-  .btn-fr:hover { background: rgba(0,212,255,0.12); color: var(--accent); }
-  .btn-fr-live {
-    font-family: var(--font-ui); font-size: 9px; font-weight: 700;
-    letter-spacing: 1px; text-transform: uppercase; padding: 2px 6px;
-    border-radius: 2px; border: 1px solid rgba(255,170,0,0.3);
-    background: rgba(255,170,0,0.06); color: rgba(255,170,0,0.7);
-    cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 3px;
-    transition: all 0.1s; white-space: nowrap;
-  }
-  .btn-fr-live:hover { background: rgba(255,170,0,0.14); color: #ffcc44; }
-  .fr-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; display: inline-block; animation: frpulse 1.4s infinite; }
-  @keyframes frpulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-  .done-ck { position: absolute; top: 3px; right: 4px; font-size: 12px; opacity: 0.2; }
-  .type-eta .eb-type { color: #4dffb4; }
-  .type-seal .eb-type { color: #ffaa44; }
-  .type-truck .eb-type { color: #ff6b6b; }
-  .type-etd .eb-type { color: #66aaff; }
-  #right-panel {
-    width: 210px; min-width: 210px; background: var(--surface);
-    border-left: 1px solid var(--border); padding: 14px;
-    overflow-y: auto; display: flex; flex-direction: column; gap: 14px;
-    transition: width 0.25s ease, min-width 0.25s ease, padding 0.25s ease;
-    position: relative;
-  }
-  #right-panel.collapsed { width: 28px; min-width: 28px; padding: 0; overflow: hidden; }
-  #right-panel.collapsed .psec { opacity: 0; pointer-events: none; }
-  #panel-toggle {
-    position: absolute; top: 50%; left: 0; transform: translateY(-50%);
-    width: 14px; height: 48px; background: var(--border);
-    border-radius: 3px 0 0 3px; cursor: pointer; display: flex;
-    align-items: center; justify-content: center;
-    color: var(--text-dim); font-size: 9px;
-    transition: background 0.15s, color 0.15s;
-    user-select: none; z-index: 10;
-    border: 1px solid var(--border); border-right: none;
-  }
-  #panel-toggle:hover { background: var(--surface2); color: var(--accent); }
-  #right-panel:not(.collapsed) #panel-toggle { left: auto; right: -14px; border-radius: 0 3px 3px 0; border: 1px solid var(--border); border-left: none; }
-  #panel-toggle-icon { font-style: normal; font-size: 12px; }
-  .psec { }
-  .ptitle {
-    font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
-    color: var(--text-dim); margin-bottom: 7px; padding-bottom: 5px; border-bottom: 1px solid var(--border);
-  }
-  .progbar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; margin-top: 5px; }
-  .progfill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 1s; }
-  .progtxt { font-family: var(--font-mono); font-size: 10px; color: var(--text-dim); margin-top: 4px; }
-  .zrow { display: flex; align-items: center; gap: 7px; margin-bottom: 8px; }
-  .zrow label { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-dim); min-width: 40px; }
-  .zrow input[type=range] { flex: 1; accent-color: var(--accent); }
-  .zrow span { font-family: var(--font-mono); font-size: 10px; color: var(--text); min-width: 24px; text-align: right; }
-  .trow { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
-  .trow label { font-size: 10px; color: var(--text-dim); }
-  .tog { position: relative; width: 30px; height: 15px; }
-  .tog input { opacity: 0; width: 0; height: 0; }
-  .tog-sl { position: absolute; inset: 0; background: var(--border); border-radius: 8px; cursor: pointer; transition: 0.2s; }
-  .tog-sl::before { content: ''; position: absolute; left: 2px; top: 1.5px; width: 12px; height: 12px; border-radius: 50%; background: var(--text-dim); transition: 0.2s; }
-  .tog input:checked + .tog-sl { background: var(--accent); }
-  .tog input:checked + .tog-sl::before { transform: translateX(15px); background: #fff; }
-  .leg-item { display: flex; align-items: center; gap: 7px; margin-bottom: 4px; font-size: 10px; color: var(--text); }
-  .leg-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
-  #config-view {
-    display: block !important; padding-top: 68px; padding-left: 36px;
-    padding-right: 36px; padding-bottom: 40px; max-width: 1080px;
-    margin: 0 auto; overflow-y: auto;
-  }
-  #config-view:not(.active) { display: none !important; }
-  .csec { margin-bottom: 36px; }
-  .csec h2 {
-    font-size: 13px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
-    color: var(--accent); margin-bottom: 14px; padding-bottom: 7px; border-bottom: 1px solid var(--border);
-  }
-  .ctbl { width: 100%; border-collapse: collapse; font-size: 12px; }
-  .ctbl th {
-    text-align: left; padding: 7px 9px; background: var(--surface);
-    color: var(--text-dim); font-size: 9px; font-weight: 700; letter-spacing: 2px;
-    text-transform: uppercase; border-bottom: 1px solid var(--border);
-  }
-  .ctbl td { padding: 5px 9px; border-bottom: 1px solid var(--border); vertical-align: middle; color: var(--text); }
-  .ctbl tr:hover td { background: var(--surface); }
-  .ctbl input[type=text], .ctbl input[type=time], .ctbl select {
-    background: var(--bg); border: 1px solid var(--border); color: var(--text);
-    font-family: var(--font-mono); font-size: 11px; padding: 3px 6px;
-    border-radius: 2px; width: 100%;
-  }
-  .ctbl input[type=color] { width: 34px; height: 24px; border: 1px solid var(--border); background: none; cursor: pointer; border-radius: 2px; padding: 1px; }
-  .daycbs { display: flex; gap: 5px; flex-wrap: wrap; }
-  .dcb { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 8px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-dim); cursor: pointer; }
-  .dcb input[type=checkbox] { accent-color: var(--accent); cursor: pointer; }
-  .btn-add { background: #001a24; border: 1px solid var(--accent); color: var(--accent); font-family: var(--font-ui); font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 7px 16px; border-radius: 2px; cursor: pointer; transition: all 0.15s; margin-top: 9px; }
-  .btn-add:hover { background: #002a3a; }
-  .btn-del { background: #1a0005; border: 1px solid #5a0010; color: #ff4466; font-family: var(--font-ui); font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 3px 7px; border-radius: 2px; cursor: pointer; white-space: nowrap; }
-  .btn-del:hover { background: #2a0010; }
-  .drow { display: flex; align-items: center; gap: 14px; margin-bottom: 13px; }
-  .drow label { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-dim); min-width: 150px; }
-  .drow input[type=range] { flex: 1; max-width: 180px; accent-color: var(--accent); }
-  .drow span { font-family: var(--font-mono); font-size: 11px; color: var(--text); min-width: 40px; }
-  #toast { position: fixed; bottom: 20px; right: 20px; background: var(--surface); border: 1px solid var(--accent); color: var(--accent); font-family: var(--font-mono); font-size: 11px; padding: 8px 16px; border-radius: 3px; z-index: 999; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
-  #toast.show { opacity: 1; }
+
+/* TOPBAR */
+#topbar {
+position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+background: #0a0c10ee; border-bottom: 1px solid var(–border);
+backdrop-filter: blur(8px); display: flex; align-items: center; height: 52px;
+}
+.logo { padding: 0 20px; font-family: var(–font-ui); font-weight: 900; font-size: 17px; letter-spacing: 3px; text-transform: uppercase; color: var(–accent); border-right: 1px solid var(–border); height: 100%; display: flex; align-items: center; white-space: nowrap; }
+#date-str { padding: 0 16px; font-family: var(–font-mono); font-size: 12px; color: var(–text-dim); border-right: 1px solid var(–border); height: 100%; display: flex; align-items: center; }
+#clock { font-family: var(–font-mono); font-size: 21px; color: var(–now-line); letter-spacing: 2px; padding: 0 18px; border-right: 1px solid var(–border); height: 100%; display: flex; align-items: center; }
+#status-bar { display: flex; flex: 1; height: 100%; }
+.spill { padding: 0 16px; border-right: 1px solid var(–border); height: 100%; display: flex; flex-direction: column; justify-content: center; }
+.spill .lbl { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(–text-dim); }
+.spill .val { font-family: var(–font-mono); font-size: 12px; color: var(–text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px; }
+.spill .val.cur { color: #ffaa44; }
+.spill .val.nxt { color: #44ffaa; }
+#nav-tabs { display: flex; height: 100%; margin-left: auto; }
+.ntab { padding: 0 22px; font-family: var(–font-ui); font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; border-left: 1px solid var(–border); height: 100%; display: flex; align-items: center; color: var(–text-dim); transition: all 0.15s; user-select: none; }
+.ntab:hover { color: var(–text); background: var(–surface); }
+.ntab.active { color: var(–accent); background: #001820; }
+
+/* FILTER BAR */
+#filter-bar {
+position: fixed; top: 52px; left: 0; right: 0; z-index: 190;
+background: #0d0f14f0; border-bottom: 1px solid var(–border);
+backdrop-filter: blur(6px); display: flex; align-items: center;
+height: 36px; padding: 0 16px; gap: 6px;
+}
+.fbar-lbl { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(–text-dim); margin-right: 8px; }
+.fchk { display: flex; align-items: center; gap: 5px; cursor: pointer; padding: 4px 10px; border-radius: 3px; border: 1px solid var(–border); background: var(–surface); transition: all 0.15s; user-select: none; }
+.fchk:hover { border-color: rgba(255,255,255,0.2); }
+.fchk input { display: none; }
+.fchk-dot { width: 8px; height: 8px; border-radius: 50%; }
+.fchk span { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+.fchk.active { border-color: currentColor; background: rgba(255,255,255,0.04); }
+.fchk-eta { color: #4dffb4; }
+.fchk-seal { color: #ffaa44; }
+.fchk-truck { color: #ff6b6b; }
+.fchk-etd { color: #66aaff; }
+
+/* VIEWS */
+.view { display: none; }
+.view.active { display: flex; }
+#timeline-view { padding-top: 88px; height: 100vh; overflow: hidden; }
+#tl-scroll { flex: 1; overflow-y: auto; overflow-x: auto; position: relative; }
+#tl-scroll::-webkit-scrollbar { width: 5px; height: 5px; }
+#tl-scroll::-webkit-scrollbar-thumb { background: #2a3040; border-radius: 3px; }
+#tl-inner { position: relative; }
+
+/* NOW LINE */
+#now-line-el { position: absolute; left: 0; right: 0; height: 2px; background: var(–now-line); z-index: 100; pointer-events: none; }
+#now-line-el::before { content: ‘NOW’; position: absolute; left: 54px; top: -9px; font-family: var(–font-mono); font-size: 9px; color: var(–now-line); background: var(–bg); padding: 0 4px; letter-spacing: 1px; }
+#now-line-el::after { content: ‘’; position: absolute; left: 48px; top: -3px; width: 8px; height: 8px; border-radius: 50%; background: var(–now-line); }
+
+.hour-tick { position: absolute; left: 0; right: 0; height: 1px; background: var(–border); z-index: 1; }
+.hour-lbl { position: absolute; left: 0; width: 54px; font-family: var(–font-mono); font-size: 10px; color: var(–text-muted); padding-right: 8px; text-align: right; z-index: 5; background: var(–bg); }
+
+/* EVENT BLOCKS */
+.eblock { position: absolute; border-radius: 3px; border-left: 3px solid; overflow: hidden; cursor: default; transition: filter 0.15s; z-index: 10; background: rgba(20,24,32,0.96); }
+.eblock:hover { z-index: 50; filter: brightness(1.3); }
+.eblock.done { background: var(–done-bg) !important; border-color: var(–done-border) !important; opacity: 0.4; }
+.eblock.past:not(.done) { opacity: 0.55; }
+.eb { padding: 4px 6px; height: 100%; display: flex; flex-direction: column; justify-content: center; gap: 1px; position: relative; }
+.eb-time { font-family: var(–font-mono); font-size: 10px; color: rgba(255,255,255,0.45); line-height: 1; }
+.eb-type { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; line-height: 1; }
+.eb-flight { font-family: var(–font-mono); font-size: 13px; line-height: 1; white-space: nowrap; }
+.eb-airline { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.35); line-height: 1; }
+.eb-acts { display: flex; gap: 3px; margin-top: 3px; flex-wrap: wrap; }
+
+.btn-done { font-family: var(–font-ui); font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 2px 6px; border-radius: 2px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.45); cursor: pointer; transition: all 0.1s; white-space: nowrap; }
+.btn-done:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.eblock.done .btn-done { color: #1e3a1e; border-color: #1e3a1e; pointer-events: none; }
+
+/* FR24 buttons — only on ETA/ETD */
+.btn-fr24 { font-family: var(–font-ui); font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 2px 7px; border-radius: 2px; text-decoration: none; display: inline-flex; align-items: center; gap: 3px; transition: all 0.1s; white-space: nowrap; cursor: pointer; }
+.btn-fr24-live { border: 1px solid rgba(255,140,0,0.4); background: rgba(255,140,0,0.07); color: rgba(255,165,0,0.8); }
+.btn-fr24-live:hover { background: rgba(255,140,0,0.16); color: #ffcc44; }
+.btn-fr24-hist { border: 1px solid rgba(0,212,255,0.25); background: rgba(0,212,255,0.05); color: rgba(0,212,255,0.6); }
+.btn-fr24-hist:hover { background: rgba(0,212,255,0.12); color: var(–accent); }
+.fr-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; display: inline-block; animation: frpulse 1.4s infinite; }
+@keyframes frpulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.done-ck { position: absolute; top: 3px; right: 4px; font-size: 12px; opacity: 0.2; }
+
+.type-eta .eb-type { color: #4dffb4; }
+.type-seal .eb-type { color: #ffaa44; }
+.type-truck .eb-type { color: #ff6b6b; }
+.type-etd .eb-type { color: #66aaff; }
+
+/* RIGHT PANEL */
+#right-panel { width: 210px; min-width: 210px; background: var(–surface); border-left: 1px solid var(–border); padding: 14px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; transition: width 0.25s ease, min-width 0.25s ease, padding 0.25s ease; position: relative; }
+#right-panel.collapsed { width: 28px; min-width: 28px; padding: 0; overflow: hidden; }
+#right-panel.collapsed .psec { opacity: 0; pointer-events: none; }
+#panel-toggle { position: absolute; top: 50%; left: 0; transform: translateY(-50%); width: 14px; height: 48px; background: var(–border); border-radius: 3px 0 0 3px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(–text-dim); font-size: 9px; transition: background 0.15s, color 0.15s; user-select: none; z-index: 10; border: 1px solid var(–border); border-right: none; }
+#panel-toggle:hover { background: var(–surface2); color: var(–accent); }
+#right-panel:not(.collapsed) #panel-toggle { left: auto; right: -14px; border-radius: 0 3px 3px 0; border: 1px solid var(–border); border-left: none; }
+#panel-toggle-icon { font-style: normal; font-size: 12px; }
+.ptitle { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(–text-dim); margin-bottom: 7px; padding-bottom: 5px; border-bottom: 1px solid var(–border); }
+.progbar { height: 4px; background: var(–border); border-radius: 2px; overflow: hidden; margin-top: 5px; }
+.progfill { height: 100%; background: var(–accent); border-radius: 2px; transition: width 1s; }
+.progtxt { font-family: var(–font-mono); font-size: 10px; color: var(–text-dim); margin-top: 4px; }
+.zrow { display: flex; align-items: center; gap: 7px; margin-bottom: 8px; }
+.zrow label { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(–text-dim); min-width: 40px; }
+.zrow input[type=range] { flex: 1; accent-color: var(–accent); }
+.zrow span { font-family: var(–font-mono); font-size: 10px; color: var(–text); min-width: 24px; text-align: right; }
+.trow { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.trow label { font-size: 10px; color: var(–text-dim); }
+.tog { position: relative; width: 30px; height: 15px; }
+.tog input { opacity: 0; width: 0; height: 0; }
+.tog-sl { position: absolute; inset: 0; background: var(–border); border-radius: 8px; cursor: pointer; transition: 0.2s; }
+.tog-sl::before { content: ‘’; position: absolute; left: 2px; top: 1.5px; width: 12px; height: 12px; border-radius: 50%; background: var(–text-dim); transition: 0.2s; }
+.tog input:checked + .tog-sl { background: var(–accent); }
+.tog input:checked + .tog-sl::before { transform: translateX(15px); background: #fff; }
+.leg-item { display: flex; align-items: center; gap: 7px; margin-bottom: 4px; font-size: 10px; color: var(–text); }
+.leg-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+
+/* Export/Import buttons in panel */
+.btn-io { width: 100%; font-family: var(–font-ui); font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 6px 0; border-radius: 2px; cursor: pointer; margin-bottom: 5px; transition: all 0.15s; }
+.btn-export { background: #001a24; border: 1px solid var(–accent); color: var(–accent); }
+.btn-export:hover { background: #002a3a; }
+.btn-import { background: #1a1000; border: 1px solid #ffaa44; color: #ffaa44; }
+.btn-import:hover { background: #2a1a00; }
+
+/* CONFIG */
+#config-view { display: block !important; padding-top: 80px; padding-left: 36px; padding-right: 36px; padding-bottom: 40px; max-width: 1080px; margin: 0 auto; overflow-y: auto; }
+#config-view:not(.active) { display: none !important; }
+.csec { margin-bottom: 36px; }
+.csec h2 { font-size: 13px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(–accent); margin-bottom: 14px; padding-bottom: 7px; border-bottom: 1px solid var(–border); }
+.ctbl { width: 100%; border-collapse: collapse; font-size: 12px; }
+.ctbl th { text-align: left; padding: 7px 9px; background: var(–surface); color: var(–text-dim); font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid var(–border); }
+.ctbl td { padding: 5px 9px; border-bottom: 1px solid var(–border); vertical-align: middle; color: var(–text); }
+.ctbl tr:hover td { background: var(–surface); }
+.ctbl input[type=text], .ctbl input[type=time], .ctbl select { background: var(–bg); border: 1px solid var(–border); color: var(–text); font-family: var(–font-mono); font-size: 11px; padding: 3px 6px; border-radius: 2px; width: 100%; }
+.ctbl input[type=color] { width: 34px; height: 24px; border: 1px solid var(–border); background: none; cursor: pointer; border-radius: 2px; padding: 1px; }
+.daycbs { display: flex; gap: 5px; flex-wrap: wrap; }
+.dcb { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 8px; letter-spacing: 1px; text-transform: uppercase; color: var(–text-dim); cursor: pointer; }
+.dcb input[type=checkbox] { accent-color: var(–accent); cursor: pointer; }
+.btn-add { background: #001a24; border: 1px solid var(–accent); color: var(–accent); font-family: var(–font-ui); font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 7px 16px; border-radius: 2px; cursor: pointer; transition: all 0.15s; margin-top: 9px; }
+.btn-add:hover { background: #002a3a; }
+.btn-del { background: #1a0005; border: 1px solid #5a0010; color: #ff4466; font-family: var(–font-ui); font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 3px 7px; border-radius: 2px; cursor: pointer; white-space: nowrap; }
+.btn-del:hover { background: #2a0010; }
+.drow { display: flex; align-items: center; gap: 14px; margin-bottom: 13px; }
+.drow label { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(–text-dim); min-width: 150px; }
+.drow input[type=range] { flex: 1; max-width: 180px; accent-color: var(–accent); }
+.drow span { font-family: var(–font-mono); font-size: 11px; color: var(–text); min-width: 40px; }
+
+#toast { position: fixed; bottom: 20px; right: 20px; background: var(–surface); border: 1px solid var(–accent); color: var(–accent); font-family: var(–font-mono); font-size: 11px; padding: 8px 16px; border-radius: 3px; z-index: 999; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+#toast.show { opacity: 1; }
+#file-import { display: none; }
 </style>
+
 </head>
 <body>
+
 <div id="topbar">
   <div class="logo">⬡ JNB CATERING OPS</div>
   <div id="date-str"></div>
@@ -238,12 +191,39 @@
     <div class="ntab" onclick="switchView('config')">Config</div>
   </div>
 </div>
+
+<!-- FILTER BAR -->
+
+<div id="filter-bar">
+  <span class="fbar-lbl">Show</span>
+  <label class="fchk fchk-eta active" id="fchk-eta">
+    <input type="checkbox" checked onchange="toggleFilter('eta',this.checked)">
+    <span class="fchk-dot" style="background:#4dffb4"></span>
+    <span>ETA</span>
+  </label>
+  <label class="fchk fchk-etd active" id="fchk-etd">
+    <input type="checkbox" checked onchange="toggleFilter('etd',this.checked)">
+    <span class="fchk-dot" style="background:#66aaff"></span>
+    <span>ETD</span>
+  </label>
+  <label class="fchk fchk-seal active" id="fchk-seal">
+    <input type="checkbox" checked onchange="toggleFilter('seal',this.checked)">
+    <span class="fchk-dot" style="background:#ffaa44"></span>
+    <span>Sealing</span>
+  </label>
+  <label class="fchk fchk-truck active" id="fchk-truck">
+    <input type="checkbox" checked onchange="toggleFilter('truck',this.checked)">
+    <span class="fchk-dot" style="background:#ff6b6b"></span>
+    <span>Truck Dep</span>
+  </label>
+</div>
+
 <div id="timeline-view" class="view active">
   <div id="tl-scroll">
     <div id="tl-inner"></div>
   </div>
   <div id="right-panel">
-    <div id="panel-toggle" onclick="togglePanel()" title="Réduire / Agrandir"><span id="panel-toggle-icon">◀</span></div>
+    <div id="panel-toggle" onclick="togglePanel()"><span id="panel-toggle-icon">◀</span></div>
     <div class="psec">
       <div class="ptitle">Day Progress</div>
       <div class="progbar"><div class="progfill" id="prog-fill" style="width:0%"></div></div>
@@ -268,8 +248,15 @@
         <span style="color:#66aaff;">●</span> ETD Departure
       </div>
     </div>
+    <div class="psec">
+      <div class="ptitle">Data Sync</div>
+      <button class="btn-io btn-export" onclick="exportData()">⬇ Export Config</button>
+      <button class="btn-io btn-import" onclick="document.getElementById('file-import').click()">⬆ Import Config</button>
+      <input type="file" id="file-import" accept=".json" onchange="importData(this)">
+    </div>
   </div>
 </div>
+
 <div id="config-view" class="view">
   <div class="csec">
     <h2>Airlines</h2>
@@ -291,7 +278,9 @@
     <div class="drow"><label>Show Airline Name</label><label class="tog"><input type="checkbox" id="cfg-al" checked onchange="cfgApply()"><span class="tog-sl"></span></label></div>
   </div>
 </div>
+
 <div id="toast"></div>
+
 <script>
 const DEF_AIRLINES = [
   {id:'emirates',name:'Emirates',color:'#e31837'},
@@ -351,116 +340,157 @@ const DEF_FLIGHTS = [
   {id:'f32',airline:'Air Austral',flight:'UU344',eta:'20:45',etd:'21:45',sealing:'19:30',truck:'20:15',days:['THU','SUN']},
   {id:'f33',airline:'Uganda',flight:'UR711',eta:'23:45',etd:'00:45',sealing:'21:15',truck:'22:00',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
 ];
-const ALLDAYS=['SUN','MON','TUE','WED','THU','FRI','SAT'];
-let airlines=[],flights=[],completions={},ds={blockH:72,zoom:3,showAl:true};
+
+const ALLDAYS = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+let airlines=[], flights=[], completions={}, ds={blockH:72,zoom:3,showAl:true};
+// active filters: which event types to show
+let activeFilters = {eta:true, etd:true, seal:true, truck:true};
+
 function todayKey(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
+
 function loadData(){
-  const a=localStorage.getItem('cop_airlines');airlines=a?JSON.parse(a):JSON.parse(JSON.stringify(DEF_AIRLINES));
-  const f=localStorage.getItem('cop_flights');flights=f?JSON.parse(f):JSON.parse(JSON.stringify(DEF_FLIGHTS));
-  const c=localStorage.getItem('cop_comp_'+todayKey());completions=c?JSON.parse(c):{};
-  const d=localStorage.getItem('cop_display');if(d)ds={...ds,...JSON.parse(d)};
+  const a=localStorage.getItem('cop_airlines'); airlines=a?JSON.parse(a):JSON.parse(JSON.stringify(DEF_AIRLINES));
+  const f=localStorage.getItem('cop_flights'); flights=f?JSON.parse(f):JSON.parse(JSON.stringify(DEF_FLIGHTS));
+  const c=localStorage.getItem('cop_comp_'+todayKey()); completions=c?JSON.parse(c):{};
+  const d=localStorage.getItem('cop_display'); if(d) ds={...ds,...JSON.parse(d)};
+  const fi=localStorage.getItem('cop_filters'); if(fi) activeFilters={...activeFilters,...JSON.parse(fi)};
 }
 function saveData(){
   localStorage.setItem('cop_airlines',JSON.stringify(airlines));
   localStorage.setItem('cop_flights',JSON.stringify(flights));
   localStorage.setItem('cop_comp_'+todayKey(),JSON.stringify(completions));
   localStorage.setItem('cop_display',JSON.stringify(ds));
+  localStorage.setItem('cop_filters',JSON.stringify(activeFilters));
 }
+
 function getColor(name){const a=airlines.find(x=>x.name.toLowerCase()===name.toLowerCase());return a?a.color:'#4466aa';}
 function t2m(t){if(!t)return-1;const[h,m]=t.split(':').map(Number);return h*60+m;}
 function nowMins(){const n=new Date();return n.getHours()*60+n.getMinutes()+n.getSeconds()/60;}
 function todayDay(){return ALLDAYS[new Date().getDay()];}
+
 function todayEvents(){
-  const day=todayDay(),evs=[];
+  const day=todayDay(), evs=[];
   for(const f of flights){
-    if(!f.days.includes(day))continue;
-    if(f.sealing)evs.push({key:f.id+'_sl',time:f.sealing,lbl:'Sealing',flight:f.flight,airline:f.airline,tc:'type-seal',fr:false});
-    if(f.truck)evs.push({key:f.id+'_tr',time:f.truck,lbl:'Truck Dep',flight:f.flight,airline:f.airline,tc:'type-truck',fr:false});
-    if(f.eta)evs.push({key:f.id+'_et',time:f.eta,lbl:'ETA',flight:f.flight,airline:f.airline,tc:'type-eta',fr:true});
-    if(f.etd)evs.push({key:f.id+'_ed',time:f.etd,lbl:'ETD',flight:f.flight,airline:f.airline,tc:'type-etd',fr:true});
+    if(!f.days.includes(day)) continue;
+    if(f.sealing && activeFilters.seal) evs.push({key:f.id+'_sl',time:f.sealing,type:'seal',lbl:'Sealing',flight:f.flight,airline:f.airline,tc:'type-seal'});
+    if(f.truck && activeFilters.truck) evs.push({key:f.id+'_tr',time:f.truck,type:'truck',lbl:'Truck Dep',flight:f.flight,airline:f.airline,tc:'type-truck'});
+    if(f.eta && activeFilters.eta) evs.push({key:f.id+'_et',time:f.eta,type:'eta',lbl:'ETA',flight:f.flight,airline:f.airline,tc:'type-eta'});
+    if(f.etd && activeFilters.etd) evs.push({key:f.id+'_ed',time:f.etd,type:'etd',lbl:'ETD',flight:f.flight,airline:f.airline,tc:'type-etd'});
   }
   evs.sort((a,b)=>t2m(a.time)-t2m(b.time));
   return evs;
 }
+
+// Build FR24 links — only for ETA and ETD
+// Uses flightradar24.com/data/flights/XX000 for history
+// Uses flightradar24.com/XX000 for live tracking
+function makeFR24Btns(flight, type){
+  if(type !== 'eta' && type !== 'etd') return '';
+  const code = flight.replace(/\s+/g,'').toUpperCase();
+  const liveUrl = `https://www.flightradar24.com/${code}`;
+  const histUrl = `https://www.flightradar24.com/data/flights/${code.toLowerCase()}`;
+  return `<a class="btn-fr24 btn-fr24-live" href="${liveUrl}" target="_blank"><span class="fr-dot"></span>Live</a><a class="btn-fr24 btn-fr24-hist" href="${histUrl}" target="_blank">History</a>`;
+}
+
 function buildTimeline(){
   const inner=document.getElementById('tl-inner');
   inner.innerHTML='';
-  const pxpm=ds.zoom,bh=ds.blockH,total=24*60*pxpm;
+  const pxpm=ds.zoom, bh=ds.blockH, total=24*60*pxpm;
   inner.style.height=total+'px';
   inner.style.position='relative';
+
   for(let h=0;h<24;h++){
     const y=h*60*pxpm;
     const tick=document.createElement('div');
-    tick.className='hour-tick';tick.style.top=y+'px';
+    tick.className='hour-tick'; tick.style.top=y+'px';
     inner.appendChild(tick);
     const lbl=document.createElement('div');
-    lbl.className='hour-lbl';lbl.style.top=(y+2)+'px';
+    lbl.className='hour-lbl'; lbl.style.top=(y+2)+'px';
     lbl.textContent=String(h).padStart(2,'0')+':00';
     inner.appendChild(lbl);
   }
+
   const nl=document.createElement('div');
-  nl.id='now-line-el';nl.style.position='absolute';nl.style.left='0';nl.style.right='0';
+  nl.id='now-line-el'; nl.style.position='absolute'; nl.style.left='0'; nl.style.right='0';
   inner.appendChild(nl);
-  const evs=todayEvents(),nm=nowMins();
-  const BW=164,LANE=60,GAP=4,cols=[];
+
+  const evs=todayEvents(), nm=nowMins();
+  const BW=178, LANE=60, GAP=4;
+  const cols=[];
+
   function assignCol(mins){
     const endM=mins+bh/pxpm;
     for(let c=0;c<cols.length;c++){if(cols[c]<=mins){cols[c]=endM;return c;}}
-    cols.push(endM);return cols.length-1;
+    cols.push(endM); return cols.length-1;
   }
+
   for(const ev of evs){
-    const mins=t2m(ev.time);if(mins<0)continue;
+    const mins=t2m(ev.time); if(mins<0) continue;
     const col=assignCol(mins);
     const y=mins*pxpm;
     const color=getColor(ev.airline);
     const isDone=!!completions[ev.key];
     const isPast=mins<nm;
+
     const b=document.createElement('div');
     b.className=`eblock ${ev.tc}${isDone?' done':''}${isPast&&!isDone?' past':''}`;
     b.style.cssText=`left:${LANE+col*(BW+GAP)}px;top:${y}px;width:${BW}px;height:${bh}px;border-left-color:${color};`;
     b.dataset.key=ev.key;
-    const fc=ev.flight.toLowerCase();
-    const liveBtn=`<a class="btn-fr-live" href="https://www.flightradar24.com/${fc}" target="_blank"><span class="fr-dot"></span>Live</a>`;
-    const histBtn=ev.fr?`<a class="btn-fr" href="https://www.flightradar24.com/data/flights/${fc}" target="_blank">History</a>`:'';
+
+    const fr24Btns=makeFR24Btns(ev.flight, ev.type);
     const doneBtn=`<button class="btn-done" onclick="toggleDone('${ev.key}')">${isDone?'✓ Done':'Done'}</button>`;
     const alPart=ds.showAl?`<div class="eb-airline">${ev.airline}</div>`:'';
-    b.innerHTML=`<div class="eb"><div class="eb-time">${ev.time}</div><div class="eb-type">${ev.lbl}</div><div class="eb-flight">${ev.flight}</div>${alPart}<div class="eb-acts">${doneBtn}${liveBtn}${histBtn}</div>${isDone?'<div class="done-ck">✓</div>':''}</div>`;
+    b.innerHTML=`<div class="eb"><div class="eb-time">${ev.time}</div><div class="eb-type">${ev.lbl}</div><div class="eb-flight">${ev.flight}</div>${alPart}<div class="eb-acts">${doneBtn}${fr24Btns}</div>${isDone?'<div class="done-ck">✓</div>':''}</div>`;
     inner.appendChild(b);
   }
+
   inner.style.minWidth=`${LANE+(cols.length||1)*(BW+GAP)+20}px`;
-  updateNL();updateStatus(evs);updateProg(evs);updateLeg();
+  updateNL(); updateStatus(evs); updateProg(evs); updateLeg();
 }
+
 function updateNL(){const nl=document.getElementById('now-line-el');if(!nl)return;nl.style.top=(nowMins()*ds.zoom)+'px';}
+
 function updateStatus(evs){
-  const nm=nowMins();let cur=null,nxt=null;
+  const nm=nowMins(); let cur=null,nxt=null;
   for(const e of evs){const m=t2m(e.time);if(m<=nm)cur=e;else if(!nxt)nxt=e;}
   document.getElementById('cur-ev').textContent=cur?`${cur.time} ${cur.lbl} ${cur.flight}`:'—';
   document.getElementById('nxt-ev').textContent=nxt?`${nxt.time} ${nxt.lbl} ${nxt.flight}`:'None';
 }
+
 function updateProg(evs){
-  const tot=evs.length,done=evs.filter(e=>completions[e.key]).length;
+  const tot=evs.length, done=evs.filter(e=>completions[e.key]).length;
   const pct=tot?Math.round(done/tot*100):0;
   document.getElementById('prog-fill').style.width=pct+'%';
   document.getElementById('prog-txt').textContent=`${done} / ${tot} done`;
   document.getElementById('done-cnt').textContent=`${done} / ${tot}`;
 }
+
 function updateLeg(){
-  const leg=document.getElementById('leg');if(!leg)return;
+  const leg=document.getElementById('leg'); if(!leg) return;
   const used=new Set(todayEvents().map(e=>e.airline));
   leg.innerHTML='';
   for(const a of airlines){
-    if(!used.has(a.name))continue;
+    if(!used.has(a.name)) continue;
     const d=document.createElement('div');
     d.className='leg-item';
     d.innerHTML=`<div class="leg-dot" style="background:${a.color}"></div><span>${a.name}</span>`;
     leg.appendChild(d);
   }
 }
+
 function toggleDone(key){
   completions[key]=!completions[key];
-  if(!completions[key])delete completions[key];
-  saveData();buildTimeline();
+  if(!completions[key]) delete completions[key];
+  saveData(); buildTimeline();
 }
+
+function toggleFilter(type, checked){
+  activeFilters[type]=checked;
+  const el=document.getElementById('fchk-'+type);
+  if(el) el.classList.toggle('active', checked);
+  saveData(); buildTimeline();
+}
+
 function updateClock(){
   const n=new Date();
   const pad=v=>String(v).padStart(2,'0');
@@ -470,25 +500,30 @@ function updateClock(){
   document.getElementById('date-str').textContent=`${days[n.getDay()]} ${n.getDate()} ${mos[n.getMonth()]} ${n.getFullYear()}`;
   updateNL();
 }
+
 function switchView(v){
   document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
   document.querySelectorAll('.ntab').forEach(el=>el.classList.remove('active'));
   document.getElementById(v+'-view').classList.add('active');
   document.querySelectorAll('.ntab').forEach(el=>{if(el.textContent.toLowerCase()===v)el.classList.add('active');});
-  if(v==='config')renderConfig();
-  if(v==='timeline')buildTimeline();
+  // Hide/show filter bar
+  document.getElementById('filter-bar').style.display = v==='timeline'?'flex':'none';
+  if(v==='config') renderConfig();
+  if(v==='timeline') buildTimeline();
 }
+
 document.getElementById('zoom-sl').addEventListener('input',function(){
   document.getElementById('zoom-v').textContent=this.value+'x';
-  ds.zoom=parseFloat(this.value);saveData();buildTimeline();
+  ds.zoom=parseFloat(this.value); saveData(); buildTimeline();
 });
 document.getElementById('ht-sl').addEventListener('input',function(){
   document.getElementById('ht-v').textContent=this.value;
-  ds.blockH=parseInt(this.value);saveData();buildTimeline();
+  ds.blockH=parseInt(this.value); saveData(); buildTimeline();
 });
 document.getElementById('show-al').addEventListener('change',function(){
-  ds.showAl=this.checked;saveData();buildTimeline();
+  ds.showAl=this.checked; saveData(); buildTimeline();
 });
+
 function cfgApply(){
   const z=parseFloat(document.getElementById('cfg-zm').value);
   const h=parseInt(document.getElementById('cfg-ht').value);
@@ -496,27 +531,30 @@ function cfgApply(){
   document.getElementById('cfg-zm-v').textContent=z+'x';
   document.getElementById('cfg-ht-v').textContent=h+'px';
   ds={zoom:z,blockH:h,showAl:sa};
-  document.getElementById('zoom-sl').value=z;document.getElementById('zoom-v').textContent=z+'x';
-  document.getElementById('ht-sl').value=h;document.getElementById('ht-v').textContent=h;
+  document.getElementById('zoom-sl').value=z; document.getElementById('zoom-v').textContent=z+'x';
+  document.getElementById('ht-sl').value=h; document.getElementById('ht-v').textContent=h;
   document.getElementById('show-al').checked=sa;
-  saveData();buildTimeline();
+  saveData(); buildTimeline();
 }
+
 function renderConfig(){
-  renderAlTbl();renderFlTbl();
-  document.getElementById('cfg-zm').value=ds.zoom;document.getElementById('cfg-zm-v').textContent=ds.zoom+'x';
-  document.getElementById('cfg-ht').value=ds.blockH;document.getElementById('cfg-ht-v').textContent=ds.blockH+'px';
+  renderAlTbl(); renderFlTbl();
+  document.getElementById('cfg-zm').value=ds.zoom; document.getElementById('cfg-zm-v').textContent=ds.zoom+'x';
+  document.getElementById('cfg-ht').value=ds.blockH; document.getElementById('cfg-ht-v').textContent=ds.blockH+'px';
   document.getElementById('cfg-al').checked=ds.showAl;
 }
+
 function renderAlTbl(){
-  const tbody=document.getElementById('al-tbody');tbody.innerHTML='';
+  const tbody=document.getElementById('al-tbody'); tbody.innerHTML='';
   for(const a of airlines){
     const tr=document.createElement('tr');
     tr.innerHTML=`<td><input type="text" value="${a.name}" onchange="updAl('${a.id}','name',this.value)"></td><td><input type="color" value="${a.color}" style="width:40px;height:28px;" onchange="updAl('${a.id}','color',this.value)"></td><td><button class="btn-del" onclick="delAl('${a.id}')">Delete</button></td>`;
     tbody.appendChild(tr);
   }
 }
+
 function renderFlTbl(){
-  const tbody=document.getElementById('fl-tbody');tbody.innerHTML='';
+  const tbody=document.getElementById('fl-tbody'); tbody.innerHTML='';
   for(const f of flights){
     const tr=document.createElement('tr');
     const aOpts=airlines.map(a=>`<option value="${a.name}" ${a.name===f.airline?'selected':''}>${a.name}</option>`).join('');
@@ -525,6 +563,7 @@ function renderFlTbl(){
     tbody.appendChild(tr);
   }
 }
+
 function updAl(id,f,v){const a=airlines.find(x=>x.id===id);if(a){a[f]=v;saveData();showToast('Saved');}}
 function delAl(id){if(!confirm('Delete airline?'))return;airlines=airlines.filter(x=>x.id!==id);saveData();renderAlTbl();showToast('Deleted');}
 function addAirline(){const id='al_'+Date.now();airlines.push({id,name:'New Airline',color:'#4488cc'});saveData();renderAlTbl();}
@@ -532,22 +571,70 @@ function updFl(id,f,v){const fl=flights.find(x=>x.id===id);if(fl){fl[f]=v;saveDa
 function updFlDay(id,day,checked){const f=flights.find(x=>x.id===id);if(!f)return;if(checked&&!f.days.includes(day))f.days.push(day);if(!checked)f.days=f.days.filter(d=>d!==day);saveData();}
 function delFl(id){if(!confirm('Delete flight?'))return;flights=flights.filter(x=>x.id!==id);saveData();renderFlTbl();showToast('Deleted');}
 function addFlight(){const id='fl_'+Date.now();flights.push({id,airline:airlines[0]?.name||'',flight:'XX000',eta:'',sealing:'',truck:'',etd:'',days:[]});saveData();renderFlTbl();}
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1500);}
+
+// Export / Import
+function exportData(){
+  const payload={airlines,flights,display:ds};
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download='jnb-ops-config.json'; a.click();
+  URL.revokeObjectURL(url);
+  showToast('Config exported!');
+}
+
+function importData(input){
+  const file=input.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const data=JSON.parse(e.target.result);
+      if(data.airlines) airlines=data.airlines;
+      if(data.flights) flights=data.flights;
+      if(data.display) ds={...ds,...data.display};
+      saveData();
+      document.getElementById('zoom-sl').value=ds.zoom; document.getElementById('zoom-v').textContent=ds.zoom+'x';
+      document.getElementById('ht-sl').value=ds.blockH; document.getElementById('ht-v').textContent=ds.blockH;
+      document.getElementById('show-al').checked=ds.showAl;
+      buildTimeline();
+      showToast('Config imported!');
+    }catch(err){showToast('Import error!');}
+  };
+  reader.readAsText(file);
+  input.value='';
+}
+
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800);}
+
 function togglePanel(){
   const p=document.getElementById('right-panel');
   const icon=document.getElementById('panel-toggle-icon');
   p.classList.toggle('collapsed');
   icon.textContent=p.classList.contains('collapsed')?'▶':'◀';
 }
+
 function scrollToNow(){const s=document.getElementById('tl-scroll');if(s)s.scrollTop=Math.max(0,nowMins()*ds.zoom-220);}
+
+// Init
 loadData();
-document.getElementById('zoom-sl').value=ds.zoom;document.getElementById('zoom-v').textContent=ds.zoom+'x';
-document.getElementById('ht-sl').value=ds.blockH;document.getElementById('ht-v').textContent=ds.blockH;
+
+// Sync filter checkboxes state from saved filters
+['eta','etd','seal','truck'].forEach(f=>{
+  const cb=document.querySelector(`#fchk-${f} input`);
+  if(cb) cb.checked=activeFilters[f];
+  const el=document.getElementById('fchk-'+f);
+  if(el) el.classList.toggle('active',activeFilters[f]);
+});
+
+document.getElementById('zoom-sl').value=ds.zoom; document.getElementById('zoom-v').textContent=ds.zoom+'x';
+document.getElementById('ht-sl').value=ds.blockH; document.getElementById('ht-v').textContent=ds.blockH;
 document.getElementById('show-al').checked=ds.showAl;
-buildTimeline();updateClock();
+
+buildTimeline(); updateClock();
 setInterval(updateClock,1000);
 setInterval(()=>{updateNL();const e=todayEvents();updateStatus(e);updateProg(e);},30000);
 setTimeout(scrollToNow,400);
 </script>
+
 </body>
 </html>
