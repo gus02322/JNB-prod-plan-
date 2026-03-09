@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JNB Catering Ops — Control Board</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;500;600;700;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c10;
+    --surface: #111318;
+    --surface2: #181b22;
+    --border: #252930;
+    --text: #d8dce8;
+    --text-dim: #5a6070;
+    --text-muted: #363c48;
+    --accent: #00d4ff;
+    --now-line: #ffcc00;
+    --done-bg: #0d1a0d;
+    --done-border: #1e3a1e;
+    --font-mono: 'Share Tech Mono', monospace;
+    --font-ui: 'Barlow Condensed', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-ui); min-height: 100vh; overflow-x: hidden; }
+
+/* TOPBAR */
+#topbar {
+position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+background: #0a0c10ee; border-bottom: 1px solid var(–border);
+backdrop-filter: blur(8px); display: flex; align-items: center; height: 52px;
+}
+.logo { padding: 0 20px; font-family: var(–font-ui); font-weight: 900; font-size: 17px; letter-spacing: 3px; text-transform: uppercase; color: var(–accent); border-right: 1px solid var(–border); height: 100%; display: flex; align-items: center; white-space: nowrap; }
+#date-str { padding: 0 16px; font-family: var(–font-mono); font-size: 12px; color: var(–text-dim); border-right: 1px solid var(–border); height: 100%; display: flex; align-items: center; }
+#clock { font-family: var(–font-mono); font-size: 21px; color: var(–now-line); letter-spacing: 2px; padding: 0 18px; border-right: 1px solid var(–border); height: 100%; display: flex; align-items: center; }
+#status-bar { display: flex; flex: 1; height: 100%; }
+.spill { padding: 0 16px; border-right: 1px solid var(–border); height: 100%; display: flex; flex-direction: column; justify-content: center; }
+.spill .lbl { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(–text-dim); }
+.spill .val { font-family: var(–font-mono); font-size: 12px; color: var(–text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px; }
+.spill .val.cur { color: #ffaa44; }
+.spill .val.nxt { color: #44ffaa; }
+#nav-tabs { display: flex; height: 100%; margin-left: auto; }
+.ntab { padding: 0 22px; font-family: var(–font-ui); font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; border-left: 1px solid var(–border); height: 100%; display: flex; align-items: center; color: var(–text-dim); transition: all 0.15s; user-select: none; }
+.ntab:hover { color: var(–text); background: var(–surface); }
+.ntab.active { color: var(–accent); background: #001820; }
+
+/* FILTER BAR */
+#filter-bar {
+position: fixed; top: 52px; left: 0; right: 0; z-index: 190;
+background: #0d0f14f0; border-bottom: 1px solid var(–border);
+backdrop-filter: blur(6px); display: flex; align-items: center;
+height: 36px; padding: 0 16px; gap: 6px;
+}
+.fbar-lbl { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(–text-dim); margin-right: 8px; }
+.fchk { display: flex; align-items: center; gap: 5px; cursor: pointer; padding: 4px 10px; border-radius: 3px; border: 1px solid var(–border); background: var(–surface); transition: all 0.15s; user-select: none; }
+.fchk:hover { border-color: rgba(255,255,255,0.2); }
+.fchk input { display: none; }
+.fchk-dot { width: 8px; height: 8px; border-radius: 50%; }
+.fchk span { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+.fchk.active { border-color: currentColor; background: rgba(255,255,255,0.04); }
+.fchk-eta { color: #4dffb4; }
+.fchk-seal { color: #ffaa44; }
+.fchk-truck { color: #ff6b6b; }
+.fchk-etd { color: #66aaff; }
+
+/* VIEWS */
+.view { display: none; }
+.view.active { display: flex; }
+#timeline-view { padding-top: 88px; height: 100vh; overflow: hidden; }
+#tl-scroll { flex: 1; overflow-y: auto; overflow-x: auto; position: relative; }
+#tl-scroll::-webkit-scrollbar { width: 5px; height: 5px; }
+#tl-scroll::-webkit-scrollbar-thumb { background: #2a3040; border-radius: 3px; }
+#tl-inner { position: relative; }
+
+/* NOW LINE */
+#now-line-el { position: absolute; left: 0; right: 0; height: 2px; background: var(–now-line); z-index: 100; pointer-events: none; }
+#now-line-el::before { content: ‘NOW’; position: absolute; left: 54px; top: -9px; font-family: var(–font-mono); font-size: 9px; color: var(–now-line); background: var(–bg); padding: 0 4px; letter-spacing: 1px; }
+#now-line-el::after { content: ‘’; position: absolute; left: 48px; top: -3px; width: 8px; height: 8px; border-radius: 50%; background: var(–now-line); }
+
+.hour-tick { position: absolute; left: 0; right: 0; height: 1px; background: var(–border); z-index: 1; }
+.hour-lbl { position: absolute; left: 0; width: 54px; font-family: var(–font-mono); font-size: 10px; color: var(–text-muted); padding-right: 8px; text-align: right; z-index: 5; background: var(–bg); }
+
+/* EVENT BLOCKS */
+.eblock { position: absolute; border-radius: 3px; border-left: 3px solid; overflow: hidden; cursor: default; transition: filter 0.15s; z-index: 10; background: rgba(20,24,32,0.96); }
+.eblock:hover { z-index: 50; filter: brightness(1.3); }
+.eblock.done { background: var(–done-bg) !important; border-color: var(–done-border) !important; opacity: 0.4; }
+.eblock.past:not(.done) { opacity: 0.55; }
+.eb { padding: 4px 6px; height: 100%; display: flex; flex-direction: column; justify-content: center; gap: 1px; position: relative; }
+.eb-time { font-family: var(–font-mono); font-size: 10px; color: rgba(255,255,255,0.45); line-height: 1; }
+.eb-type { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; line-height: 1; }
+.eb-flight { font-family: var(–font-mono); font-size: 13px; line-height: 1; white-space: nowrap; }
+.eb-airline { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.35); line-height: 1; }
+.eb-acts { display: flex; gap: 3px; margin-top: 3px; flex-wrap: wrap; }
+
+.btn-done { font-family: var(–font-ui); font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 2px 6px; border-radius: 2px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.45); cursor: pointer; transition: all 0.1s; white-space: nowrap; }
+.btn-done:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.eblock.done .btn-done { color: #1e3a1e; border-color: #1e3a1e; pointer-events: none; }
+
+/* FR24 buttons — only on ETA/ETD */
+.btn-fr24 { font-family: var(–font-ui); font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 2px 7px; border-radius: 2px; text-decoration: none; display: inline-flex; align-items: center; gap: 3px; transition: all 0.1s; white-space: nowrap; cursor: pointer; }
+.btn-fr24-live { border: 1px solid rgba(255,140,0,0.4); background: rgba(255,140,0,0.07); color: rgba(255,165,0,0.8); }
+.btn-fr24-live:hover { background: rgba(255,140,0,0.16); color: #ffcc44; }
+.btn-fr24-hist { border: 1px solid rgba(0,212,255,0.25); background: rgba(0,212,255,0.05); color: rgba(0,212,255,0.6); }
+.btn-fr24-hist:hover { background: rgba(0,212,255,0.12); color: var(–accent); }
+.fr-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; display: inline-block; animation: frpulse 1.4s infinite; }
+@keyframes frpulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.done-ck { position: absolute; top: 3px; right: 4px; font-size: 12px; opacity: 0.2; }
+
+.type-eta .eb-type { color: #4dffb4; }
+.type-seal .eb-type { color: #ffaa44; }
+.type-truck .eb-type { color: #ff6b6b; }
+.type-etd .eb-type { color: #66aaff; }
+
+/* RIGHT PANEL */
+#right-panel { width: 210px; min-width: 210px; background: var(–surface); border-left: 1px solid var(–border); padding: 14px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; transition: width 0.25s ease, min-width 0.25s ease, padding 0.25s ease; position: relative; }
+#right-panel.collapsed { width: 28px; min-width: 28px; padding: 0; overflow: hidden; }
+#right-panel.collapsed .psec { opacity: 0; pointer-events: none; }
+#panel-toggle { position: absolute; top: 50%; left: 0; transform: translateY(-50%); width: 14px; height: 48px; background: var(–border); border-radius: 3px 0 0 3px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(–text-dim); font-size: 9px; transition: background 0.15s, color 0.15s; user-select: none; z-index: 10; border: 1px solid var(–border); border-right: none; }
+#panel-toggle:hover { background: var(–surface2); color: var(–accent); }
+#right-panel:not(.collapsed) #panel-toggle { left: auto; right: -14px; border-radius: 0 3px 3px 0; border: 1px solid var(–border); border-left: none; }
+#panel-toggle-icon { font-style: normal; font-size: 12px; }
+.ptitle { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(–text-dim); margin-bottom: 7px; padding-bottom: 5px; border-bottom: 1px solid var(–border); }
+.progbar { height: 4px; background: var(–border); border-radius: 2px; overflow: hidden; margin-top: 5px; }
+.progfill { height: 100%; background: var(–accent); border-radius: 2px; transition: width 1s; }
+.progtxt { font-family: var(–font-mono); font-size: 10px; color: var(–text-dim); margin-top: 4px; }
+.zrow { display: flex; align-items: center; gap: 7px; margin-bottom: 8px; }
+.zrow label { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(–text-dim); min-width: 40px; }
+.zrow input[type=range] { flex: 1; accent-color: var(–accent); }
+.zrow span { font-family: var(–font-mono); font-size: 10px; color: var(–text); min-width: 24px; text-align: right; }
+.trow { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.trow label { font-size: 10px; color: var(–text-dim); }
+.tog { position: relative; width: 30px; height: 15px; }
+.tog input { opacity: 0; width: 0; height: 0; }
+.tog-sl { position: absolute; inset: 0; background: var(–border); border-radius: 8px; cursor: pointer; transition: 0.2s; }
+.tog-sl::before { content: ‘’; position: absolute; left: 2px; top: 1.5px; width: 12px; height: 12px; border-radius: 50%; background: var(–text-dim); transition: 0.2s; }
+.tog input:checked + .tog-sl { background: var(–accent); }
+.tog input:checked + .tog-sl::before { transform: translateX(15px); background: #fff; }
+.leg-item { display: flex; align-items: center; gap: 7px; margin-bottom: 4px; font-size: 10px; color: var(–text); }
+.leg-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+
+/* Export/Import buttons in panel */
+.btn-io { width: 100%; font-family: var(–font-ui); font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 6px 0; border-radius: 2px; cursor: pointer; margin-bottom: 5px; transition: all 0.15s; }
+.btn-export { background: #001a24; border: 1px solid var(–accent); color: var(–accent); }
+.btn-export:hover { background: #002a3a; }
+.btn-import { background: #1a1000; border: 1px solid #ffaa44; color: #ffaa44; }
+.btn-import:hover { background: #2a1a00; }
+
+/* CONFIG */
+#config-view { display: block !important; padding-top: 80px; padding-left: 36px; padding-right: 36px; padding-bottom: 40px; max-width: 1080px; margin: 0 auto; overflow-y: auto; }
+#config-view:not(.active) { display: none !important; }
+.csec { margin-bottom: 36px; }
+.csec h2 { font-size: 13px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(–accent); margin-bottom: 14px; padding-bottom: 7px; border-bottom: 1px solid var(–border); }
+.ctbl { width: 100%; border-collapse: collapse; font-size: 12px; }
+.ctbl th { text-align: left; padding: 7px 9px; background: var(–surface); color: var(–text-dim); font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid var(–border); }
+.ctbl td { padding: 5px 9px; border-bottom: 1px solid var(–border); vertical-align: middle; color: var(–text); }
+.ctbl tr:hover td { background: var(–surface); }
+.ctbl input[type=text], .ctbl input[type=time], .ctbl select { background: var(–bg); border: 1px solid var(–border); color: var(–text); font-family: var(–font-mono); font-size: 11px; padding: 3px 6px; border-radius: 2px; width: 100%; }
+.ctbl input[type=color] { width: 34px; height: 24px; border: 1px solid var(–border); background: none; cursor: pointer; border-radius: 2px; padding: 1px; }
+.daycbs { display: flex; gap: 5px; flex-wrap: wrap; }
+.dcb { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 8px; letter-spacing: 1px; text-transform: uppercase; color: var(–text-dim); cursor: pointer; }
+.dcb input[type=checkbox] { accent-color: var(–accent); cursor: pointer; }
+.btn-add { background: #001a24; border: 1px solid var(–accent); color: var(–accent); font-family: var(–font-ui); font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 7px 16px; border-radius: 2px; cursor: pointer; transition: all 0.15s; margin-top: 9px; }
+.btn-add:hover { background: #002a3a; }
+.btn-del { background: #1a0005; border: 1px solid #5a0010; color: #ff4466; font-family: var(–font-ui); font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 3px 7px; border-radius: 2px; cursor: pointer; white-space: nowrap; }
+.btn-del:hover { background: #2a0010; }
+.drow { display: flex; align-items: center; gap: 14px; margin-bottom: 13px; }
+.drow label { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(–text-dim); min-width: 150px; }
+.drow input[type=range] { flex: 1; max-width: 180px; accent-color: var(–accent); }
+.drow span { font-family: var(–font-mono); font-size: 11px; color: var(–text); min-width: 40px; }
+
+#toast { position: fixed; bottom: 20px; right: 20px; background: var(–surface); border: 1px solid var(–accent); color: var(–accent); font-family: var(–font-mono); font-size: 11px; padding: 8px 16px; border-radius: 3px; z-index: 999; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+#toast.show { opacity: 1; }
+#file-import { display: none; }
+
+/* ── MOBILE RESPONSIVE ── */
+@media (max-width: 768px) {
+#topbar { height: 44px; }
+.logo { font-size: 12px; letter-spacing: 2px; padding: 0 10px; }
+#date-str { display: none; }
+#clock { font-size: 16px; padding: 0 10px; }
+.spill { padding: 0 8px; }
+.spill .lbl { font-size: 8px; }
+.spill .val { font-size: 10px; max-width: 90px; }
+.ntab { padding: 0 12px; font-size: 10px; letter-spacing: 1px; }
+#filter-bar { top: 44px; height: 40px; padding: 0 10px; gap: 5px; overflow-x: auto; overflow-y: hidden; flex-wrap: nowrap; scrollbar-width: none; }
+#filter-bar::-webkit-scrollbar { display: none; }
+.fbar-lbl { display: none; }
+.fchk { padding: 5px 10px; flex-shrink: 0; }
+#timeline-view { padding-top: 84px; padding-bottom: 46px; }
+#right-panel { display: none !important; }
+.eb { padding: 5px 7px; gap: 2px; }
+.eb-time { font-size: 11px; }
+.eb-type { font-size: 11px; }
+.eb-flight { font-size: 14px; font-weight: 700; }
+.btn-done { font-size: 10px; padding: 5px 10px; min-height: 30px; }
+.btn-fr24 { font-size: 9px; padding: 5px 8px; min-height: 30px; }
+.eb-acts { gap: 5px; margin-top: 5px; }
+#config-view { padding: 60px 12px 60px; }
+.ctbl { font-size: 11px; }
+.ctbl th { font-size: 8px; padding: 5px; }
+.ctbl td { padding: 4px 5px; }
+.csec h2 { font-size: 11px; }
+#mobile-stats { display: flex !important; }
+#toast { bottom: 56px; }
+}
+
+/* Tablet */
+@media (min-width: 769px) and (max-width: 1100px) {
+#right-panel { width: 170px; min-width: 170px; }
+.logo { font-size: 14px; padding: 0 14px; }
+#clock { font-size: 18px; padding: 0 12px; }
+.spill .val { max-width: 140px; }
+.btn-done { padding: 3px 8px; min-height: 26px; }
+.btn-fr24 { padding: 3px 7px; min-height: 26px; }
+}
+
+/* Mobile bottom stats — hidden on desktop */
+#mobile-stats { display: none; }
+</style>
+
+</head>
+<body>
+
+<div id="topbar">
+  <div class="logo">⬡ JNB CATERING OPS</div>
+  <div id="date-str"></div>
+  <div id="clock">00:00:00</div>
+  <div id="status-bar">
+    <div class="spill"><div class="lbl">Current</div><div class="val cur" id="cur-ev">—</div></div>
+    <div class="spill"><div class="lbl">Next</div><div class="val nxt" id="nxt-ev">—</div></div>
+    <div class="spill"><div class="lbl">Done</div><div class="val" id="done-cnt">0 / 0</div></div>
+  </div>
+  <div id="nav-tabs">
+    <div class="ntab active" onclick="switchView('timeline')">Timeline</div>
+    <div class="ntab" onclick="switchView('config')">Config</div>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+
+<div id="filter-bar">
+  <span class="fbar-lbl">Show</span>
+  <label class="fchk fchk-eta active" id="fchk-eta">
+    <input type="checkbox" checked onchange="toggleFilter('eta',this.checked)">
+    <span class="fchk-dot" style="background:#4dffb4"></span>
+    <span>ETA</span>
+  </label>
+  <label class="fchk fchk-etd active" id="fchk-etd">
+    <input type="checkbox" checked onchange="toggleFilter('etd',this.checked)">
+    <span class="fchk-dot" style="background:#66aaff"></span>
+    <span>ETD</span>
+  </label>
+  <label class="fchk fchk-seal active" id="fchk-seal">
+    <input type="checkbox" checked onchange="toggleFilter('seal',this.checked)">
+    <span class="fchk-dot" style="background:#ffaa44"></span>
+    <span>Sealing</span>
+  </label>
+  <label class="fchk fchk-truck active" id="fchk-truck">
+    <input type="checkbox" checked onchange="toggleFilter('truck',this.checked)">
+    <span class="fchk-dot" style="background:#ff6b6b"></span>
+    <span>Truck Dep</span>
+  </label>
+</div>
+
+<div id="timeline-view" class="view active">
+  <div id="tl-scroll">
+    <div id="tl-inner"></div>
+  </div>
+  <div id="right-panel">
+    <div id="panel-toggle" onclick="togglePanel()"><span id="panel-toggle-icon">◀</span></div>
+    <div class="psec">
+      <div class="ptitle">Day Progress</div>
+      <div class="progbar"><div class="progfill" id="prog-fill" style="width:0%"></div></div>
+      <div class="progtxt" id="prog-txt">0 / 0 done</div>
+    </div>
+    <div class="psec">
+      <div class="ptitle">View</div>
+      <div class="zrow"><label>Zoom</label><input type="range" id="zoom-sl" min="1" max="8" value="3" step="0.5"><span id="zoom-v">3x</span></div>
+      <div class="zrow"><label>Height</label><input type="range" id="ht-sl" min="44" max="120" value="72" step="4"><span id="ht-v">72</span></div>
+      <div class="trow" style="margin-top:4px;"><label>Airline Name</label><label class="tog"><input type="checkbox" id="show-al" checked><span class="tog-sl"></span></label></div>
+    </div>
+    <div class="psec">
+      <div class="ptitle">Airlines Today</div>
+      <div id="leg"></div>
+    </div>
+    <div class="psec">
+      <div class="ptitle">Event Types</div>
+      <div style="font-size:10px;line-height:1.9;color:var(--text-dim);">
+        <span style="color:#4dffb4;">●</span> ETA Arrival<br>
+        <span style="color:#ffaa44;">●</span> Sealing & Loading<br>
+        <span style="color:#ff6b6b;">●</span> Truck Departure<br>
+        <span style="color:#66aaff;">●</span> ETD Departure
+      </div>
+    </div>
+    <div class="psec">
+      <div class="ptitle">Data Sync</div>
+      <button class="btn-io btn-export" onclick="exportData()">⬇ Export Config</button>
+      <button class="btn-io btn-import" onclick="document.getElementById('file-import').click()">⬆ Import Config</button>
+      <input type="file" id="file-import" accept=".json" onchange="importData(this)">
+    </div>
+  </div>
+</div>
+
+<div id="config-view" class="view">
+  <div class="csec">
+    <h2>Airlines</h2>
+    <table class="ctbl"><thead><tr><th>Name</th><th>Color</th><th></th></tr></thead><tbody id="al-tbody"></tbody></table>
+    <button class="btn-add" onclick="addAirline()">+ Add Airline</button>
+  </div>
+  <div class="csec">
+    <h2>Flights</h2>
+    <table class="ctbl">
+      <thead><tr><th>Airline</th><th>Flight</th><th>ETA</th><th>Sealing</th><th>Truck</th><th>ETD</th><th>Operating Days</th><th></th></tr></thead>
+      <tbody id="fl-tbody"></tbody>
+    </table>
+    <button class="btn-add" onclick="addFlight()">+ Add Flight</button>
+  </div>
+  <div class="csec">
+    <h2>Display Settings</h2>
+    <div class="drow"><label>Block Height</label><input type="range" min="44" max="120" value="72" step="4" id="cfg-ht" oninput="cfgApply()"><span id="cfg-ht-v">72px</span></div>
+    <div class="drow"><label>Timeline Zoom</label><input type="range" min="1" max="8" value="3" step="0.5" id="cfg-zm" oninput="cfgApply()"><span id="cfg-zm-v">3x</span></div>
+    <div class="drow"><label>Show Airline Name</label><label class="tog"><input type="checkbox" id="cfg-al" checked onchange="cfgApply()"><span class="tog-sl"></span></label></div>
+  </div>
+</div>
+
+<div id="mobile-stats" style="position:fixed;bottom:0;left:0;right:0;z-index:150;background:#0d0f14f5;border-top:1px solid #252930;height:46px;align-items:center;padding:0 14px;gap:0;">
+  <div class="spill" style="border-right:1px solid #252930;"><div class="lbl">Current</div><div class="val cur" id="mob-cur">—</div></div>
+  <div class="spill" style="border-right:1px solid #252930;"><div class="lbl">Next</div><div class="val nxt" id="mob-nxt">—</div></div>
+  <div class="spill" style="margin-left:auto;border-right:none;"><div class="lbl">Done</div><div class="val" id="mob-done">0/0</div></div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const DEF_AIRLINES = [
+  {id:'emirates',name:'Emirates',color:'#e31837'},
+  {id:'qantas',name:'Qantas',color:'#ff5500'},
+  {id:'lufthansa',name:'Lufthansa',color:'#8844cc'},
+  {id:'british_airways',name:'British Airways',color:'#2255aa'},
+  {id:'virgin_atlantic',name:'Virgin Atlantic',color:'#cc0055'},
+  {id:'ethiopian',name:'Ethiopian',color:'#078930'},
+  {id:'cathay',name:'Cathay',color:'#006564'},
+  {id:'united',name:'United',color:'#4a6ea8'},
+  {id:'delta',name:'Delta',color:'#003399'},
+  {id:'air_china',name:'Air China',color:'#cc2200'},
+  {id:'etihad',name:'Etihad',color:'#b8973a'},
+  {id:'air_mauritius',name:'Air Mauritius',color:'#009966'},
+  {id:'air_algerie',name:'Air Algerie',color:'#00aa44'},
+  {id:'air_seychelles',name:'Air Seychelles',color:'#1a9fd4'},
+  {id:'latam',name:'Latam',color:'#e61f26'},
+  {id:'uganda',name:'Uganda',color:'#d4aa00'},
+  {id:'egyptair',name:'EgyptAir',color:'#bf0000'},
+  {id:'air_austral',name:'Air Austral',color:'#0066cc'},
+  {id:'asky',name:'Asky',color:'#ee7700'},
+  {id:'air_cote',name:"Air Cote D'Ivoire",color:'#ff7700'},
+  {id:'qantas_perth',name:'Qantas PERTH',color:'#ff8c00'},
+];
+const DEF_FLIGHTS = [
+  {id:'f1',airline:"Air Cote D'Ivoire",flight:'HF903',eta:'01:25',etd:'03:00',sealing:'00:00',truck:'01:00',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f2',airline:'Asky',flight:'KP0073',eta:'01:35',etd:'03:40',sealing:'00:00',truck:'01:00',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f3',airline:'Air Algerie',flight:'AH5361',eta:'06:25',etd:'07:55',sealing:'04:45',truck:'05:45',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f4',airline:"Air Cote D'Ivoire",flight:'HF903',eta:'01:55',etd:'04:55',sealing:'00:30',truck:'01:30',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f5',airline:'Ethiopian',flight:'ET848',eta:'03:55',etd:'08:20',sealing:'05:20',truck:'06:20',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f6',airline:'Air Seychelles',flight:'HM062',eta:'19:00',etd:'09:00',sealing:'05:00',truck:'06:00',days:['SUN']},
+  {id:'f7',airline:'Lufthansa',flight:'LH579',eta:'07:05',etd:'10:10',sealing:'04:25',truck:'06:25',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f8',airline:'Air China',flight:'CA868',eta:'07:40',etd:'10:10',sealing:'06:10',truck:'07:10',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f9',airline:'Emirates',flight:'EK768',eta:'05:35',etd:'10:25',sealing:'05:25',truck:'07:25',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f10',airline:'Etihad',flight:'EY748',eta:'08:20',etd:'09:50',sealing:'06:50',truck:'07:50',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f11',airline:'Cathay',flight:'CX748',eta:'07:25',etd:'11:00',sealing:'06:00',truck:'08:30',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f12',airline:'Emirates',flight:'EK762',eta:'10:25',etd:'13:25',sealing:'07:55',truck:'09:55',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f13',airline:'Air Mauritius',flight:'MK852',eta:'11:25',etd:'13:10',sealing:'09:55',truck:'10:55',days:['MON','TUE','WED','FRI','SAT','SUN']},
+  {id:'f14',airline:'Uganda',flight:'UR711',eta:'11:45',etd:'12:50',sealing:'10:15',truck:'11:15',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f15',airline:'Air Seychelles',flight:'HM060',eta:'12:30',etd:'13:50',sealing:'10:45',truck:'11:45',days:['FRI','SAT','SUN']},
+  {id:'f16',airline:'Latam',flight:'LA8059',eta:'12:40',etd:'15:25',sealing:'10:45',truck:'11:45',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f17',airline:'Qantas',flight:'QF064',eta:'15:00',etd:'17:30',sealing:'11:30',truck:'14:30',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f18',airline:'Emirates',flight:'EK764',eta:'16:35',etd:'18:50',sealing:'14:05',truck:'16:05',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f19',airline:'British Airways',flight:'BA056',eta:'09:25',etd:'19:35',sealing:'14:35',truck:'16:35',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f20',airline:'Lufthansa',flight:'LH573',eta:'09:30',etd:'19:45',sealing:'14:45',truck:'16:45',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f21',airline:'Virgin Atlantic',flight:'VS450',eta:'08:35',etd:'21:30',sealing:'16:30',truck:'18:30',days:['THU']},
+  {id:'f22',airline:'Qantas PERTH',flight:'QF066',eta:'18:50',etd:'21:55',sealing:'13:20',truck:'18:20',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f23',airline:'Delta',flight:'DL201',eta:'19:00',etd:'21:55',sealing:'16:30',truck:'18:30',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f24',airline:'Uganda',flight:'UR713',eta:'19:40',etd:'20:40',sealing:'18:10',truck:'19:10',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f25',airline:'Virgin Atlantic',flight:'VS450',eta:'08:35',etd:'22:00',sealing:'17:00',truck:'19:00',days:['MON','TUE','WED','FRI','SAT','SUN']},
+  {id:'f26',airline:'British Airways',flight:'BA054',eta:'07:00',etd:'22:00',sealing:'17:00',truck:'19:00',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f27',airline:'EgyptAir',flight:'MS840',eta:'08:10',etd:'22:25',sealing:'18:25',truck:'19:25',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f28',airline:'United',flight:'UA187',eta:'18:35',etd:'22:00',sealing:'17:30',truck:'19:30',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f29',airline:'Emirates',flight:'EK766',eta:'20:35',etd:'22:20',sealing:'18:00',truck:'20:00',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f30',airline:'Air Algerie',flight:'AH5361',eta:'06:30',etd:'22:30',sealing:'19:30',truck:'20:30',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f31',airline:'Ethiopian',flight:'ET858',eta:'20:10',etd:'22:50',sealing:'19:20',truck:'20:20',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f32',airline:'Air Austral',flight:'UU344',eta:'20:45',etd:'21:45',sealing:'19:30',truck:'20:15',days:['THU','SUN']},
+  {id:'f33',airline:'Uganda',flight:'UR711',eta:'23:45',etd:'00:45',sealing:'21:15',truck:'22:00',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+];
+
+const ALLDAYS = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+let airlines=[], flights=[], completions={}, ds={blockH:72,zoom:3,showAl:true};
+// active filters: which event types to show
+let activeFilters = {eta:true, etd:true, seal:true, truck:true};
+
+function todayKey(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
+
+function loadData(){
+  const a=localStorage.getItem('cop_airlines'); airlines=a?JSON.parse(a):JSON.parse(JSON.stringify(DEF_AIRLINES));
+  const f=localStorage.getItem('cop_flights'); flights=f?JSON.parse(f):JSON.parse(JSON.stringify(DEF_FLIGHTS));
+  const c=localStorage.getItem('cop_comp_'+todayKey()); completions=c?JSON.parse(c):{};
+  const d=localStorage.getItem('cop_display'); if(d) ds={...ds,...JSON.parse(d)};
+  const fi=localStorage.getItem('cop_filters'); if(fi) activeFilters={...activeFilters,...JSON.parse(fi)};
+}
+function saveData(){
+  localStorage.setItem('cop_airlines',JSON.stringify(airlines));
+  localStorage.setItem('cop_flights',JSON.stringify(flights));
+  localStorage.setItem('cop_comp_'+todayKey(),JSON.stringify(completions));
+  localStorage.setItem('cop_display',JSON.stringify(ds));
+  localStorage.setItem('cop_filters',JSON.stringify(activeFilters));
+}
+
+function getColor(name){const a=airlines.find(x=>x.name.toLowerCase()===name.toLowerCase());return a?a.color:'#4466aa';}
+function t2m(t){if(!t)return-1;const[h,m]=t.split(':').map(Number);return h*60+m;}
+function nowMins(){const n=new Date();return n.getHours()*60+n.getMinutes()+n.getSeconds()/60;}
+function todayDay(){return ALLDAYS[new Date().getDay()];}
+
+function todayEvents(){
+  const day=todayDay(), evs=[];
+  for(const f of flights){
+    if(!f.days.includes(day)) continue;
+    if(f.sealing && activeFilters.seal) evs.push({key:f.id+'_sl',time:f.sealing,type:'seal',lbl:'Sealing',flight:f.flight,airline:f.airline,tc:'type-seal'});
+    if(f.truck && activeFilters.truck) evs.push({key:f.id+'_tr',time:f.truck,type:'truck',lbl:'Truck Dep',flight:f.flight,airline:f.airline,tc:'type-truck'});
+    if(f.eta && activeFilters.eta) evs.push({key:f.id+'_et',time:f.eta,type:'eta',lbl:'ETA',flight:f.flight,airline:f.airline,tc:'type-eta'});
+    if(f.etd && activeFilters.etd) evs.push({key:f.id+'_ed',time:f.etd,type:'etd',lbl:'ETD',flight:f.flight,airline:f.airline,tc:'type-etd'});
+  }
+  evs.sort((a,b)=>t2m(a.time)-t2m(b.time));
+  return evs;
+}
+
+// IATA prefix → ICAO prefix for FlightAware URLs
+const IATA_TO_ICAO = {
+  'EK':'UAE','QF':'QFA','LH':'DLH','BA':'BAW','VS':'VIR',
+  'ET':'ETH','CX':'CPA','UA':'UAL','DL':'DAL','CA':'CCA',
+  'EY':'ETD','MK':'MAU','AH':'DAH','HM':'SEY','LA':'LAN',
+  'UR':'UGA','MS':'MSR','UU':'REU','KP':'KPE','HF':'VUN',
+};
+
+// Build FlightAware links — only for ETA and ETD
+function makeFR24Btns(flight, type){
+  if(type !== 'eta' && type !== 'etd') return '';
+  const code = flight.replace(/\s+/g,'').toUpperCase();
+  // Extract IATA prefix (letters at start) and flight number
+  const match = code.match(/^([A-Z]{2,3})(\d+)$/);
+  let icaoCode = code;
+  if(match){
+    const iataPrefix = match[1];
+    const num = match[2];
+    const icaoPrefix = IATA_TO_ICAO[iataPrefix] || iataPrefix;
+    icaoCode = icaoPrefix + num;
+  }
+  const liveUrl = `https://flightaware.com/live/flight/${icaoCode}`;
+  const histUrl = `https://flightaware.com/live/flight/${icaoCode}/history`;
+  return `<a class="btn-fr24 btn-fr24-live" href="${liveUrl}" target="_blank"><span class="fr-dot"></span>Live</a><a class="btn-fr24 btn-fr24-hist" href="${histUrl}" target="_blank">History</a>`;
+}
+
+function buildTimeline(){
+  const inner=document.getElementById('tl-inner');
+  inner.innerHTML='';
+  const pxpm=ds.zoom, bh=ds.blockH, total=24*60*pxpm;
+  inner.style.height=total+'px';
+  inner.style.position='relative';
+
+  for(let h=0;h<24;h++){
+    const y=h*60*pxpm;
+    const tick=document.createElement('div');
+    tick.className='hour-tick'; tick.style.top=y+'px';
+    inner.appendChild(tick);
+    const lbl=document.createElement('div');
+    lbl.className='hour-lbl'; lbl.style.top=(y+2)+'px';
+    lbl.textContent=String(h).padStart(2,'0')+':00';
+    inner.appendChild(lbl);
+  }
+
+  const nl=document.createElement('div');
+  nl.id='now-line-el'; nl.style.position='absolute'; nl.style.left='0'; nl.style.right='0';
+  inner.appendChild(nl);
+
+  const evs=todayEvents(), nm=nowMins();
+  const BW=178, LANE=60, GAP=4;
+  const cols=[];
+
+  function assignCol(mins){
+    const endM=mins+bh/pxpm;
+    for(let c=0;c<cols.length;c++){if(cols[c]<=mins){cols[c]=endM;return c;}}
+    cols.push(endM); return cols.length-1;
+  }
+
+  for(const ev of evs){
+    const mins=t2m(ev.time); if(mins<0) continue;
+    const col=assignCol(mins);
+    const y=mins*pxpm;
+    const color=getColor(ev.airline);
+    const isDone=!!completions[ev.key];
+    const isPast=mins<nm;
+
+    const b=document.createElement('div');
+    b.className=`eblock ${ev.tc}${isDone?' done':''}${isPast&&!isDone?' past':''}`;
+    b.style.cssText=`left:${LANE+col*(BW+GAP)}px;top:${y}px;width:${BW}px;height:${bh}px;border-left-color:${color};`;
+    b.dataset.key=ev.key;
+
+    const fr24Btns=makeFR24Btns(ev.flight, ev.type);
+    const doneBtn=`<button class="btn-done" onclick="toggleDone('${ev.key}')">${isDone?'✓ Done':'Done'}</button>`;
+    const alPart=ds.showAl?`<div class="eb-airline">${ev.airline}</div>`:'';
+    b.innerHTML=`<div class="eb"><div class="eb-time">${ev.time}</div><div class="eb-type">${ev.lbl}</div><div class="eb-flight">${ev.flight}</div>${alPart}<div class="eb-acts">${doneBtn}${fr24Btns}</div>${isDone?'<div class="done-ck">✓</div>':''}</div>`;
+    inner.appendChild(b);
+  }
+
+  inner.style.minWidth=`${LANE+(cols.length||1)*(BW+GAP)+20}px`;
+  updateNL(); updateStatus(evs); updateProg(evs); updateLeg();
+}
+
+function updateNL(){const nl=document.getElementById('now-line-el');if(!nl)return;nl.style.top=(nowMins()*ds.zoom)+'px';}
+
+function updateStatus(evs){
+  const nm=nowMins(); let cur=null,nxt=null;
+  for(const e of evs){const m=t2m(e.time);if(m<=nm)cur=e;else if(!nxt)nxt=e;}
+  const curTxt=cur?`${cur.time} ${cur.lbl} ${cur.flight}`:'—';
+  const nxtTxt=nxt?`${nxt.time} ${nxt.lbl} ${nxt.flight}`:'None';
+  document.getElementById('cur-ev').textContent=curTxt;
+  document.getElementById('nxt-ev').textContent=nxtTxt;
+  // Mobile bottom bar
+  const mc=document.getElementById('mob-cur'); if(mc) mc.textContent=curTxt;
+  const mn=document.getElementById('mob-nxt'); if(mn) mn.textContent=nxtTxt;
+}
+
+function updateProg(evs){
+  const tot=evs.length, done=evs.filter(e=>completions[e.key]).length;
+  const pct=tot?Math.round(done/tot*100):0;
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-txt').textContent=`${done} / ${tot} done`;
+  document.getElementById('done-cnt').textContent=`${done} / ${tot}`;
+  const md=document.getElementById('mob-done'); if(md) md.textContent=`${done}/${tot}`;
+}
+
+function updateLeg(){
+  const leg=document.getElementById('leg'); if(!leg) return;
+  const used=new Set(todayEvents().map(e=>e.airline));
+  leg.innerHTML='';
+  for(const a of airlines){
+    if(!used.has(a.name)) continue;
+    const d=document.createElement('div');
+    d.className='leg-item';
+    d.innerHTML=`<div class="leg-dot" style="background:${a.color}"></div><span>${a.name}</span>`;
+    leg.appendChild(d);
+  }
+}
+
+function toggleDone(key){
+  completions[key]=!completions[key];
+  if(!completions[key]) delete completions[key];
+  saveData(); buildTimeline();
+}
+
+function toggleFilter(type, checked){
+  activeFilters[type]=checked;
+  const el=document.getElementById('fchk-'+type);
+  if(el) el.classList.toggle('active', checked);
+  saveData(); buildTimeline();
+}
+
+function updateClock(){
+  const n=new Date();
+  const pad=v=>String(v).padStart(2,'0');
+  document.getElementById('clock').textContent=`${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`;
+  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const mos=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('date-str').textContent=`${days[n.getDay()]} ${n.getDate()} ${mos[n.getMonth()]} ${n.getFullYear()}`;
+  updateNL();
+}
+
+function switchView(v){
+  document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.ntab').forEach(el=>el.classList.remove('active'));
+  document.getElementById(v+'-view').classList.add('active');
+  document.querySelectorAll('.ntab').forEach(el=>{if(el.textContent.toLowerCase()===v)el.classList.add('active');});
+  // Hide/show filter bar
+  document.getElementById('filter-bar').style.display = v==='timeline'?'flex':'none';
+  if(v==='config') renderConfig();
+  if(v==='timeline') buildTimeline();
+}
+
+document.getElementById('zoom-sl').addEventListener('input',function(){
+  document.getElementById('zoom-v').textContent=this.value+'x';
+  ds.zoom=parseFloat(this.value); saveData(); buildTimeline();
+});
+document.getElementById('ht-sl').addEventListener('input',function(){
+  document.getElementById('ht-v').textContent=this.value;
+  ds.blockH=parseInt(this.value); saveData(); buildTimeline();
+});
+document.getElementById('show-al').addEventListener('change',function(){
+  ds.showAl=this.checked; saveData(); buildTimeline();
+});
+
+function cfgApply(){
+  const z=parseFloat(document.getElementById('cfg-zm').value);
+  const h=parseInt(document.getElementById('cfg-ht').value);
+  const sa=document.getElementById('cfg-al').checked;
+  document.getElementById('cfg-zm-v').textContent=z+'x';
+  document.getElementById('cfg-ht-v').textContent=h+'px';
+  ds={zoom:z,blockH:h,showAl:sa};
+  document.getElementById('zoom-sl').value=z; document.getElementById('zoom-v').textContent=z+'x';
+  document.getElementById('ht-sl').value=h; document.getElementById('ht-v').textContent=h;
+  document.getElementById('show-al').checked=sa;
+  saveData(); buildTimeline();
+}
+
+function renderConfig(){
+  renderAlTbl(); renderFlTbl();
+  document.getElementById('cfg-zm').value=ds.zoom; document.getElementById('cfg-zm-v').textContent=ds.zoom+'x';
+  document.getElementById('cfg-ht').value=ds.blockH; document.getElementById('cfg-ht-v').textContent=ds.blockH+'px';
+  document.getElementById('cfg-al').checked=ds.showAl;
+}
+
+function renderAlTbl(){
+  const tbody=document.getElementById('al-tbody'); tbody.innerHTML='';
+  for(const a of airlines){
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td><input type="text" value="${a.name}" onchange="updAl('${a.id}','name',this.value)"></td><td><input type="color" value="${a.color}" style="width:40px;height:28px;" onchange="updAl('${a.id}','color',this.value)"></td><td><button class="btn-del" onclick="delAl('${a.id}')">Delete</button></td>`;
+    tbody.appendChild(tr);
+  }
+}
+
+function renderFlTbl(){
+  const tbody=document.getElementById('fl-tbody'); tbody.innerHTML='';
+  for(const f of flights){
+    const tr=document.createElement('tr');
+    const aOpts=airlines.map(a=>`<option value="${a.name}" ${a.name===f.airline?'selected':''}>${a.name}</option>`).join('');
+    const dCbs=ALLDAYS.slice(1).concat([ALLDAYS[0]]).map(d=>`<label class="dcb"><input type="checkbox" ${f.days.includes(d)?'checked':''} onchange="updFlDay('${f.id}','${d}',this.checked)">${d}</label>`).join('');
+    tr.innerHTML=`<td style="min-width:130px"><select onchange="updFl('${f.id}','airline',this.value)">${aOpts}</select></td><td><input type="text" value="${f.flight||''}" style="width:75px" onchange="updFl('${f.id}','flight',this.value)"></td><td><input type="time" value="${f.eta||''}" onchange="updFl('${f.id}','eta',this.value)"></td><td><input type="time" value="${f.sealing||''}" onchange="updFl('${f.id}','sealing',this.value)"></td><td><input type="time" value="${f.truck||''}" onchange="updFl('${f.id}','truck',this.value)"></td><td><input type="time" value="${f.etd||''}" onchange="updFl('${f.id}','etd',this.value)"></td><td><div class="daycbs">${dCbs}</div></td><td><button class="btn-del" onclick="delFl('${f.id}')">Del</button></td>`;
+    tbody.appendChild(tr);
+  }
+}
+
+function updAl(id,f,v){const a=airlines.find(x=>x.id===id);if(a){a[f]=v;saveData();showToast('Saved');}}
+function delAl(id){if(!confirm('Delete airline?'))return;airlines=airlines.filter(x=>x.id!==id);saveData();renderAlTbl();showToast('Deleted');}
+function addAirline(){const id='al_'+Date.now();airlines.push({id,name:'New Airline',color:'#4488cc'});saveData();renderAlTbl();}
+function updFl(id,f,v){const fl=flights.find(x=>x.id===id);if(fl){fl[f]=v;saveData();showToast('Saved');}}
+function updFlDay(id,day,checked){const f=flights.find(x=>x.id===id);if(!f)return;if(checked&&!f.days.includes(day))f.days.push(day);if(!checked)f.days=f.days.filter(d=>d!==day);saveData();}
+function delFl(id){if(!confirm('Delete flight?'))return;flights=flights.filter(x=>x.id!==id);saveData();renderFlTbl();showToast('Deleted');}
+function addFlight(){const id='fl_'+Date.now();flights.push({id,airline:airlines[0]?.name||'',flight:'XX000',eta:'',sealing:'',truck:'',etd:'',days:[]});saveData();renderFlTbl();}
+
+// Export / Import
+function exportData(){
+  const payload={airlines,flights,display:ds};
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download='jnb-ops-config.json'; a.click();
+  URL.revokeObjectURL(url);
+  showToast('Config exported!');
+}
+
+function importData(input){
+  const file=input.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const data=JSON.parse(e.target.result);
+      if(data.airlines) airlines=data.airlines;
+      if(data.flights) flights=data.flights;
+      if(data.display) ds={...ds,...data.display};
+      saveData();
+      document.getElementById('zoom-sl').value=ds.zoom; document.getElementById('zoom-v').textContent=ds.zoom+'x';
+      document.getElementById('ht-sl').value=ds.blockH; document.getElementById('ht-v').textContent=ds.blockH;
+      document.getElementById('show-al').checked=ds.showAl;
+      buildTimeline();
+      showToast('Config imported!');
+    }catch(err){showToast('Import error!');}
+  };
+  reader.readAsText(file);
+  input.value='';
+}
+
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800);}
+
+function togglePanel(){
+  const p=document.getElementById('right-panel');
+  const icon=document.getElementById('panel-toggle-icon');
+  p.classList.toggle('collapsed');
+  icon.textContent=p.classList.contains('collapsed')?'▶':'◀';
+}
+
+function scrollToNow(){const s=document.getElementById('tl-scroll');if(s)s.scrollTop=Math.max(0,nowMins()*ds.zoom-220);}
+
+// Init
+loadData();
+
+// Auto zoom based on screen if no saved preference
+if(!localStorage.getItem('cop_display')){
+  if(window.innerWidth <= 768) ds.zoom=2;
+  else if(window.innerWidth <= 1100) ds.zoom=2.5;
+  else ds.zoom=3;
+}
+
+// Sync filter checkboxes state from saved filters
+['eta','etd','seal','truck'].forEach(f=>{
+  const cb=document.querySelector(`#fchk-${f} input`);
+  if(cb) cb.checked=activeFilters[f];
+  const el=document.getElementById('fchk-'+f);
+  if(el) el.classList.toggle('active',activeFilters[f]);
+});
+
+document.getElementById('zoom-sl').value=ds.zoom; document.getElementById('zoom-v').textContent=ds.zoom+'x';
+document.getElementById('ht-sl').value=ds.blockH; document.getElementById('ht-v').textContent=ds.blockH;
+document.getElementById('show-al').checked=ds.showAl;
+
+buildTimeline(); updateClock();
+setInterval(updateClock,1000);
+setInterval(()=>{updateNL();const e=todayEvents();updateStatus(e);updateProg(e);},30000);
+setTimeout(scrollToNow,400);
+</script>
+
+</body>
+</html>
