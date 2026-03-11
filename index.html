@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -24,234 +25,292 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: var(--font-ui); min-height: 100vh; overflow-x: hidden; }
 
-  /* TOPBAR */
-  #topbar {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-    background: #13161eee; border-bottom: 1px solid var(--border);
-    backdrop-filter: blur(8px); display: flex; align-items: center; height: 52px;
-  }
-  .logo { padding: 0 20px; font-family: var(--font-ui); font-weight: 900; font-size: 17px; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); border-right: 1px solid var(--border); height: 100%; display: flex; align-items: center; white-space: nowrap; }
-  #date-str { padding: 0 16px; font-family: var(--font-mono); font-size: 12px; color: var(--text-dim); border-right: 1px solid var(--border); height: 100%; display: flex; align-items: center; }
-  #clock { font-family: var(--font-mono); font-size: 21px; color: var(--now-line); letter-spacing: 2px; padding: 0 18px; border-right: 1px solid var(--border); height: 100%; display: flex; align-items: center; }
-  #status-bar { display: flex; flex: 1; height: 100%; }
-  .spill { padding: 0 16px; border-right: 1px solid var(--border); height: 100%; display: flex; flex-direction: column; justify-content: center; }
-  .spill .lbl { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); }
-  .spill .val { font-family: var(--font-mono); font-size: 12px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px; }
-  .spill .val.cur { color: #ffaa44; }
-  .spill .val.nxt { color: #44ffaa; }
-  #nav-tabs { display: flex; height: 100%; margin-left: auto; }
-  .ntab { padding: 0 22px; font-family: var(--font-ui); font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; border-left: 1px solid var(--border); height: 100%; display: flex; align-items: center; color: var(--text-dim); transition: all 0.15s; user-select: none; }
-  .ntab:hover { color: var(--text); background: var(--surface); }
-  .ntab.active { color: var(--accent); background: #001820; }
+/* TOPBAR */
+#topbar {
+position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+background: #13161eee; border-bottom: 1px solid var(–border);
+backdrop-filter: blur(8px); display: flex; align-items: center; height: 52px;
+}
+.logo { padding: 0 20px; font-family: var(–font-ui); font-weight: 900; font-size: 17px; letter-spacing: 3px; text-transform: uppercase; color: var(–accent); border-right: 1px solid var(–border); height: 100%; display: flex; align-items: center; white-space: nowrap; }
+#date-str { padding: 0 16px; font-family: var(–font-mono); font-size: 12px; color: var(–text-dim); border-right: 1px solid var(–border); height: 100%; display: flex; align-items: center; }
+#clock { font-family: var(–font-mono); font-size: 21px; color: var(–now-line); letter-spacing: 2px; padding: 0 18px; border-right: 1px solid var(–border); height: 100%; display: flex; align-items: center; }
+#status-bar { display: flex; flex: 1; height: 100%; overflow: hidden; }
+.spill { padding: 0 16px; border-right: 1px solid var(–border); height: 100%; display: flex; flex-direction: column; justify-content: center; }
+.spill .lbl { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(–text-dim); }
+.spill .val { font-family: var(–font-mono); font-size: 12px; color: var(–text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 220px; }
+.spill .val.cur { color: #ffaa44; }
+.spill .val.nxt { color: #44ffaa; }
+#nav-tabs { display: flex; height: 100%; margin-left: auto; }
+.ntab { padding: 0 22px; font-family: var(–font-ui); font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; border-left: 1px solid var(–border); height: 100%; display: flex; align-items: center; color: var(–text-dim); transition: all 0.15s; user-select: none; }
+.ntab:hover { color: var(–text); background: var(–surface); }
+.ntab.active { color: var(–accent); background: #001820; }
 
-  /* FILTER BAR */
-  #filter-bar {
-    position: fixed; top: 52px; left: 0; right: 0; z-index: 190;
-    background: #181c26f0; border-bottom: 1px solid var(--border);
-    backdrop-filter: blur(6px); display: flex; align-items: center;
-    height: 36px; padding: 0 16px; gap: 6px;
-  }
-  .fbar-lbl { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); margin-right: 8px; }
-  .fchk { display: flex; align-items: center; gap: 5px; cursor: pointer; padding: 4px 10px; border-radius: 3px; border: 1px solid var(--border); background: var(--surface); transition: all 0.15s; user-select: none; }
-  .fchk:hover { border-color: rgba(255,255,255,0.2); }
-  .fchk input { display: none; }
-  .fchk-dot { width: 8px; height: 8px; border-radius: 50%; }
-  .fchk span { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
-  .fchk.active { border-color: currentColor; background: rgba(255,255,255,0.04); }
-  .fchk-eta { color: #4dffb4; }
-  .fchk-seal { color: #ffaa44; }
-  .fchk-truck { color: #ff6b6b; }
-  .fchk-etd { color: #66aaff; }
+/* FILTER BAR */
+#filter-bar {
+position: fixed; top: 52px; left: 0; right: 0; z-index: 190;
+background: #181c26f0; border-bottom: 1px solid var(–border);
+backdrop-filter: blur(6px); display: flex; align-items: center;
+height: 36px; padding: 0 16px; gap: 6px;
+}
+.fbar-lbl { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(–text-dim); margin-right: 8px; }
+.fchk { display: flex; align-items: center; gap: 5px; cursor: pointer; padding: 4px 10px; border-radius: 3px; border: 1px solid var(–border); background: var(–surface); transition: all 0.15s; user-select: none; }
+.fchk:hover { border-color: rgba(255,255,255,0.2); }
+.fchk input { display: none; }
+.fchk-dot { width: 8px; height: 8px; border-radius: 50%; }
+.fchk span { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+.fchk.active { border-color: currentColor; background: rgba(255,255,255,0.04); }
+.fchk-eta { color: #4dffb4; }
+.fchk-seal { color: #ffaa44; }
+.fchk-truck { color: #ff6b6b; }
+.fchk-etd { color: #66aaff; }
 
-  /* VIEWS */
-  .view { display: none; }
-  .view.active { display: flex; }
-  #timeline-view { padding-top: 88px; height: 100vh; overflow: hidden; }
-  #tl-scroll { flex: 1; overflow-y: auto; overflow-x: auto; position: relative; }
-  #tl-scroll::-webkit-scrollbar { width: 5px; height: 5px; }
-  #tl-scroll::-webkit-scrollbar-thumb { background: #2a3040; border-radius: 3px; }
-  #tl-inner { position: relative; }
+/* VIEWS */
+.view { display: none; }
+.view.active { display: flex; }
+#timeline-view { padding-top: 88px; height: 100vh; overflow: hidden; }
+#tl-scroll { flex: 1; overflow-y: auto; overflow-x: auto; position: relative; }
+#tl-scroll::-webkit-scrollbar { width: 5px; height: 5px; }
+#tl-scroll::-webkit-scrollbar-thumb { background: #2a3040; border-radius: 3px; }
+#tl-inner { position: relative; }
 
-  /* NOW LINE */
-  #now-line-el { position: absolute; left: 0; right: 0; height: 3px; background: var(--now-line); z-index: 50; pointer-events: none; box-shadow: 0 0 10px var(--now-line); }
-  #now-line-el::before { content: 'NOW'; position: absolute; left: 58px; top: -9px; font-family: var(--font-mono); font-size: 9px; color: var(--now-line); background: transparent; padding: 0 4px; letter-spacing: 1px; z-index: 51; }
-  #now-line-el::after { content: ''; position: absolute; left: 46px; top: -4px; width: 10px; height: 10px; border-radius: 50%; background: var(--now-line); box-shadow: 0 0 8px var(--now-line); }
+/* NOW LINE */
+#now-line-el { position: absolute; left: 0; right: 0; height: 3px; background: var(–now-line); z-index: 50; pointer-events: none; box-shadow: 0 0 10px var(–now-line); }
+#now-line-el::before { content: ‘NOW’; position: absolute; left: 58px; top: -9px; font-family: var(–font-mono); font-size: 9px; color: var(–now-line); background: transparent; padding: 0 4px; letter-spacing: 1px; z-index: 51; }
+#now-line-el::after { content: ‘’; position: absolute; left: 46px; top: -4px; width: 10px; height: 10px; border-radius: 50%; background: var(–now-line); box-shadow: 0 0 8px var(–now-line); }
 
-  .hour-tick { position: absolute; left: 0; right: 0; height: 1px; background: var(--border); z-index: 1; }
-  .hour-lbl { position: absolute; left: 0; width: 54px; font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); padding-right: 8px; text-align: right; z-index: 4; background: var(--bg); }
+.hour-tick { position: absolute; left: 0; right: 0; height: 1px; background: var(–border); z-index: 1; }
+.hour-lbl { position: absolute; left: 0; width: 54px; font-family: var(–font-mono); font-size: 10px; color: var(–text-muted); padding-right: 8px; text-align: right; z-index: 4; background: var(–bg); }
 
-  /* EVENT BLOCKS */
-  .eblock { position: absolute; border-radius: 3px; border-left: 3px solid; overflow: hidden; cursor: default; transition: filter 0.15s; z-index: 10; background: rgba(30,35,48,0.97); }
-  .eblock:hover { z-index: 50; filter: brightness(1.3); }
-  .eblock.done { background: var(--done-bg) !important; border-color: var(--done-border) !important; opacity: 0.4; }
-  .eblock.past:not(.done) { opacity: 0.55; }
-  .eb { padding: 4px 6px; height: 100%; display: flex; flex-direction: column; justify-content: center; gap: 1px; position: relative; }
-  .eb-time { font-family: var(--font-mono); font-size: 10px; color: rgba(255,255,255,0.45); line-height: 1; }
-  .eb-type { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; line-height: 1; }
-  .eb-flight { font-family: var(--font-mono); font-size: 13px; line-height: 1; white-space: nowrap; }
-  .eb-airline { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.35); line-height: 1; }
-  .eb-acts { display: flex; gap: 3px; margin-top: 3px; flex-wrap: wrap; }
+/* EVENT BLOCKS */
+.eblock { position: absolute; border-radius: 3px; border-left: 3px solid; overflow: hidden; cursor: default; transition: filter 0.15s; z-index: 10; background: rgba(30,35,48,0.97); }
+.eblock:hover { z-index: 50; filter: brightness(1.3); }
+.eblock.done { background: var(–done-bg) !important; border-color: var(–done-border) !important; opacity: 0.4; }
+.eblock.past:not(.done) { opacity: 0.55; }
+.eb { padding: 4px 6px; height: 100%; display: flex; flex-direction: column; justify-content: center; gap: 1px; position: relative; }
+.eb-time { font-family: var(–font-mono); font-size: 10px; color: rgba(255,255,255,0.45); line-height: 1; }
+.eb-type { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; line-height: 1; }
+.eb-flight { font-family: var(–font-mono); font-size: 13px; line-height: 1; white-space: nowrap; }
+.eb-airline { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.35); line-height: 1; }
+.eb-acts { display: flex; gap: 3px; margin-top: 3px; flex-wrap: wrap; }
 
-  .btn-done { font-family: var(--font-ui); font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 2px 6px; border-radius: 2px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.45); cursor: pointer; transition: all 0.15s; white-space: nowrap; }
-  .btn-done:hover { background: rgba(255,255,255,0.1); color: #fff; }
-  .eblock.done .btn-done { color: #4dff88; border-color: #2a7a44; background: rgba(77,255,136,0.1); pointer-events: all; cursor: pointer; }
-  .eblock.done .btn-done:hover { background: rgba(77,255,136,0.2); color: #fff; border-color: #4dff88; }
+.btn-done { font-family: var(–font-ui); font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 2px 6px; border-radius: 2px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.45); cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+.btn-done:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.eblock.done .btn-done { color: #4dff88; border-color: #2a7a44; background: rgba(77,255,136,0.1); pointer-events: all; cursor: pointer; }
+.eblock.done .btn-done:hover { background: rgba(77,255,136,0.2); color: #fff; border-color: #4dff88; }
 
-  /* FR24 buttons — only on ETA/ETD */
-  .btn-fr24 { font-family: var(--font-ui); font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 2px 7px; border-radius: 2px; text-decoration: none; display: inline-flex; align-items: center; gap: 3px; transition: all 0.1s; white-space: nowrap; cursor: pointer; }
-  .btn-fr24-live { border: 1px solid rgba(255,140,0,0.4); background: rgba(255,140,0,0.07); color: rgba(255,165,0,0.8); }
-  .btn-fr24-live:hover { background: rgba(255,140,0,0.16); color: #ffcc44; }
-  .btn-fr24-hist { border: 1px solid rgba(0,212,255,0.25); background: rgba(0,212,255,0.05); color: rgba(0,212,255,0.6); }
-  .btn-fr24-hist:hover { background: rgba(0,212,255,0.12); color: var(--accent); }
-  .fr-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; display: inline-block; animation: frpulse 1.4s infinite; }
-  @keyframes frpulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-  .done-ck { position: absolute; top: 3px; right: 4px; font-size: 12px; opacity: 0.2; }
+/* FR24 buttons — only on ETA/ETD */
+.btn-fr24 { font-family: var(–font-ui); font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 2px 7px; border-radius: 2px; text-decoration: none; display: inline-flex; align-items: center; gap: 3px; transition: all 0.1s; white-space: nowrap; cursor: pointer; }
+.btn-fr24-live { border: 1px solid rgba(255,140,0,0.4); background: rgba(255,140,0,0.07); color: rgba(255,165,0,0.8); }
+.btn-fr24-live:hover { background: rgba(255,140,0,0.16); color: #ffcc44; }
+.btn-fr24-hist { border: 1px solid rgba(0,212,255,0.25); background: rgba(0,212,255,0.05); color: rgba(0,212,255,0.6); }
+.btn-fr24-hist:hover { background: rgba(0,212,255,0.12); color: var(–accent); }
+.fr-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; display: inline-block; animation: frpulse 1.4s infinite; }
+@keyframes frpulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.done-ck { position: absolute; top: 3px; right: 4px; font-size: 12px; opacity: 0.2; }
 
-  .type-eta .eb-type { color: #4dffb4; }
-  .type-seal .eb-type { color: #ffaa44; }
-  .type-truck .eb-type { color: #ff6b6b; }
-  .type-etd .eb-type { color: #66aaff; }
+.type-eta .eb-type { color: #4dffb4; }
+.type-seal .eb-type { color: #ffaa44; }
+.type-truck .eb-type { color: #ff6b6b; }
+.type-etd .eb-type { color: #66aaff; }
 
-  /* RIGHT PANEL */
-  #right-panel { width: 210px; min-width: 210px; background: var(--surface); border-left: 1px solid var(--border); padding: 14px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; transition: width 0.25s ease, min-width 0.25s ease, padding 0.25s ease; position: relative; }
-  #right-panel.collapsed { width: 28px; min-width: 28px; padding: 0; overflow: hidden; }
-  #right-panel.collapsed .psec { opacity: 0; pointer-events: none; }
-  #panel-toggle { position: absolute; top: 50%; left: 0; transform: translateY(-50%); width: 14px; height: 48px; background: var(--border); border-radius: 3px 0 0 3px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text-dim); font-size: 9px; transition: background 0.15s, color 0.15s; user-select: none; z-index: 10; border: 1px solid var(--border); border-right: none; }
-  #panel-toggle:hover { background: var(--surface2); color: var(--accent); }
-  #right-panel:not(.collapsed) #panel-toggle { left: auto; right: -14px; border-radius: 0 3px 3px 0; border: 1px solid var(--border); border-left: none; }
-  #panel-toggle-icon { font-style: normal; font-size: 12px; }
-  .ptitle { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 7px; padding-bottom: 5px; border-bottom: 1px solid var(--border); }
-  .progbar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; margin-top: 5px; }
-  .progfill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 1s; }
-  .progtxt { font-family: var(--font-mono); font-size: 10px; color: var(--text-dim); margin-top: 4px; }
-  .zrow { display: flex; align-items: center; gap: 7px; margin-bottom: 8px; }
-  .zrow label { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-dim); min-width: 40px; }
-  .zrow input[type=range] { flex: 1; accent-color: var(--accent); }
-  .zrow span { font-family: var(--font-mono); font-size: 10px; color: var(--text); min-width: 24px; text-align: right; }
-  .trow { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
-  .trow label { font-size: 10px; color: var(--text-dim); }
-  .tog { position: relative; width: 30px; height: 15px; }
-  .tog input { opacity: 0; width: 0; height: 0; }
-  .tog-sl { position: absolute; inset: 0; background: var(--border); border-radius: 8px; cursor: pointer; transition: 0.2s; }
-  .tog-sl::before { content: ''; position: absolute; left: 2px; top: 1.5px; width: 12px; height: 12px; border-radius: 50%; background: var(--text-dim); transition: 0.2s; }
-  .tog input:checked + .tog-sl { background: var(--accent); }
-  .tog input:checked + .tog-sl::before { transform: translateX(15px); background: #fff; }
-  .leg-item { display: flex; align-items: center; gap: 7px; margin-bottom: 4px; font-size: 10px; color: var(--text); }
-  .leg-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+/* RIGHT PANEL */
+#right-panel { width: 210px; min-width: 210px; background: var(–surface); border-left: 1px solid var(–border); padding: 14px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; transition: width 0.25s ease, min-width 0.25s ease, padding 0.25s ease; position: relative; }
+#right-panel.collapsed { width: 28px; min-width: 28px; padding: 0; overflow: hidden; }
+#right-panel.collapsed .psec { opacity: 0; pointer-events: none; }
+#panel-toggle { position: absolute; top: 50%; left: 0; transform: translateY(-50%); width: 14px; height: 48px; background: var(–border); border-radius: 3px 0 0 3px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(–text-dim); font-size: 9px; transition: background 0.15s, color 0.15s; user-select: none; z-index: 10; border: 1px solid var(–border); border-right: none; }
+#panel-toggle:hover { background: var(–surface2); color: var(–accent); }
+#right-panel:not(.collapsed) #panel-toggle { left: auto; right: -14px; border-radius: 0 3px 3px 0; border: 1px solid var(–border); border-left: none; }
+#panel-toggle-icon { font-style: normal; font-size: 12px; }
+.ptitle { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(–text-dim); margin-bottom: 7px; padding-bottom: 5px; border-bottom: 1px solid var(–border); }
+.progbar { height: 4px; background: var(–border); border-radius: 2px; overflow: hidden; margin-top: 5px; }
+.progfill { height: 100%; background: var(–accent); border-radius: 2px; transition: width 1s; }
+.progtxt { font-family: var(–font-mono); font-size: 10px; color: var(–text-dim); margin-top: 4px; }
+.zrow { display: flex; align-items: center; gap: 7px; margin-bottom: 8px; }
+.zrow label { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(–text-dim); min-width: 40px; }
+.zrow input[type=range] { flex: 1; accent-color: var(–accent); }
+.zrow span { font-family: var(–font-mono); font-size: 10px; color: var(–text); min-width: 24px; text-align: right; }
+.trow { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.trow label { font-size: 10px; color: var(–text-dim); }
+.tog { position: relative; width: 30px; height: 15px; }
+.tog input { opacity: 0; width: 0; height: 0; }
+.tog-sl { position: absolute; inset: 0; background: var(–border); border-radius: 8px; cursor: pointer; transition: 0.2s; }
+.tog-sl::before { content: ‘’; position: absolute; left: 2px; top: 1.5px; width: 12px; height: 12px; border-radius: 50%; background: var(–text-dim); transition: 0.2s; }
+.tog input:checked + .tog-sl { background: var(–accent); }
+.tog input:checked + .tog-sl::before { transform: translateX(15px); background: #fff; }
+.leg-item { display: flex; align-items: center; gap: 7px; margin-bottom: 4px; font-size: 10px; color: var(–text); }
+.leg-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
 
-  /* Export/Import buttons in panel */
-  .btn-io { width: 100%; font-family: var(--font-ui); font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 6px 0; border-radius: 2px; cursor: pointer; margin-bottom: 5px; transition: all 0.15s; }
-  .btn-export { background: #001a24; border: 1px solid var(--accent); color: var(--accent); }
-  .btn-export:hover { background: #002a3a; }
-  .btn-import { background: #1a1000; border: 1px solid #ffaa44; color: #ffaa44; }
-  .btn-import:hover { background: #2a1a00; }
+/* Export/Import buttons in panel */
+.btn-io { width: 100%; font-family: var(–font-ui); font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 6px 0; border-radius: 2px; cursor: pointer; margin-bottom: 5px; transition: all 0.15s; }
+.btn-export { background: #001a24; border: 1px solid var(–accent); color: var(–accent); }
+.btn-export:hover { background: #002a3a; }
+.btn-import { background: #1a1000; border: 1px solid #ffaa44; color: #ffaa44; }
+.btn-import:hover { background: #2a1a00; }
 
-  /* CONFIG */
-  #config-view { display: block !important; padding-top: 80px; padding-left: 36px; padding-right: 36px; padding-bottom: 40px; max-width: 1080px; margin: 0 auto; overflow-y: auto; }
-  #config-view:not(.active) { display: none !important; }
-  .csec { margin-bottom: 36px; }
-  .csec h2 { font-size: 13px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; padding-bottom: 7px; border-bottom: 1px solid var(--border); }
-  .ctbl { width: 100%; border-collapse: collapse; font-size: 12px; }
-  .ctbl th { text-align: left; padding: 7px 9px; background: var(--surface); color: var(--text-dim); font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid var(--border); }
-  .ctbl td { padding: 5px 9px; border-bottom: 1px solid var(--border); vertical-align: middle; color: var(--text); }
-  .ctbl tr:hover td { background: var(--surface); }
-  .ctbl input[type=text], .ctbl input[type=time], .ctbl select { background: var(--bg); border: 1px solid var(--border); color: var(--text); font-family: var(--font-mono); font-size: 11px; padding: 3px 6px; border-radius: 2px; width: 100%; }
-  .ctbl input[type=color] { width: 34px; height: 24px; border: 1px solid var(--border); background: none; cursor: pointer; border-radius: 2px; padding: 1px; }
-  .daycbs { display: flex; gap: 5px; flex-wrap: wrap; }
-  .dcb { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 8px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-dim); cursor: pointer; }
-  .dcb input[type=checkbox] { accent-color: var(--accent); cursor: pointer; }
-  .btn-add { background: #001a24; border: 1px solid var(--accent); color: var(--accent); font-family: var(--font-ui); font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 7px 16px; border-radius: 2px; cursor: pointer; transition: all 0.15s; margin-top: 9px; }
-  .btn-add:hover { background: #002a3a; }
-  .btn-del { background: #1a0005; border: 1px solid #5a0010; color: #ff4466; font-family: var(--font-ui); font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 3px 7px; border-radius: 2px; cursor: pointer; white-space: nowrap; }
-  .btn-del:hover { background: #2a0010; }
-  .drow { display: flex; align-items: center; gap: 14px; margin-bottom: 13px; }
-  .drow label { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-dim); min-width: 150px; }
-  .drow input[type=range] { flex: 1; max-width: 180px; accent-color: var(--accent); }
-  .drow span { font-family: var(--font-mono); font-size: 11px; color: var(--text); min-width: 40px; }
+/* CONFIG */
+#config-view { display: block !important; padding-top: 80px; padding-left: 36px; padding-right: 36px; padding-bottom: 40px; max-width: 1080px; margin: 0 auto; overflow-y: auto; }
+#config-view:not(.active) { display: none !important; }
+.csec { margin-bottom: 36px; }
+.csec h2 { font-size: 13px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(–accent); margin-bottom: 14px; padding-bottom: 7px; border-bottom: 1px solid var(–border); }
+.ctbl { width: 100%; border-collapse: collapse; font-size: 12px; }
+.ctbl th { text-align: left; padding: 7px 9px; background: var(–surface); color: var(–text-dim); font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid var(–border); }
+.ctbl td { padding: 5px 9px; border-bottom: 1px solid var(–border); vertical-align: middle; color: var(–text); }
+.ctbl tr:hover td { background: var(–surface); }
+.ctbl input[type=text], .ctbl input[type=time], .ctbl select { background: var(–bg); border: 1px solid var(–border); color: var(–text); font-family: var(–font-mono); font-size: 11px; padding: 3px 6px; border-radius: 2px; width: 100%; }
+.ctbl input[type=color] { width: 34px; height: 24px; border: 1px solid var(–border); background: none; cursor: pointer; border-radius: 2px; padding: 1px; }
+.daycbs { display: flex; gap: 5px; flex-wrap: wrap; }
+.dcb { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 8px; letter-spacing: 1px; text-transform: uppercase; color: var(–text-dim); cursor: pointer; }
+.dcb input[type=checkbox] { accent-color: var(–accent); cursor: pointer; }
+.btn-add { background: #001a24; border: 1px solid var(–accent); color: var(–accent); font-family: var(–font-ui); font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 7px 16px; border-radius: 2px; cursor: pointer; transition: all 0.15s; margin-top: 9px; }
+.btn-add:hover { background: #002a3a; }
+.btn-del { background: #1a0005; border: 1px solid #5a0010; color: #ff4466; font-family: var(–font-ui); font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 3px 7px; border-radius: 2px; cursor: pointer; white-space: nowrap; }
+.btn-del:hover { background: #2a0010; }
+.drow { display: flex; align-items: center; gap: 14px; margin-bottom: 13px; }
+.drow label { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(–text-dim); min-width: 150px; }
+.drow input[type=range] { flex: 1; max-width: 180px; accent-color: var(–accent); }
+.drow span { font-family: var(–font-mono); font-size: 11px; color: var(–text); min-width: 40px; }
 
-  #toast { position: fixed; bottom: 20px; right: 20px; background: var(--surface); border: 1px solid var(--accent); color: var(--accent); font-family: var(--font-mono); font-size: 11px; padding: 8px 16px; border-radius: 3px; z-index: 999; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
-  #toast.show { opacity: 1; }
-  #file-import { display: none; }
+#toast { position: fixed; bottom: 20px; right: 20px; background: var(–surface); border: 1px solid var(–accent); color: var(–accent); font-family: var(–font-mono); font-size: 11px; padding: 8px 16px; border-radius: 3px; z-index: 999; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+#toast.show { opacity: 1; }
+#file-import { display: none; }
 
-  /* ── MOBILE RESPONSIVE ── */
-  @media (max-width: 768px) {
-    #topbar { height: 44px; }
-    .logo { font-size: 12px; letter-spacing: 2px; padding: 0 10px; }
-    #date-str { display: none; }
-    #clock { font-size: 16px; padding: 0 10px; }
-    .spill { padding: 0 8px; }
-    .spill .lbl { font-size: 8px; }
-    .spill .val { font-size: 10px; max-width: 90px; }
-    .ntab { padding: 0 12px; font-size: 10px; letter-spacing: 1px; }
-    #filter-bar { top: 44px; height: 40px; padding: 0 10px; gap: 5px; overflow-x: auto; overflow-y: hidden; flex-wrap: nowrap; scrollbar-width: none; }
-    #filter-bar::-webkit-scrollbar { display: none; }
-    .fbar-lbl { display: none; }
-    .fchk { padding: 5px 10px; flex-shrink: 0; }
-    #timeline-view { padding-top: 84px; padding-bottom: 46px; }
-    #right-panel { display: none !important; }
-    .eb { padding: 5px 7px; gap: 2px; }
-    .eb-time { font-size: 11px; }
-    .eb-type { font-size: 11px; }
-    .eb-flight { font-size: 14px; font-weight: 700; }
-    .btn-done { font-size: 10px; padding: 5px 10px; min-height: 30px; }
-    .btn-fr24 { font-size: 9px; padding: 5px 8px; min-height: 30px; }
-    .eb-acts { gap: 5px; margin-top: 5px; }
-    #config-view { padding: 60px 12px 60px; }
-    .ctbl { font-size: 11px; }
-    .ctbl th { font-size: 8px; padding: 5px; }
-    .ctbl td { padding: 4px 5px; }
-    .csec h2 { font-size: 11px; }
-    #mobile-stats { display: flex !important; }
-    #toast { bottom: 56px; }
-  }
+/* Background swatches */
+.bg-sw { width: 26px; height: 26px; border-radius: 4px; cursor: pointer; border: 2px solid transparent; transition: all 0.15s; flex-shrink: 0; }
+.bg-sw:hover { border-color: rgba(255,255,255,0.3); transform: scale(1.1); }
+.bg-sw.active { border-color: var(–accent); box-shadow: 0 0 6px var(–accent); }
 
-  /* Tablet */
-  @media (min-width: 769px) and (max-width: 1100px) {
-    #right-panel { width: 170px; min-width: 170px; }
-    .logo { font-size: 14px; padding: 0 14px; }
-    #clock { font-size: 18px; padding: 0 12px; }
-    .spill .val { max-width: 140px; }
-    .btn-done { padding: 3px 8px; min-height: 26px; }
-    .btn-fr24 { padding: 3px 7px; min-height: 26px; }
-  }
+/* AIRLINE CARDS */
+.al-card { background: var(–surface); border: 1px solid var(–border); border-radius: 5px; min-width: 260px; flex: 1; max-width: 380px; overflow: hidden; }
+.al-card-head { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(–border); }
+.al-card-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.al-card-name { font-family: var(–font-ui); font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; flex: 1; }
+.al-card-meals { font-family: var(–font-mono); font-size: 11px; color: var(–accent); margin-left: auto; white-space: nowrap; }
+.al-card-body { padding: 6px 0; }
+.al-fl-row { display: flex; align-items: center; padding: 5px 14px; gap: 10px; border-bottom: 1px solid var(–border); transition: background 0.1s; }
+.al-fl-row:last-child { border-bottom: none; }
+.al-fl-row.done-row { opacity: 0.4; }
+.al-fl-row.past-row:not(.done-row) { opacity: 0.6; }
+.al-fl-num { font-family: var(–font-mono); font-size: 13px; font-weight: 700; min-width: 65px; }
+.al-fl-times { display: flex; gap: 6px; flex: 1; flex-wrap: wrap; }
+.al-fl-chip { font-family: var(–font-mono); font-size: 10px; padding: 2px 6px; border-radius: 2px; border: 1px solid; white-space: nowrap; }
+.al-fl-meals { font-family: var(–font-mono); font-size: 11px; color: var(–text-dim); margin-left: auto; }
+.al-done-btn { font-family: var(–font-ui); font-size: 9px; font-weight: 700; letter-spacing: 1px; padding: 3px 8px; border-radius: 2px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.4); cursor: pointer; white-space: nowrap; transition: all 0.15s; }
+.al-done-btn.is-done { color: #4dff88; border-color: #2a7a44; background: rgba(77,255,136,0.1); }
+.al-done-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.al-done-btn.is-done:hover { background: rgba(77,255,136,0.2); }
 
-  /* Background swatches */
-  .bg-sw { width: 26px; height: 26px; border-radius: 4px; cursor: pointer; border: 2px solid transparent; transition: all 0.15s; flex-shrink: 0; }
-  .bg-sw:hover { border-color: rgba(255,255,255,0.3); transform: scale(1.1); }
-  .bg-sw.active { border-color: var(--accent); box-shadow: 0 0 6px var(--accent); }
+/* ALERT pulse */
+@keyframes alertpulse { 0%,100%{box-shadow:0 0 24px rgba(255,170,68,0.3)} 50%{box-shadow:0 0 40px rgba(255,170,68,0.7)} }
+#alert-banner { animation: alertpulse 1.5s infinite; }
 
-  /* AIRLINE CARDS */
-  .al-card { background: var(--surface); border: 1px solid var(--border); border-radius: 5px; min-width: 260px; flex: 1; max-width: 380px; overflow: hidden; }
-  .al-card-head { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--border); }
-  .al-card-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-  .al-card-name { font-family: var(--font-ui); font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; flex: 1; }
-  .al-card-meals { font-family: var(--font-mono); font-size: 11px; color: var(--accent); margin-left: auto; white-space: nowrap; }
-  .al-card-body { padding: 6px 0; }
-  .al-fl-row { display: flex; align-items: center; padding: 5px 14px; gap: 10px; border-bottom: 1px solid var(--border); transition: background 0.1s; }
-  .al-fl-row:last-child { border-bottom: none; }
-  .al-fl-row.done-row { opacity: 0.4; }
-  .al-fl-row.past-row:not(.done-row) { opacity: 0.6; }
-  .al-fl-num { font-family: var(--font-mono); font-size: 13px; font-weight: 700; min-width: 65px; }
-  .al-fl-times { display: flex; gap: 6px; flex: 1; flex-wrap: wrap; }
-  .al-fl-chip { font-family: var(--font-mono); font-size: 10px; padding: 2px 6px; border-radius: 2px; border: 1px solid; white-space: nowrap; }
-  .al-fl-meals { font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); margin-left: auto; }
-  .al-done-btn { font-family: var(--font-ui); font-size: 9px; font-weight: 700; letter-spacing: 1px; padding: 3px 8px; border-radius: 2px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.4); cursor: pointer; white-space: nowrap; transition: all 0.15s; }
-  .al-done-btn.is-done { color: #4dff88; border-color: #2a7a44; background: rgba(77,255,136,0.1); }
-  .al-done-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
-  .al-done-btn.is-done:hover { background: rgba(77,255,136,0.2); }
+/* ══════════════════════════════════════════
+MOBILE RESPONSIVE — FIXES COMPLETS
+══════════════════════════════════════════ */
+@media (max-width: 768px) {
 
-  /* ALERT pulse */
-  @keyframes alertpulse { 0%,100%{box-shadow:0 0 24px rgba(255,170,68,0.3)} 50%{box-shadow:0 0 40px rgba(255,170,68,0.7)} }
-  #alert-banner { animation: alertpulse 1.5s infinite; }
+```
+/* ── TOPBAR ── */
+#topbar { height: 48px; }
+.logo { font-size: 11px; letter-spacing: 1.5px; padding: 0 10px; min-width: 0; }
+#date-str { display: none; }
+#clock { font-size: 17px; padding: 0 10px; letter-spacing: 1px; }
+/* Masquer le status-bar desktop dans topbar sur mobile */
+#status-bar { display: none; }
+/* Afficher uniquement les onglets */
+#nav-tabs { margin-left: 0; }
+.ntab { padding: 0 10px; font-size: 10px; letter-spacing: 1px; }
 
-  /* Mobile bottom stats — hidden on desktop */
-  #mobile-stats { display: none; }
+/* ── FILTER BAR ── */
+#filter-bar { top: 48px; height: 40px; padding: 0 10px; gap: 5px; overflow-x: auto; overflow-y: hidden; flex-wrap: nowrap; scrollbar-width: none; }
+#filter-bar::-webkit-scrollbar { display: none; }
+.fbar-lbl { display: none; }
+.fchk { padding: 5px 10px; flex-shrink: 0; }
+.fchk span { font-size: 11px; }
+
+/* ── TIMELINE VIEW ── */
+#timeline-view { padding-top: 88px; padding-bottom: 100px; }
+#right-panel { display: none !important; }
+
+/* ── EVENT BLOCKS mobiles : 1 colonne pleine largeur ── */
+/* Les blocs sont positionnés via JS, on surcharge via CSS mobile */
+.eblock {
+  /* override JS inline left/width */
+  left: 58px !important;
+  width: calc(100vw - 70px) !important;
+  min-height: 88px !important;
+}
+
+.eb { padding: 8px 10px; gap: 3px; }
+.eb-time {
+  font-size: 13px;
+  color: rgba(255,255,255,0.55);
+  font-weight: 700;
+}
+.eb-type {
+  font-size: 12px;
+  letter-spacing: 1.5px;
+}
+.eb-flight {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.eb-airline {
+  font-size: 11px;
+  color: rgba(255,255,255,0.5);
+}
+.eb-acts { gap: 6px; margin-top: 6px; }
+.btn-done {
+  font-size: 11px;
+  padding: 6px 14px;
+  min-height: 32px;
+  border-radius: 3px;
+}
+.btn-fr24 {
+  font-size: 10px;
+  padding: 6px 10px;
+  min-height: 32px;
+}
+.done-ck { font-size: 16px; top: 6px; right: 8px; }
+
+/* ── HOUR LABELS ── */
+.hour-lbl { font-size: 11px; color: var(--text-dim); width: 50px; }
+
+/* ── CONFIG ── */
+#config-view { padding: 60px 12px 60px; }
+.ctbl { font-size: 11px; }
+.ctbl th { font-size: 8px; padding: 5px; }
+.ctbl td { padding: 4px 5px; }
+.csec h2 { font-size: 11px; }
+
+/* ── TOAST ── */
+#toast { bottom: 110px; }
+
+/* ── MOBILE BOTTOM BAR — VERSION AMÉLIORÉE ── */
+#mobile-stats { display: flex !important; }
+```
+
+}
+
+/* Tablet */
+@media (min-width: 769px) and (max-width: 1100px) {
+#right-panel { width: 170px; min-width: 170px; }
+.logo { font-size: 14px; padding: 0 14px; }
+#clock { font-size: 18px; padding: 0 12px; }
+.spill .val { max-width: 140px; }
+.btn-done { padding: 3px 8px; min-height: 26px; }
+.btn-fr24 { padding: 3px 7px; min-height: 26px; }
+}
+
+/* Mobile bottom stats — hidden on desktop */
+#mobile-stats { display: none; }
 </style>
+
 </head>
 <body>
 
 <div id="topbar">
-  <div class="logo">⬡ JNB CATERING OPS</div>
+  <div class="logo">⬡ JNB OPS</div>
   <div id="date-str"></div>
   <div id="clock">00:00:00</div>
   <div id="status-bar">
@@ -267,6 +326,7 @@
 </div>
 
 <!-- FILTER BAR -->
+
 <div id="filter-bar">
   <span class="fbar-lbl">Show</span>
   <label class="fchk fchk-eta active" id="fchk-eta">
@@ -370,13 +430,85 @@
   </div>
 </div>
 
-<div id="mobile-stats" style="position:fixed;bottom:0;left:0;right:0;z-index:150;background:#181c26f5;border-top:1px solid #2e3440;height:46px;align-items:center;padding:0 14px;gap:0;">
-  <div class="spill" style="border-right:1px solid #2e3440;"><div class="lbl">Current</div><div class="val cur" id="mob-cur">—</div></div>
-  <div class="spill" style="border-right:1px solid #2e3440;"><div class="lbl">Next</div><div class="val nxt" id="mob-nxt">—</div></div>
-  <div class="spill" style="margin-left:auto;border-right:none;"><div class="lbl">Done</div><div class="val" id="mob-done">0/0</div></div>
+<!-- ══════════════════════════════════════════
+     MOBILE BOTTOM BAR — VERSION AMÉLIORÉE
+     ══════════════════════════════════════════ -->
+
+<div id="mobile-stats" style="
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 150;
+  background: #0e1118f8;
+  border-top: 2px solid #2e3440;
+  height: auto;
+  display: none;
+  flex-direction: column;
+  padding: 0;
+">
+  <!-- Barre de progression en haut -->
+  <div id="mob-progress-bar" style="height:3px;background:#2e3440;width:100%;">
+    <div id="mob-progress-fill" style="height:100%;background:var(--accent);width:0%;transition:width 1s;"></div>
+  </div>
+
+  <!-- Ligne principale : Current / Next / Done -->
+
+  <div style="display:flex;align-items:stretch;height:72px;">
+
+```
+<!-- CURRENT -->
+<div style="
+  flex: 1;
+  padding: 10px 12px;
+  border-right: 1px solid #2e3440;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  overflow: hidden;
+">
+  <div style="font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: #5a6070; margin-bottom: 4px; font-family: var(--font-ui); font-weight: 700;">Current</div>
+  <div id="mob-cur-time" style="font-family: var(--font-mono); font-size: 14px; color: #ffaa44; line-height: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">—</div>
+  <div id="mob-cur-info" style="font-family: var(--font-ui); font-size: 12px; font-weight: 600; color: #d8dce8; line-height: 1.2; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">—</div>
+</div>
+
+<!-- NEXT -->
+<div style="
+  flex: 1;
+  padding: 10px 12px;
+  border-right: 1px solid #2e3440;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  overflow: hidden;
+">
+  <div style="font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: #5a6070; margin-bottom: 4px; font-family: var(--font-ui); font-weight: 700;">Next</div>
+  <div id="mob-nxt-time" style="font-family: var(--font-mono); font-size: 14px; color: #44ffaa; line-height: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">—</div>
+  <div id="mob-nxt-info" style="font-family: var(--font-ui); font-size: 12px; font-weight: 600; color: #d8dce8; line-height: 1.2; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">—</div>
+</div>
+
+<!-- DONE -->
+<div style="
+  width: 72px;
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-shrink: 0;
+">
+  <div style="font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: #5a6070; margin-bottom: 4px; font-family: var(--font-ui); font-weight: 700;">Done</div>
+  <div id="mob-done-num" style="font-family: var(--font-mono); font-size: 18px; color: var(--accent); line-height: 1; font-weight: 700;">0</div>
+  <div id="mob-done-tot" style="font-family: var(--font-mono); font-size: 11px; color: #5a6070; line-height: 1; margin-top: 2px;">/0</div>
+</div>
+```
+
+  </div>
 </div>
 
 <!-- AIRLINE VIEW -->
+
 <div id="airline-view" class="view" style="padding-top:88px;padding-bottom:20px;overflow-y:auto;flex-direction:column;">
   <div style="padding:0 28px 16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
     <div style="font-family:var(--font-ui);font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--text-dim);">Today's Flights by Airline</div>
@@ -387,6 +519,7 @@
 </div>
 
 <!-- ALERT BANNER -->
+
 <div id="alert-banner" style="display:none;position:fixed;top:88px;left:50%;transform:translateX(-50%);z-index:500;background:#1a1000;border:1px solid #ffaa44;border-radius:4px;padding:10px 20px;font-family:var(--font-mono);font-size:12px;color:#ffaa44;letter-spacing:1px;box-shadow:0 0 24px rgba(255,170,68,0.3);cursor:pointer;text-align:center;min-width:280px;" onclick="dismissAlert()">
   <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;opacity:0.7;margin-bottom:4px;">⚠ UPCOMING EVENT</div>
   <div id="alert-text">—</div>
@@ -416,47 +549,49 @@ const DEF_AIRLINES = [
   {id:'egyptair',name:'EgyptAir',color:'#bf0000'},
   {id:'air_austral',name:'Air Austral',color:'#0066cc'},
   {id:'asky',name:'Asky',color:'#ee7700'},
+  {id:'air_cote',name:"Air Cote D'Ivoire",color:'#ff7700'},
   {id:'qantas_perth',name:'Qantas PERTH',color:'#ff8c00'},
 ];
-
-// Frequency key: 1=MON,2=TUE,3=WED,4=THU,5=FRI,6=SAT,7=SUN
-// ALLDAYS index:  MON,TUE,WED,THU,FRI,SAT,SUN
 const DEF_FLIGHTS = [
-  {id:'f2', airline:'Asky',          flight:'KP0073', eta:'01:35', etd:'03:40', sealing:'00:00', truck:'01:00', days:['MON','WED','THU','FRI','SUN']},         // 13457
-  {id:'f5', airline:'Ethiopian',     flight:'ET848',  eta:'03:55', etd:'08:20', sealing:'05:20', truck:'06:20', days:['MON','TUE','WED','THU','FRI','SAT','SUN']}, // 1234567
-  {id:'f6', airline:'Air Seychelles',flight:'HM062',  eta:'19:00', etd:'09:00', sealing:'05:00', truck:'06:00', days:['TUE']},                                  // 2
-  {id:'f7', airline:'Lufthansa',     flight:'LH579',  eta:'07:05', etd:'10:10', sealing:'04:25', truck:'06:25', days:['TUE','THU','SUN']},                      // 247
-  {id:'f8', airline:'Air China',     flight:'CA868',  eta:'07:40', etd:'10:10', sealing:'06:10', truck:'07:10', days:['MON','WED','FRI']},                      // 135
-  {id:'f9', airline:'Emirates',      flight:'EK768',  eta:'05:35', etd:'10:25', sealing:'05:25', truck:'07:25', days:['MON','TUE','WED','THU','FRI','SAT','SUN']}, // 1234567
-  {id:'f10',airline:'Etihad',        flight:'EY748',  eta:'08:20', etd:'09:50', sealing:'06:50', truck:'07:50', days:['MON','WED','THU','FRI','SAT','SUN']},    // 134567
-  {id:'f11',airline:'Cathay',        flight:'CX748',  eta:'07:25', etd:'11:00', sealing:'06:00', truck:'08:30', days:['MON','TUE','WED','THU','FRI','SAT','SUN']}, // 1234567
-  {id:'f12',airline:'Emirates',      flight:'EK762',  eta:'10:25', etd:'13:25', sealing:'07:55', truck:'09:55', days:['MON','TUE','WED','THU','FRI','SAT','SUN']}, // 1234567
-  {id:'f13',airline:'Air Mauritius', flight:'MK852',  eta:'11:25', etd:'13:10', sealing:'09:55', truck:'10:55', days:['MON','TUE','THU','FRI','SAT','SUN']},    // 124567
-  {id:'f14',airline:'Uganda',        flight:'UR711',  eta:'11:45', etd:'12:50', sealing:'10:15', truck:'11:15', days:['MON','WED','FRI','SAT']},                // 1356
-  {id:'f15',airline:'Air Seychelles',flight:'HM060',  eta:'12:30', etd:'13:50', sealing:'10:45', truck:'11:45', days:['FRI','SAT','SUN']},                      // 567
-  {id:'f16',airline:'Latam',         flight:'LA8059', eta:'12:40', etd:'15:25', sealing:'10:45', truck:'11:45', days:['TUE','THU','FRI','SUN']},                // 2457
-  {id:'f17',airline:'Qantas',        flight:'QF064',  eta:'15:00', etd:'17:30', sealing:'11:30', truck:'14:30', days:['MON','WED','THU','SAT']},                // 1346
-  {id:'f18',airline:'Emirates',      flight:'EK764',  eta:'16:35', etd:'18:50', sealing:'14:05', truck:'16:05', days:['MON','TUE','WED','THU','FRI','SAT','SUN']}, // 1234567
-  {id:'f19',airline:'British Airways',flight:'BA056', eta:'09:25', etd:'19:35', sealing:'14:35', truck:'16:35', days:['MON','TUE','WED','THU','FRI','SAT','SUN']}, // 1234567
-  {id:'f20',airline:'Lufthansa',     flight:'LH573',  eta:'09:30', etd:'19:45', sealing:'14:45', truck:'16:45', days:['MON','TUE','WED','THU','FRI','SAT','SUN']}, // 1234567
-  {id:'f21',airline:'Virgin Atlantic',flight:'VS450', eta:'08:35', etd:'21:30', sealing:'16:30', truck:'18:30', days:['THU']},                                  // 4
-  {id:'f22',airline:'Qantas PERTH',  flight:'QF066',  eta:'18:50', etd:'21:55', sealing:'13:20', truck:'18:20', days:['TUE','FRI','SUN']},                      // 257
-  {id:'f23',airline:'Delta',         flight:'DL201',  eta:'19:00', etd:'21:55', sealing:'16:30', truck:'18:30', days:['TUE','WED','FRI','SAT','SUN']},          // 23567
-  {id:'f24',airline:'Uganda',        flight:'UR713',  eta:'19:40', etd:'20:40', sealing:'18:10', truck:'19:10', days:['TUE','THU']},                            // 24
-  {id:'f25',airline:'Virgin Atlantic',flight:'VS450', eta:'08:35', etd:'22:00', sealing:'17:00', truck:'19:00', days:['MON','TUE','WED','FRI','SAT','SUN']},    // 123567
-  {id:'f26',airline:'British Airways',flight:'BA054', eta:'07:00', etd:'22:00', sealing:'17:00', truck:'19:00', days:['MON','TUE','WED','THU','FRI','SAT','SUN']}, // 1234567
-  {id:'f27',airline:'EgyptAir',      flight:'MS840',  eta:'08:10', etd:'22:25', sealing:'18:25', truck:'19:25', days:['MON','WED','FRI','SUN']},                // 1357
-  {id:'f28',airline:'United',        flight:'UA187',  eta:'18:35', etd:'22:00', sealing:'17:30', truck:'19:30', days:['MON','TUE','THU','FRI','SAT','SUN']},    // 124567
-  {id:'f29',airline:'Emirates',      flight:'EK766',  eta:'20:35', etd:'22:20', sealing:'18:00', truck:'20:00', days:['MON','TUE','WED','THU','FRI','SAT','SUN']}, // 1234567
-  {id:'f30',airline:'Air Algerie',   flight:'AH5361', eta:'06:30', etd:'22:30', sealing:'19:30', truck:'20:30', days:['WED','SUN']},                            // 37
-  {id:'f31',airline:'Ethiopian',     flight:'ET858',  eta:'20:10', etd:'22:50', sealing:'19:20', truck:'20:20', days:['MON','TUE','WED','THU','FRI','SAT','SUN']}, // 1234567
-  {id:'f32',airline:'Air Austral',   flight:'UU344',  eta:'20:45', etd:'21:45', sealing:'19:30', truck:'20:15', days:['THU','SUN']},                            // 47
-  {id:'f33',airline:'Uganda',        flight:'UR711',  eta:'23:45', etd:'00:45', sealing:'21:15', truck:'22:00', days:['SUN']},                                  // 7
+  {id:'f1',airline:"Air Cote D'Ivoire",flight:'HF903',eta:'01:25',etd:'03:00',sealing:'00:00',truck:'01:00',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f2',airline:'Asky',flight:'KP0073',eta:'01:35',etd:'03:40',sealing:'00:00',truck:'01:00',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f3',airline:'Air Algerie',flight:'AH5361',eta:'06:25',etd:'07:55',sealing:'04:45',truck:'05:45',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f4',airline:"Air Cote D'Ivoire",flight:'HF903',eta:'01:55',etd:'04:55',sealing:'00:30',truck:'01:30',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f5',airline:'Ethiopian',flight:'ET848',eta:'03:55',etd:'08:20',sealing:'05:20',truck:'06:20',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f6',airline:'Air Seychelles',flight:'HM062',eta:'19:00',etd:'09:00',sealing:'05:00',truck:'06:00',days:['SUN']},
+  {id:'f7',airline:'Lufthansa',flight:'LH579',eta:'07:05',etd:'10:10',sealing:'04:25',truck:'06:25',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f8',airline:'Air China',flight:'CA868',eta:'07:40',etd:'10:10',sealing:'06:10',truck:'07:10',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f9',airline:'Emirates',flight:'EK768',eta:'05:35',etd:'10:25',sealing:'05:25',truck:'07:25',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f10',airline:'Etihad',flight:'EY748',eta:'08:20',etd:'09:50',sealing:'06:50',truck:'07:50',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f11',airline:'Cathay',flight:'CX748',eta:'07:25',etd:'11:00',sealing:'06:00',truck:'08:30',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f12',airline:'Emirates',flight:'EK762',eta:'10:25',etd:'13:25',sealing:'07:55',truck:'09:55',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f13',airline:'Air Mauritius',flight:'MK852',eta:'11:25',etd:'13:10',sealing:'09:55',truck:'10:55',days:['MON','TUE','WED','FRI','SAT','SUN']},
+  {id:'f14',airline:'Uganda',flight:'UR711',eta:'11:45',etd:'12:50',sealing:'10:15',truck:'11:15',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f15',airline:'Air Seychelles',flight:'HM060',eta:'12:30',etd:'13:50',sealing:'10:45',truck:'11:45',days:['FRI','SAT','SUN']},
+  {id:'f16',airline:'Latam',flight:'LA8059',eta:'12:40',etd:'15:25',sealing:'10:45',truck:'11:45',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f17',airline:'Qantas',flight:'QF064',eta:'15:00',etd:'17:30',sealing:'11:30',truck:'14:30',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f18',airline:'Emirates',flight:'EK764',eta:'16:35',etd:'18:50',sealing:'14:05',truck:'16:05',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f19',airline:'British Airways',flight:'BA056',eta:'09:25',etd:'19:35',sealing:'14:35',truck:'16:35',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f20',airline:'Lufthansa',flight:'LH573',eta:'09:30',etd:'19:45',sealing:'14:45',truck:'16:45',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f21',airline:'Virgin Atlantic',flight:'VS450',eta:'08:35',etd:'21:30',sealing:'16:30',truck:'18:30',days:['THU']},
+  {id:'f22',airline:'Qantas PERTH',flight:'QF066',eta:'18:50',etd:'21:55',sealing:'13:20',truck:'18:20',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f23',airline:'Delta',flight:'DL201',eta:'19:00',etd:'21:55',sealing:'16:30',truck:'18:30',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f24',airline:'Uganda',flight:'UR713',eta:'19:40',etd:'20:40',sealing:'18:10',truck:'19:10',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f25',airline:'Virgin Atlantic',flight:'VS450',eta:'08:35',etd:'22:00',sealing:'17:00',truck:'19:00',days:['MON','TUE','WED','FRI','SAT','SUN']},
+  {id:'f26',airline:'British Airways',flight:'BA054',eta:'07:00',etd:'22:00',sealing:'17:00',truck:'19:00',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f27',airline:'EgyptAir',flight:'MS840',eta:'08:10',etd:'22:25',sealing:'18:25',truck:'19:25',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f28',airline:'United',flight:'UA187',eta:'18:35',etd:'22:00',sealing:'17:30',truck:'19:30',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f29',airline:'Emirates',flight:'EK766',eta:'20:35',etd:'22:20',sealing:'18:00',truck:'20:00',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f30',airline:'Air Algerie',flight:'AH5361',eta:'06:30',etd:'22:30',sealing:'19:30',truck:'20:30',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f31',airline:'Ethiopian',flight:'ET858',eta:'20:10',etd:'22:50',sealing:'19:20',truck:'20:20',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f32',airline:'Air Austral',flight:'UU344',eta:'20:45',etd:'21:45',sealing:'19:30',truck:'20:15',days:['THU','SUN']},
+  {id:'f33',airline:'Uganda',flight:'UR711',eta:'23:45',etd:'00:45',sealing:'21:15',truck:'22:00',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
 ];
 
 const ALLDAYS = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
 let airlines=[], flights=[], completions={}, ds={blockH:72,zoom:3,showAl:true};
 let activeFilters = {eta:true, etd:true, seal:true, truck:true};
+const isMobile = () => window.innerWidth <= 768;
 
 function todayKey(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
 
@@ -539,26 +674,61 @@ function buildTimeline(){
   inner.appendChild(nl);
 
   const evs=todayEvents(), nm=nowMins();
-  const BW=178, LANE=60, GAP=4;
-  const cols=[];
+
+  // On mobile : 1 seule colonne pleine largeur, pas de multi-colonnes
+  const mobile = isMobile();
+  const LANE = mobile ? 58 : 60;
+  const GAP = mobile ? 0 : 4;
+  // Sur mobile, largeur = 100% de la fenêtre moins le label heure
+  // (géré via CSS .eblock override)
+  const BW = mobile ? (window.innerWidth - LANE - 8) : 178;
+
+  const cols = [];
 
   function assignCol(mins){
-    const endM=mins+bh/pxpm;
+    if(mobile) return 0; // toujours colonne 0 sur mobile
+    const endM = mins + bh/pxpm;
     for(let c=0;c<cols.length;c++){if(cols[c]<=mins){cols[c]=endM;return c;}}
     cols.push(endM); return cols.length-1;
   }
 
+  // Sur mobile, on ne stack pas (col toujours 0 mais on gère le overlap)
+  // On ajoute un offset vertical si chevauchement
+  const mobileUsedSlots = []; // {top, bottom}
+
   for(const ev of evs){
     const mins=t2m(ev.time); if(mins<0) continue;
-    const col=assignCol(mins);
-    const y=mins*pxpm;
+    let y=mins*pxpm;
+
+    let col;
+    if(mobile){
+      // Sur mobile : si chevauchement, on décale verticalement
+      const blockEnd = y + bh;
+      let offset = 0;
+      for(const slot of mobileUsedSlots){
+        if(y + offset < slot.bottom && y + offset + bh > slot.top){
+          offset = slot.bottom - y + 2;
+        }
+      }
+      y = y + offset;
+      mobileUsedSlots.push({top: y, bottom: y + bh});
+      col = 0;
+    } else {
+      col = assignCol(mins);
+    }
+
     const color=getColor(ev.airline);
     const isDone=!!completions[ev.key];
     const isPast=mins<nm;
 
     const b=document.createElement('div');
     b.className=`eblock ${ev.tc}${isDone?' done':''}${isPast&&!isDone?' past':''}`;
-    b.style.cssText=`left:${LANE+col*(BW+GAP)}px;top:${y}px;width:${BW}px;height:${bh}px;border-left-color:${color};`;
+
+    if(mobile){
+      b.style.cssText=`left:${LANE}px;top:${y}px;width:calc(100vw - ${LANE+8}px);min-height:${bh}px;border-left-color:${color};border-left-width:4px;`;
+    } else {
+      b.style.cssText=`left:${LANE+col*(BW+GAP)}px;top:${y}px;width:${BW}px;height:${bh}px;border-left-color:${color};`;
+    }
     b.dataset.key=ev.key;
 
     const fr24Btns=makeFR24Btns(ev.flight, ev.type);
@@ -568,7 +738,12 @@ function buildTimeline(){
     inner.appendChild(b);
   }
 
-  inner.style.minWidth=`${LANE+(cols.length||1)*(BW+GAP)+20}px`;
+  if(!mobile){
+    inner.style.minWidth=`${LANE+(cols.length||1)*(BW+GAP)+20}px`;
+  } else {
+    inner.style.minWidth='100%';
+  }
+
   updateNL(); updateStatus(evs); updateProg(evs); updateLeg();
 }
 
@@ -577,12 +752,36 @@ function updateNL(){const nl=document.getElementById('now-line-el');if(!nl)retur
 function updateStatus(evs){
   const nm=nowMins(); let cur=null,nxt=null;
   for(const e of evs){const m=t2m(e.time);if(m<=nm)cur=e;else if(!nxt)nxt=e;}
+
+  // Desktop topbar
   const curTxt=cur?`${cur.time} ${cur.lbl} ${cur.flight}`:'—';
   const nxtTxt=nxt?`${nxt.time} ${nxt.lbl} ${nxt.flight}`:'None';
   document.getElementById('cur-ev').textContent=curTxt;
   document.getElementById('nxt-ev').textContent=nxtTxt;
-  const mc=document.getElementById('mob-cur'); if(mc) mc.textContent=curTxt;
-  const mn=document.getElementById('mob-nxt'); if(mn) mn.textContent=nxtTxt;
+
+  // Mobile bottom bar — version améliorée avec split
+  if(cur){
+    const el_time = document.getElementById('mob-cur-time');
+    const el_info = document.getElementById('mob-cur-info');
+    if(el_time) el_time.textContent = cur.time;
+    if(el_info) el_info.textContent = `${cur.lbl} · ${cur.flight}`;
+  } else {
+    const el_time = document.getElementById('mob-cur-time');
+    const el_info = document.getElementById('mob-cur-info');
+    if(el_time) el_time.textContent = '—';
+    if(el_info) el_info.textContent = '';
+  }
+  if(nxt){
+    const el_time = document.getElementById('mob-nxt-time');
+    const el_info = document.getElementById('mob-nxt-info');
+    if(el_time) el_time.textContent = nxt.time;
+    if(el_info) el_info.textContent = `${nxt.lbl} · ${nxt.flight}`;
+  } else {
+    const el_time = document.getElementById('mob-nxt-time');
+    const el_info = document.getElementById('mob-nxt-info');
+    if(el_time) el_time.textContent = '—';
+    if(el_info) el_info.textContent = 'Terminé';
+  }
 }
 
 function updateProg(evs){
@@ -591,7 +790,14 @@ function updateProg(evs){
   document.getElementById('prog-fill').style.width=pct+'%';
   document.getElementById('prog-txt').textContent=`${done} / ${tot} done`;
   document.getElementById('done-cnt').textContent=`${done} / ${tot}`;
-  const md=document.getElementById('mob-done'); if(md) md.textContent=`${done}/${tot}`;
+
+  // Mobile bottom bar
+  const mdn = document.getElementById('mob-done-num');
+  const mdt = document.getElementById('mob-done-tot');
+  const mpf = document.getElementById('mob-progress-fill');
+  if(mdn) mdn.textContent = done;
+  if(mdt) mdt.textContent = '/' + tot;
+  if(mpf) mpf.style.width = pct + '%';
 }
 
 function updateLeg(){
@@ -900,7 +1106,7 @@ function hslBg(hue, bright){
   const fb = document.getElementById('filter-bar');
   if(fb) fb.style.background = `hsl(${hue},${s}%,${l+1}%)f0`;
   const ms = document.getElementById('mobile-stats');
-  if(ms) ms.style.background = `hsl(${hue},${s}%,${l+1}%)f5`;
+  if(ms) ms.style.background = `hsl(${hue},${s}%,${l+1}%)f8`;
 }
 
 function applyBgTheme(){
@@ -959,6 +1165,10 @@ document.getElementById('bg-bright').addEventListener('input', function(){
   applyBgTheme();
 });
 loadBgTheme();
+
+// Recalcul si rotation / resize
+window.addEventListener('resize', ()=>{ buildTimeline(); });
 </script>
+
 </body>
 </html>
