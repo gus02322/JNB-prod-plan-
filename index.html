@@ -232,110 +232,113 @@ position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none;
 MOBILE ≤ 768px
 ══════════════════════════════════════════ */
 @media (max-width: 768px) {
-#topbar { height: 50px; }
-.logo { font-size: 12px; letter-spacing: 2px; padding: 0 10px; border-right: none; }
+/* ── TOPBAR ── */
+#topbar { height: 48px; }
+.logo { font-size: 11px; letter-spacing: 1.5px; padding: 0 8px; border-right: 1px solid var(–border); flex-shrink: 0; }
 #date-str { display: none; }
-#clock { font-size: 16px; padding: 0 10px; letter-spacing: 1px; border-right: none; }
+#clock { font-size: 17px; padding: 0 10px; letter-spacing: 1px; border-right: 1px solid var(–border); flex-shrink: 0; }
 #status-bar { display: none; }
 #nav-tabs { display: none; }
 #tl-filters { display: none !important; }
 
-/* Mobile date picker — compact in topbar */
+/* Date picker — compact, right side of topbar */
 #date-picker-wrap {
-padding: 0 8px; gap: 5px; flex: 1; justify-content: flex-end;
+padding: 0 6px; gap: 4px; flex: 1; justify-content: flex-end;
 border-right: none;
 }
 #date-picker-wrap .dp-lbl { display: none; }
-#date-display { font-size: 10px; min-width: 72px; padding: 3px 6px; }
-#date-nav-prev, #date-nav-next { width: 26px; height: 26px; font-size: 13px; }
-#date-today-btn { font-size: 8px; padding: 2px 5px; }
+#date-display { font-size: 10px; min-width: 68px; padding: 2px 5px; }
+#date-nav-prev, #date-nav-next { width: 24px; height: 24px; font-size: 14px; font-weight: 700; }
+#date-today-btn { font-size: 8px; padding: 2px 4px; }
 
+/* ── MOBILE NAV ── */
 #mob-nav {
 display: flex !important;
-position: fixed; top: 50px; left: 0; right: 0; z-index: 195;
-background: #181c26f8; border-bottom: 1px solid var(–border);
-height: 38px;
+position: fixed; top: 48px; left: 0; right: 0; z-index: 195;
+background: #181c26; border-bottom: 1px solid var(–border);
+height: 40px;
 }
 .mob-ntab {
 flex: 1; display: flex; align-items: center; justify-content: center;
-font-family: var(–font-ui); font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+font-family: var(–font-ui); font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
 text-transform: uppercase; color: var(–text-dim); cursor: pointer;
 border-right: 1px solid var(–border); user-select: none; transition: all 0.15s;
 }
 .mob-ntab:last-child { border-right: none; }
 .mob-ntab.active { color: var(–accent); background: #001820; }
 
-#timeline-view { padding-top: 88px; padding-bottom: 52px; }
+/* ── VIEWS ── */
+#timeline-view { padding-top: 88px; padding-bottom: 58px; }
 #right-panel { display: none !important; }
 
-/* Mobile slot cards */
+/* ── SLOT CARDS — compact ── */
 .eblock {
 left: 0 !important; right: 0 !important; width: auto !important;
 position: relative !important; top: auto !important;
-margin: 0 10px 8px 10px; height: auto !important; min-height: 90px;
-border-radius: 6px; border-left-width: 4px;
+margin: 0 8px 5px 8px; height: auto !important; min-height: unset !important;
+border-radius: 5px; border-left-width: 4px;
 }
 #tl-inner { position: relative; height: auto !important; min-height: unset !important; min-width: unset !important; }
 .hour-tick { display: none; }
 .hour-lbl { display: none; }
 #now-line-el { display: none; }
 
-.eb { padding: 10px 12px; height: auto; gap: 4px; justify-content: flex-start; }
-.eb-top-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.eb-time { font-family: var(–font-mono); font-size: 15px; font-weight: 700; color: rgba(255,255,255,0.75); line-height: 1; }
+.eb { padding: 7px 10px; height: auto; gap: 3px; justify-content: flex-start; }
+.eb-top-row { display: flex; align-items: center; gap: 7px; flex-wrap: nowrap; }
+.eb-time { font-family: var(–font-mono); font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.8); line-height: 1; flex-shrink: 0; }
 .eb-type-badge {
-font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
-padding: 2px 7px; border-radius: 10px; border: 1px solid; line-height: 1.4;
+font-size: 8px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+padding: 2px 6px; border-radius: 8px; border: 1px solid; line-height: 1.4; flex-shrink: 0;
 }
 .type-eta .eb-type-badge   { color: #4dffb4; border-color: rgba(77,255,180,0.4);  background: rgba(77,255,180,0.08); }
 .type-seal .eb-type-badge  { color: #ffaa44; border-color: rgba(255,170,68,0.4);  background: rgba(255,170,68,0.08); }
 .type-truck .eb-type-badge { color: #ff6b6b; border-color: rgba(255,107,107,0.4); background: rgba(255,107,107,0.08); }
 .type-etd .eb-type-badge   { color: #66aaff; border-color: rgba(102,170,255,0.4); background: rgba(102,170,255,0.08); }
 .eb-type { display: none; }
-.eb-flight { font-family: var(–font-mono); font-size: 18px; font-weight: 700; line-height: 1; letter-spacing: 1px; }
-.eb-airline { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.45); line-height: 1; }
-.eb-acts { display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap; align-items: center; }
-.btn-done { font-size: 11px; padding: 6px 14px; min-height: 32px; border-radius: 4px; }
-.btn-fr24  { font-size: 10px; padding: 6px 12px; min-height: 32px; border-radius: 4px; }
-.done-ck { font-size: 16px; top: 8px; right: 8px; }
+.eb-flight { font-family: var(–font-mono); font-size: 16px; font-weight: 700; line-height: 1; letter-spacing: 0.5px; }
+.eb-airline { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.4); line-height: 1; margin-top: 1px; }
+.eb-acts { display: flex; gap: 6px; margin-top: 5px; flex-wrap: wrap; align-items: center; }
+.btn-done { font-size: 10px; padding: 5px 12px; min-height: 28px; border-radius: 4px; }
+.btn-fr24  { font-size: 9px;  padding: 5px 10px; min-height: 28px; border-radius: 4px; }
+.done-ck { font-size: 14px; top: 6px; right: 6px; }
 
 .mob-hour-sep {
-display: flex; align-items: center; gap: 10px;
-padding: 6px 14px 2px; font-family: var(–font-mono); font-size: 11px; color: var(–text-muted);
+display: flex; align-items: center; gap: 8px;
+padding: 5px 12px 2px; font-family: var(–font-mono); font-size: 10px; color: var(–text-muted);
 }
 .mob-hour-sep::after { content: ‘’; flex: 1; height: 1px; background: var(–border); }
 
 .mob-now-sep {
-display: flex; align-items: center; gap: 10px; padding: 4px 14px;
+display: flex; align-items: center; gap: 8px; padding: 4px 12px;
 font-family: var(–font-mono); font-size: 10px; color: var(–now-line);
 font-weight: 700; letter-spacing: 2px;
 }
 .mob-now-sep::before { content: ‘▶ NOW’; }
 .mob-now-sep::after { content: ‘’; flex: 1; height: 2px; background: var(–now-line); box-shadow: 0 0 8px var(–now-line); }
 
-/* Drawer — sits BELOW mobile-stats bar */
+/* ── DRAWER ── */
 #mob-drawer {
 display: block !important;
 position: fixed;
-bottom: 52px; /* height of mobile-stats */
-left: 0; right: 0;
-z-index: 400; /* HIGHER than mobile-stats (150) */
+bottom: 0; left: 0; right: 0;
+z-index: 500;
 background: #181c26;
 border: 1px solid var(–border); border-bottom: none;
 border-radius: 16px 16px 0 0;
 transform: translateY(100%);
 transition: transform 0.35s cubic-bezier(0.32,0.72,0,1);
-max-height: 70vh; overflow-y: auto;
+max-height: 75vh; overflow-y: auto;
+padding-bottom: 58px;
 }
 #mob-drawer.open { transform: translateY(0); }
 #mob-drawer-handle { width: 100%; display: flex; flex-direction: column; align-items: center; padding: 12px 0 6px; cursor: grab; user-select: none; -webkit-user-select: none; }
 #mob-drawer-handle .pill { width: 44px; height: 4px; background: var(–border); border-radius: 2px; margin-bottom: 4px; }
 #mob-drawer-handle .title { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(–text-dim); }
-#mob-drawer-body { padding: 10px 18px 20px; }
-.dr-section { margin-bottom: 18px; }
+#mob-drawer-body { padding: 8px 16px 16px; }
+.dr-section { margin-bottom: 16px; }
 .dr-section-title { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(–text-dim); margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid var(–border); }
 .dr-filters { display: flex; gap: 8px; flex-wrap: wrap; }
-.dr-fchk { display: flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 20px; border: 1px solid var(–border); background: var(–surface); cursor: pointer; user-select: none; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+.dr-fchk { display: flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 20px; border: 1px solid var(–border); background: var(–surface); cursor: pointer; user-select: none; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
 .dr-fchk input { display: none; }
 .dr-fchk.active { border-color: currentColor; background: rgba(255,255,255,0.05); }
 .dr-fchk-eta   { color: #4dffb4; }
@@ -352,26 +355,55 @@ max-height: 70vh; overflow-y: auto;
 .dr-btn-export { background: #001a24; border: 1px solid var(–accent); color: var(–accent); }
 .dr-btn-import { background: #1a1000; border: 1px solid #ffaa44; color: #ffaa44; }
 
-/* Bottom bar */
+/* ── BOTTOM BAR — always on top, full width, visible ── */
 #mobile-stats {
 display: flex !important;
 position: fixed; bottom: 0; left: 0; right: 0;
-z-index: 150; /* lower than drawer */
-background: #181c26f8; border-top: 1px solid var(–border);
-height: 52px; align-items: stretch;
+z-index: 600;
+background: #181c26; border-top: 2px solid var(–border);
+height: 58px; align-items: stretch;
 }
-#mobile-stats .spill { flex: 1; height: 100%; padding: 0 12px; border-right: 1px solid var(–border); display: flex; flex-direction: column; justify-content: center; }
+#mobile-stats .spill {
+flex: 1; height: 100%; padding: 0 10px;
+border-right: 1px solid var(–border);
+display: flex; flex-direction: column; justify-content: center;
+min-width: 0; /* allow text truncation */
+}
 #mobile-stats .spill:last-child { border-right: none; }
+#mobile-stats .spill .lbl { font-size: 8px; letter-spacing: 1px; }
+#mobile-stats .spill .val { font-size: 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ⚙ button — large tap target, clearly visible */
 #mob-settings-btn {
-width: 52px; display: flex; align-items: center; justify-content: center;
-border-left: 1px solid var(–border); font-size: 20px; cursor: pointer;
-color: var(–text-dim); user-select: none; transition: color 0.15s; flex-shrink: 0;
-/* Ensure tappable above backdrop */
-position: relative; z-index: 151;
+width: 58px;
+min-width: 58px;
+flex-shrink: 0;
+display: flex; align-items: center; justify-content: center;
+border-left: 2px solid var(–accent);
+font-size: 22px;
+cursor: pointer;
+color: var(–accent);
+background: rgba(0,212,255,0.06);
+user-select: none;
+transition: all 0.15s;
 }
-#mob-settings-btn:active { color: var(–accent); }
-/* Highlight when drawer open */
-#mob-settings-btn.active { color: var(–accent); background: rgba(0,212,255,0.08); }
+#mob-settings-btn:active { background: rgba(0,212,255,0.18); }
+#mob-settings-btn.active { color: #fff; background: rgba(0,212,255,0.15); border-color: #fff; }
+
+/* Overlay */
+#drawer-overlay {
+bottom: 58px !important;
+z-index: 450 !important;
+}
+
+#config-view { padding: 10px 12px 80px; padding-top: 96px; }
+.ctbl th { font-size: 8px; padding: 5px; }
+.ctbl td { padding: 4px 5px; }
+.csec h2 { font-size: 11px; }
+#toast { bottom: 66px; }
+#airline-view { padding-top: 88px !important; padding-bottom: 66px; }
+#production-view { padding-top: 88px !important; }
+}
 
 #config-view { padding: 10px 12px 80px; padding-top: 96px; }
 .ctbl th { font-size: 8px; padding: 5px; }
@@ -405,7 +437,7 @@ position: relative; z-index: 151;
 <body>
 
 <div id="topbar">
-  <div class="logo">⬡ JNB OPS</div>
+  <div class="logo">⬡ JNB CATERING OPS</div>
   <div id="date-str"></div>
   <div id="clock">00:00:00</div>
 
@@ -561,8 +593,12 @@ position: relative; z-index: 151;
   <div class="spill"><div class="lbl">Current</div><div class="val cur" id="mob-cur">—</div></div>
   <div class="spill"><div class="lbl">Next</div><div class="val nxt" id="mob-nxt">—</div></div>
   <div class="spill"><div class="lbl">Done</div><div class="val" id="mob-done">0/0</div></div>
-  <div id="mob-settings-btn" onclick="toggleDrawer()">⚙</div>
+  <div id="mob-settings-btn">⚙</div>
 </div>
+
+<!-- DRAWER BACKDROP -->
+
+<div id="drawer-overlay" style="display:none;position:fixed;inset:0;z-index:350;" onclick="closeDrawer()"></div>
 
 <!-- MOBILE DRAWER -->
 
@@ -870,7 +906,10 @@ function buildTimelineDesktop(inner, evs, nm){
     const tick=document.createElement('div'); tick.className='hour-tick'; tick.style.top=y+'px'; inner.appendChild(tick);
     const lbl=document.createElement('div'); lbl.className='hour-lbl'; lbl.style.top=(y+2)+'px'; lbl.textContent=String(h).padStart(2,'0')+':00'; inner.appendChild(lbl);
   }
-  const nl=document.createElement('div'); nl.id='now-line-el'; nl.style.position='absolute'; nl.style.left='0'; nl.style.right='0';
+  // NOW line — always create, hide if not today
+  const nl=document.createElement('div');
+  nl.id='now-line-el';
+  nl.style.position='absolute'; nl.style.left='0'; nl.style.right='0';
   if(nm < 0) nl.style.display='none';
   inner.appendChild(nl);
   const BW=178, LANE=60, GAP=4, cols=[];
@@ -915,7 +954,12 @@ function buildTimelineMobile(inner, evs, nm){
   if(nm>=0 && !nowInserted){ const nd=document.createElement('div'); nd.className='mob-now-sep'; inner.appendChild(nd); }
 }
 
-function updateNL(){const nl=document.getElementById('now-line-el');if(!nl)return;nl.style.top=(nowMins()*ds.zoom)+'px';}
+function updateNL(){
+  const nl=document.getElementById('now-line-el');
+  if(!nl || !isToday(viewDate)) return;
+  nl.style.display='block';
+  nl.style.top=(nowMins()*ds.zoom)+'px';
+}
 
 function updateStatus(evs){
   if(!isToday(viewDate)){
@@ -964,8 +1008,8 @@ function toggleFilter(type, checked){
 function updateClock(){
   const n=new Date(), pad=v=>String(v).padStart(2,'0');
   document.getElementById('clock').textContent=`${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`;
-  if(!isMobile() && isToday(viewDate)){
-    document.getElementById('date-str').textContent=`${DAY_LABELS[n.getDay()]} ${n.getDate()} ${MON_LABELS[n.getMonth()]} ${n.getFullYear()}`;
+  if(isToday(viewDate)){
+    if(!isMobile()) document.getElementById('date-str').textContent=`${DAY_LABELS[n.getDay()]} ${n.getDate()} ${MON_LABELS[n.getMonth()]} ${n.getFullYear()}`;
     updateNL();
   }
 }
@@ -1052,7 +1096,7 @@ function dismissAlert(){ document.getElementById('alert-banner').style.display='
 
 // ── MOBILE DRAWER ──
 let drawerOpen=false, drawerStartY=0, drawerCurrentY=0;
-let _drawerJustOpened=false; // guard: ignore the document touchstart fired on same tap
+let _drawerJustOpened=false;
 
 function toggleDrawer(){
   const d=document.getElementById('mob-drawer');
@@ -1060,10 +1104,8 @@ function toggleDrawer(){
   drawerOpen=!drawerOpen;
   d.classList.toggle('open',drawerOpen);
   btn.classList.toggle('active',drawerOpen);
-  if(drawerOpen){
-    _drawerJustOpened=true; // block the outside-tap listener for this event cycle
-    const evs=todayEvents(); updateProg(evs);
-  }
+  document.getElementById('drawer-overlay').style.display = drawerOpen ? 'block' : 'none';
+  if(drawerOpen){ const evs=todayEvents(); updateProg(evs); }
 }
 function closeDrawer(){
   const d=document.getElementById('mob-drawer');
@@ -1071,18 +1113,12 @@ function closeDrawer(){
   drawerOpen=false;
   d.classList.remove('open');
   if(btn) btn.classList.remove('active');
+  document.getElementById('drawer-overlay').style.display = 'none';
 }
 const drawerHandle=document.getElementById('mob-drawer-handle');
 drawerHandle.addEventListener('touchstart',e=>{ drawerStartY=e.touches[0].clientY; },{passive:true});
 drawerHandle.addEventListener('touchmove',e=>{ drawerCurrentY=e.touches[0].clientY; const dy=drawerCurrentY-drawerStartY; if(dy>0){ const dr=document.getElementById('mob-drawer'); dr.style.transform=`translateY(${dy}px)`; dr.style.transition='none'; } },{passive:true});
 drawerHandle.addEventListener('touchend',()=>{ const dy=drawerCurrentY-drawerStartY; const dr=document.getElementById('mob-drawer'); dr.style.transition=''; if(dy>80){ closeDrawer(); dr.style.transform=''; } else { dr.style.transform=''; } });
-document.addEventListener('touchstart',e=>{
-  if(_drawerJustOpened){ _drawerJustOpened=false; return; } // skip the tap that opened it
-  if(!drawerOpen) return;
-  const dr=document.getElementById('mob-drawer');
-  const btn=document.getElementById('mob-settings-btn');
-  if(!dr.contains(e.target)&&!btn.contains(e.target)) closeDrawer();
-},{passive:true});
 
 // ── AIRLINE VIEW ──
 function buildAirlineView(){
@@ -1232,6 +1268,25 @@ function buildProductionView(){
   if(nm>=0) setTimeout(()=>{ if(scroll) scroll.scrollTop=Math.max(0,nm*pxpm-220); },50);
 }
 
+// ── SETTINGS BUTTON — attach via JS to avoid onclick/touch conflict ──
+(function(){
+  const btn = document.getElementById('mob-settings-btn');
+  if(!btn) return;
+  let _lastTouch = 0;
+  btn.addEventListener('touchend', function(e){
+    e.preventDefault(); // prevent ghost click
+    e.stopPropagation();
+    _lastTouch = Date.now();
+    toggleDrawer();
+  }, {passive: false});
+  btn.addEventListener('click', function(e){
+    e.stopPropagation();
+    // skip if touchend just fired (< 300ms ago)
+    if(Date.now() - _lastTouch < 300) return;
+    toggleDrawer();
+  });
+})();
+
 // ── INIT ──
 loadData();
 if(!localStorage.getItem('cop_display')){ if(window.innerWidth<=768) ds.zoom=2; else if(window.innerWidth<=1100) ds.zoom=2.5; else ds.zoom=3; }
@@ -1248,12 +1303,12 @@ updateDateDisplay();
 buildTimeline(); updateClock();
 setInterval(updateClock,1000);
 setInterval(()=>{
-  if(!isMobile() && isToday(viewDate)) updateNL();
+  if(isToday(viewDate)) updateNL();
   const e=todayEvents(); updateStatus(e); updateProg(e); checkAlerts();
   const nl=document.getElementById('prod-now-line'); if(nl&&isToday(viewDate)) nl.style.top=(nowMins()*ds.zoom)+'px';
 },30000);
 setInterval(checkAlerts,60000);
-setTimeout(scrollToNow,400);
+setTimeout(scrollToNow, 600);
 loadAlertSettings();
 document.querySelectorAll('.bg-sw').forEach(sw=>{ sw.addEventListener('click',()=>{ bgTheme.hue=parseInt(sw.dataset.h); applyBgTheme(); }); });
 document.getElementById('bg-bright').addEventListener('input',function(){ setBgBright(this.value); });
