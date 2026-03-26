@@ -1184,7 +1184,7 @@ function setAlertMin(v){
 document.getElementById('alert-on').addEventListener('change',function(){ setAlertOn(this.checked); });
 document.getElementById('alert-min').addEventListener('input',function(){ setAlertMin(this.value); });
 
-function playAlertSound(duration=5000){
+function playAlertSound(duration=3000){
   try {
     const ctx=new (window.AudioContext||window.webkitAudioContext)();
     const endAt=ctx.currentTime+duration/1000;
