@@ -21,82 +21,33 @@
     --font-mono: 'Share Tech Mono', monospace;
     --font-ui: 'Barlow Condensed', sans-serif;
     --block-bg: rgba(38,44,62,0.98);
-    /* TV / large screen scaling */
     --scale: 1;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: var(--font-ui); min-height: 100vh; overflow-x: hidden; }
 
-/* ═══════════════════════════════════════════
-   TOPBAR
-═══════════════════════════════════════════ */
+/* TOPBAR */
 #topbar {
   position: fixed; top: 0; left: 0; right: 0; z-index: 200;
   background: #13161eee; border-bottom: 2px solid var(--border);
   backdrop-filter: blur(8px); display: flex; align-items: center;
   height: calc(52px * var(--scale));
 }
-.logo {
-  padding: 0 calc(20px * var(--scale));
-  font-family: var(--font-ui); font-weight: 900;
-  font-size: calc(17px * var(--scale));
-  letter-spacing: calc(3px * var(--scale));
-  text-transform: uppercase; color: var(--accent);
-  border-right: 1px solid var(--border); height: 100%;
-  display: flex; align-items: center; white-space: nowrap;
-}
-#date-str {
-  padding: 0 calc(16px * var(--scale));
-  font-family: var(--font-mono);
-  font-size: calc(12px * var(--scale));
-  color: var(--text-dim); border-right: 1px solid var(--border);
-  height: 100%; display: flex; align-items: center;
-}
-#clock {
-  font-family: var(--font-mono);
-  font-size: calc(21px * var(--scale));
-  color: var(--now-line); letter-spacing: calc(2px * var(--scale));
-  padding: 0 calc(18px * var(--scale));
-  border-right: 1px solid var(--border);
-  height: 100%; display: flex; align-items: center;
-}
+.logo { padding: 0 calc(20px * var(--scale)); font-family: var(--font-ui); font-weight: 900; font-size: calc(17px * var(--scale)); letter-spacing: calc(3px * var(--scale)); text-transform: uppercase; color: var(--accent); border-right: 1px solid var(--border); height: 100%; display: flex; align-items: center; white-space: nowrap; }
+#date-str { padding: 0 calc(16px * var(--scale)); font-family: var(--font-mono); font-size: calc(12px * var(--scale)); color: var(--text-dim); border-right: 1px solid var(--border); height: 100%; display: flex; align-items: center; }
+#clock { font-family: var(--font-mono); font-size: calc(21px * var(--scale)); color: var(--now-line); letter-spacing: calc(2px * var(--scale)); padding: 0 calc(18px * var(--scale)); border-right: 1px solid var(--border); height: 100%; display: flex; align-items: center; }
 
 /* DATE PICKER */
-#date-picker-wrap {
-  display: flex; align-items: center; height: 100%;
-  border-right: 1px solid var(--border);
-  padding: 0 calc(12px * var(--scale)); gap: calc(6px * var(--scale)); position: relative;
-}
-#date-picker-wrap .dp-lbl {
-  font-size: calc(9px * var(--scale));
-  font-weight: 700; letter-spacing: 1.5px;
-  text-transform: uppercase; color: var(--text-dim);
-}
-#date-nav-prev, #date-nav-next {
-  width: calc(22px * var(--scale)); height: calc(22px * var(--scale));
-  display: flex; align-items: center; justify-content: center;
-  background: var(--surface); border: 1px solid var(--border); border-radius: 3px;
-  cursor: pointer; color: var(--text-dim);
-  font-size: calc(13px * var(--scale)); user-select: none; transition: all 0.15s;
-}
+#date-picker-wrap { display: flex; align-items: center; height: 100%; border-right: 1px solid var(--border); padding: 0 calc(12px * var(--scale)); gap: calc(6px * var(--scale)); position: relative; }
+#date-picker-wrap .dp-lbl { font-size: calc(9px * var(--scale)); font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); }
+#date-nav-prev, #date-nav-next { width: calc(22px * var(--scale)); height: calc(22px * var(--scale)); display: flex; align-items: center; justify-content: center; background: var(--surface); border: 1px solid var(--border); border-radius: 3px; cursor: pointer; color: var(--text-dim); font-size: calc(13px * var(--scale)); user-select: none; transition: all 0.15s; }
 #date-nav-prev:hover, #date-nav-next:hover { color: var(--accent); border-color: var(--accent); }
-#date-display {
-  font-family: var(--font-mono); font-size: calc(11px * var(--scale));
-  cursor: pointer; padding: 3px 8px; border-radius: 3px;
-  border: 1px solid var(--border); background: var(--surface);
-  color: var(--text); white-space: nowrap; transition: all 0.15s;
-  min-width: calc(90px * var(--scale)); text-align: center;
-}
+#date-display { font-family: var(--font-mono); font-size: calc(11px * var(--scale)); cursor: pointer; padding: 3px 8px; border-radius: 3px; border: 1px solid var(--border); background: var(--surface); color: var(--text); white-space: nowrap; transition: all 0.15s; min-width: calc(90px * var(--scale)); text-align: center; }
 #date-display:hover { border-color: var(--accent); color: var(--accent); }
 #date-display.is-future { color: #ffaa44; border-color: rgba(255,170,68,0.4); }
 #date-display.is-past   { color: var(--text-dim); }
 #date-display.is-today  { color: var(--accent); }
-#date-today-btn {
-  font-size: calc(9px * var(--scale)); font-weight: 700; letter-spacing: 1px;
-  text-transform: uppercase; padding: 2px 6px; border-radius: 3px;
-  border: 1px solid rgba(0,212,255,0.3); background: rgba(0,212,255,0.07);
-  color: rgba(0,212,255,0.6); cursor: pointer; transition: all 0.15s; white-space: nowrap;
-}
+#date-today-btn { font-size: calc(9px * var(--scale)); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; border: 1px solid rgba(0,212,255,0.3); background: rgba(0,212,255,0.07); color: rgba(0,212,255,0.6); cursor: pointer; transition: all 0.15s; white-space: nowrap; }
 #date-today-btn:hover  { background: rgba(0,212,255,0.15); color: var(--accent); }
 #date-today-btn.hidden { opacity: 0; pointer-events: none; }
 #native-date-input { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
@@ -109,7 +60,7 @@
 .spill .val.cur { color: #ffaa44; }
 .spill .val.nxt { color: #44ffaa; }
 
-/* FILTER TOGGLES (desktop topbar) */
+/* FILTER TOGGLES */
 #tl-filters { display: flex; height: 100%; border-left: 1px solid var(--border); }
 .fchk { display: flex; align-items: center; gap: 5px; cursor: pointer; padding: 0 calc(12px * var(--scale)); border-right: 1px solid var(--border); height: 100%; transition: all 0.15s; user-select: none; }
 .fchk:hover { background: var(--surface); }
@@ -117,11 +68,8 @@
 .fchk-dot { width: calc(7px * var(--scale)); height: calc(7px * var(--scale)); border-radius: 50%; flex-shrink: 0; opacity: 0.3; transition: opacity 0.15s; }
 .fchk span { font-size: calc(9px * var(--scale)); font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.35; transition: opacity 0.15s; }
 .fchk.active .fchk-dot { opacity: 1; box-shadow: 0 0 5px currentColor; }
-.fchk.active span      { opacity: 1; }
-.fchk-eta   { color: #4dffb4; }
-.fchk-seal  { color: #ffaa44; }
-.fchk-truck { color: #ff6b6b; }
-.fchk-etd   { color: #66aaff; }
+.fchk.active span { opacity: 1; }
+.fchk-eta { color: #4dffb4; } .fchk-seal { color: #ffaa44; } .fchk-truck { color: #ff6b6b; } .fchk-etd { color: #66aaff; }
 
 /* NAV TABS */
 #nav-tabs { display: flex; height: 100%; margin-left: auto; }
@@ -129,84 +77,34 @@
 .ntab:hover  { color: var(--text); background: var(--surface); }
 .ntab.active { color: var(--accent); background: #001820; }
 
-/* ═══════════════════════════════════════════
-   VIEWS
-═══════════════════════════════════════════ */
+/* VIEWS */
 .view { display: none; }
 .view.active { display: flex; }
-
-#timeline-view   { padding-top: calc(52px * var(--scale)); height: 100vh; overflow: hidden; }
-#tl-scroll       { flex: 1; overflow-y: auto; overflow-x: auto; position: relative; }
+#timeline-view { padding-top: calc(52px * var(--scale)); height: 100vh; overflow: hidden; }
+#tl-scroll { flex: 1; overflow-y: auto; overflow-x: auto; position: relative; }
 #tl-scroll::-webkit-scrollbar { width: 5px; height: 5px; }
 #tl-scroll::-webkit-scrollbar-thumb { background: #2a3040; border-radius: 3px; }
 #tl-inner { position: relative; }
 
-/* ═══════════════════════════════════════════
-   NOW LINE — high contrast
-═══════════════════════════════════════════ */
-.now-line-abs {
-  position: absolute; left: 0; right: 0; height: 3px;
-  background: var(--now-line); z-index: 50; pointer-events: none;
-  box-shadow: 0 0 14px var(--now-line), 0 0 28px rgba(255,204,0,0.4);
-}
-.now-label {
-  position: absolute;
-  left: 4px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-family: var(--font-mono);
-  font-size: calc(13px * var(--scale));
-  font-weight: 700;
-  color: #1a1200;
-  background: var(--now-line);
-  padding: 2px 8px;
-  border-radius: 3px;
-  letter-spacing: 2px;
-  white-space: nowrap;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-  line-height: 1.4;
-  z-index: 52;
-}
-.now-dot {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: calc(12px * var(--scale));
-  height: calc(12px * var(--scale));
-  border-radius: 50%;
-  background: var(--now-line);
-  box-shadow: 0 0 10px var(--now-line);
-}
+/* NOW LINE */
+.now-line-abs { position: absolute; left: 0; right: 0; height: 3px; background: var(--now-line); z-index: 50; pointer-events: none; box-shadow: 0 0 14px var(--now-line), 0 0 28px rgba(255,204,0,0.4); }
+.now-label { position: absolute; left: 4px; top: 50%; transform: translateY(-50%); font-family: var(--font-mono); font-size: calc(13px * var(--scale)); font-weight: 700; color: #1a1200; background: var(--now-line); padding: 2px 8px; border-radius: 3px; letter-spacing: 2px; white-space: nowrap; box-shadow: 0 2px 8px rgba(0,0,0,0.5); line-height: 1.4; z-index: 52; }
+.now-dot { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); width: calc(12px * var(--scale)); height: calc(12px * var(--scale)); border-radius: 50%; background: var(--now-line); box-shadow: 0 0 10px var(--now-line); }
 
 /* GRID */
 .hour-tick { position: absolute; left: 0; right: 0; height: 1px; background: var(--border); z-index: 1; }
 .hour-lbl  { position: absolute; left: 0; width: calc(54px * var(--scale)); font-family: var(--font-mono); font-size: calc(10px * var(--scale)); color: var(--text-muted); padding-right: 8px; text-align: right; z-index: 4; background: var(--bg); }
 
-/* ═══════════════════════════════════════════
-   EVENT BLOCKS
-═══════════════════════════════════════════ */
-.eblock {
-  position: absolute; border-radius: 3px; border-left: 3px solid;
-  overflow: hidden; cursor: default; transition: filter 0.15s; z-index: 10;
-  background: var(--block-bg);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-}
-.eblock:hover          { z-index: 50; filter: brightness(1.25); }
-.eblock.done           { background: var(--done-bg) !important; border-color: var(--done-border) !important; opacity: 0.4; box-shadow: none; }
-.eblock.past:not(.done){ opacity: 0.55; }
-
-.eb { padding: calc(4px * var(--scale)) calc(6px * var(--scale)); height: 100%; display: flex; flex-direction: column; justify-content: center; gap: 1px; position: relative; }
-.eb-time    { font-family: var(--font-mono); font-size: calc(10px * var(--scale)); color: rgba(255,255,255,0.5); line-height: 1; }
+/* EVENT BLOCKS */
+.eblock { position: absolute; border-radius: 3px; border-left: 3px solid; overflow: hidden; cursor: default; transition: filter 0.15s; z-index: 10; background: var(--block-bg); box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
+.eblock:hover { z-index: 50; filter: brightness(1.25); }
+.eblock.past { opacity: 0.45; }
+.eb { padding: calc(4px * var(--scale)) calc(6px * var(--scale)); height: 100%; display: flex; flex-direction: column; justify-content: center; gap: 2px; position: relative; }
+.eb-time    { font-family: var(--font-mono); font-size: calc(11px * var(--scale)); color: rgba(255,255,255,0.6); line-height: 1; font-weight: 700; }
 .eb-type    { font-size: calc(10px * var(--scale)); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; line-height: 1; }
-.eb-flight  { font-family: var(--font-mono); font-size: calc(13px * var(--scale)); line-height: 1; white-space: nowrap; color: #e8ecf8; }
-.eb-airline { font-size: calc(9px * var(--scale)); letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.4); line-height: 1; }
+.eb-flight  { font-family: var(--font-mono); font-size: calc(15px * var(--scale)); line-height: 1; white-space: nowrap; color: #e8ecf8; font-weight: 700; }
+.eb-airline { font-size: calc(10px * var(--scale)); letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.45); line-height: 1; }
 .eb-acts    { display: flex; gap: 3px; margin-top: 3px; flex-wrap: wrap; }
-
-.btn-done { font-family: var(--font-ui); font-size: calc(9px * var(--scale)); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 2px 6px; border-radius: 2px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.55); cursor: pointer; transition: all 0.15s; white-space: nowrap; }
-.btn-done:hover                { background: rgba(255,255,255,0.12); color: #fff; }
-.eblock.done .btn-done         { color: #4dff88; border-color: #2a7a44; background: rgba(77,255,136,0.1); pointer-events: all; cursor: pointer; }
-.eblock.done .btn-done:hover   { background: rgba(77,255,136,0.2); color: #fff; border-color: #4dff88; }
 
 .btn-fr24      { font-family: var(--font-ui); font-size: calc(9px * var(--scale)); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 2px 7px; border-radius: 2px; text-decoration: none; display: inline-flex; align-items: center; gap: 3px; transition: all 0.1s; white-space: nowrap; cursor: pointer; }
 .btn-fr24-live { border: 1px solid rgba(255,140,0,0.4); background: rgba(255,140,0,0.07); color: rgba(255,165,0,0.8); }
@@ -215,7 +113,6 @@
 .btn-fr24-hist:hover { background: rgba(0,212,255,0.12); color: var(--accent); }
 .fr-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; display: inline-block; animation: frpulse 1.4s infinite; }
 @keyframes frpulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-.done-ck { position: absolute; top: 3px; right: 4px; font-size: calc(12px * var(--scale)); opacity: 0.2; }
 
 .type-eta   .eb-type { color: #4dffb4; }
 .type-seal  .eb-type { color: #ffaa44; }
@@ -254,14 +151,11 @@
 .btn-import { background: #1a1000; border: 1px solid #ffaa44; color: #ffaa44; }
 .btn-import:hover { background: #2a1a00; }
 
-/* ═══════════════════════════════════════════
-   CONFIG VIEW — hidden on desktop, visible on mobile
-═══════════════════════════════════════════ */
+/* CONFIG VIEW */
 #config-view { padding-top: 80px; padding-left: 36px; padding-right: 36px; padding-bottom: 40px; max-width: 1080px; margin: 0 auto; overflow-y: auto; }
 #config-view:not(.active) { display: none !important; }
 .csec { margin-bottom: 36px; }
 .csec h2 { font-size: 13px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; padding-bottom: 7px; border-bottom: 1px solid var(--border); }
-/* Display settings section */
 .drow { display: flex; align-items: center; gap: 14px; margin-bottom: 13px; }
 .drow label { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-dim); min-width: 150px; }
 .drow input[type=range] { flex: 1; max-width: 180px; accent-color: var(--accent); }
@@ -269,16 +163,11 @@
 .bg-sw { width: 26px; height: 26px; border-radius: 4px; cursor: pointer; border: 2px solid transparent; transition: all 0.15s; flex-shrink: 0; }
 .bg-sw:hover  { border-color: rgba(255,255,255,0.3); transform: scale(1.1); }
 .bg-sw.active { border-color: var(--accent); box-shadow: 0 0 6px var(--accent); }
-/* Filters section in config */
 .cfg-filter-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
 .cfg-fchk { display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); cursor: pointer; user-select: none; font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
 .cfg-fchk input { display: none; }
 .cfg-fchk.active { border-color: currentColor; background: rgba(255,255,255,0.05); }
-.cfg-fchk-eta   { color: #4dffb4; }
-.cfg-fchk-etd   { color: #66aaff; }
-.cfg-fchk-seal  { color: #ffaa44; }
-.cfg-fchk-truck { color: #ff6b6b; }
-/* Alert section in config */
+.cfg-fchk-eta { color: #4dffb4; } .cfg-fchk-etd { color: #66aaff; } .cfg-fchk-seal { color: #ffaa44; } .cfg-fchk-truck { color: #ff6b6b; }
 .cfg-alert-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
 .cfg-alert-row label { font-size: 12px; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; }
 .cfg-range-row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
@@ -295,126 +184,51 @@
 .al-card-name { font-family: var(--font-ui); font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; flex: 1; }
 .al-card-meals{ font-family: var(--font-mono); font-size: 11px; color: var(--accent); margin-left: auto; white-space: nowrap; }
 .al-card-body { padding: 6px 0; }
-.al-fl-row    { display: flex; align-items: center; padding: 5px 14px; gap: 10px; border-bottom: 1px solid var(--border); transition: background 0.1s; }
+.al-fl-row    { display: flex; align-items: center; padding: 7px 14px; gap: 10px; border-bottom: 1px solid var(--border); }
 .al-fl-row:last-child { border-bottom: none; }
-.al-fl-row.done-row   { opacity: 0.4; }
-.al-fl-row.past-row:not(.done-row) { opacity: 0.6; }
-.al-fl-num   { font-family: var(--font-mono); font-size: 13px; font-weight: 700; min-width: 65px; }
+.al-fl-row.past-row { opacity: 0.45; }
+.al-fl-num   { font-family: var(--font-mono); font-size: 14px; font-weight: 700; min-width: 65px; }
 .al-fl-times { display: flex; gap: 6px; flex: 1; flex-wrap: wrap; }
 .al-fl-chip  { font-family: var(--font-mono); font-size: 10px; padding: 2px 6px; border-radius: 2px; border: 1px solid; white-space: nowrap; }
 .al-fl-meals { font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); margin-left: auto; }
-.al-done-btn { font-family: var(--font-ui); font-size: 9px; font-weight: 700; letter-spacing: 1px; padding: 3px 8px; border-radius: 2px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.4); cursor: pointer; white-space: nowrap; transition: all 0.15s; }
-.al-done-btn.is-done { color: #4dff88; border-color: #2a7a44; background: rgba(77,255,136,0.1); }
-.al-done-btn:hover       { background: rgba(255,255,255,0.1); color: #fff; }
-.al-done-btn.is-done:hover { background: rgba(77,255,136,0.2); }
 
-/* ═══════════════════════════════════════════
-   FULL-SCREEN ALERT MODAL
-═══════════════════════════════════════════ */
-#alert-modal {
-  display: none; position: fixed; inset: 0; z-index: 9000;
-  background: rgba(10,8,0,0.88); backdrop-filter: blur(6px);
-  align-items: center; justify-content: center;
-}
+/* FULL-SCREEN ALERT MODAL */
+#alert-modal { display: none; position: fixed; inset: 0; z-index: 9000; background: rgba(10,8,0,0.88); backdrop-filter: blur(6px); align-items: center; justify-content: center; }
 #alert-modal.show { display: flex; }
-#alert-box {
-  background: #1a1000;
-  border: 3px solid #ffaa44;
-  border-radius: 12px;
-  padding: 48px 64px;
-  text-align: center;
-  max-width: 760px;
-  width: 90vw;
-  box-shadow: 0 0 60px rgba(255,170,68,0.5), 0 0 120px rgba(255,170,68,0.2);
-  animation: alertpulse 1.5s infinite;
-  position: relative;
-}
-@keyframes alertpulse {
-  0%,100% { box-shadow: 0 0 60px rgba(255,170,68,0.4), 0 0 120px rgba(255,170,68,0.15); }
-  50%      { box-shadow: 0 0 90px rgba(255,170,68,0.7), 0 0 200px rgba(255,170,68,0.35); }
-}
-#alert-icon {
-  font-size: clamp(48px, 8vw, 96px);
-  margin-bottom: 16px;
-  animation: shake 0.5s ease-in-out 0s 6;
-}
-@keyframes shake {
-  0%,100%{transform:rotate(0)} 20%{transform:rotate(-12deg)} 60%{transform:rotate(12deg)}
-}
-#alert-badge {
-  font-size: clamp(10px, 1.5vw, 14px);
-  font-weight: 700; letter-spacing: 4px; text-transform: uppercase;
-  color: rgba(255,170,68,0.6); margin-bottom: 12px;
-}
-#alert-flight-num {
-  font-family: var(--font-mono);
-  font-size: clamp(52px, 10vw, 120px);
-  font-weight: 700;
-  color: #ffcc44;
-  line-height: 1;
-  margin-bottom: 8px;
-  text-shadow: 0 0 40px rgba(255,204,0,0.5);
-}
-#alert-event-type {
-  font-size: clamp(20px, 4vw, 48px);
-  font-weight: 700; letter-spacing: 4px; text-transform: uppercase;
-  color: #fff; margin-bottom: 10px;
-}
-#alert-time-left {
-  font-family: var(--font-mono);
-  font-size: clamp(14px, 2.5vw, 28px);
-  color: #ffaa44; letter-spacing: 2px;
-  margin-bottom: 6px;
-}
-#alert-airline-name {
-  font-size: clamp(12px, 2vw, 20px);
-  letter-spacing: 3px; text-transform: uppercase;
-  color: rgba(255,255,255,0.4); margin-bottom: 32px;
-}
-#alert-dismiss-btn {
-  background: rgba(255,170,68,0.15);
-  border: 2px solid #ffaa44; color: #ffaa44;
-  font-family: var(--font-ui); font-size: clamp(12px, 2vw, 18px);
-  font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
-  padding: 14px 40px; border-radius: 6px; cursor: pointer;
-  transition: all 0.2s;
-}
+#alert-box { background: #1a1000; border: 3px solid #ffaa44; border-radius: 12px; padding: 48px 64px; text-align: center; max-width: 760px; width: 90vw; box-shadow: 0 0 60px rgba(255,170,68,0.5), 0 0 120px rgba(255,170,68,0.2); animation: alertpulse 1.5s infinite; position: relative; }
+@keyframes alertpulse { 0%,100%{box-shadow:0 0 60px rgba(255,170,68,0.4),0 0 120px rgba(255,170,68,0.15)} 50%{box-shadow:0 0 90px rgba(255,170,68,0.7),0 0 200px rgba(255,170,68,0.35)} }
+#alert-icon { font-size: clamp(48px,8vw,96px); margin-bottom: 16px; animation: shake 0.5s ease-in-out 0s 6; }
+@keyframes shake { 0%,100%{transform:rotate(0)} 20%{transform:rotate(-12deg)} 60%{transform:rotate(12deg)} }
+#alert-badge { font-size: clamp(10px,1.5vw,14px); font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: rgba(255,170,68,0.6); margin-bottom: 12px; }
+#alert-flight-num { font-family: var(--font-mono); font-size: clamp(52px,10vw,120px); font-weight: 700; color: #ffcc44; line-height: 1; margin-bottom: 8px; text-shadow: 0 0 40px rgba(255,204,0,0.5); }
+#alert-event-type { font-size: clamp(20px,4vw,48px); font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: #fff; margin-bottom: 10px; }
+#alert-time-left { font-family: var(--font-mono); font-size: clamp(14px,2.5vw,28px); color: #ffaa44; letter-spacing: 2px; margin-bottom: 6px; }
+#alert-airline-name { font-size: clamp(12px,2vw,20px); letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 32px; }
+#alert-dismiss-btn { background: rgba(255,170,68,0.15); border: 2px solid #ffaa44; color: #ffaa44; font-family: var(--font-ui); font-size: clamp(12px,2vw,18px); font-weight: 700; letter-spacing: 3px; text-transform: uppercase; padding: 14px 40px; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
 #alert-dismiss-btn:hover { background: rgba(255,170,68,0.3); color: #fff; }
-/* Progress bar for auto-dismiss */
-#alert-progress-bar {
-  position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
-  background: rgba(255,170,68,0.2); border-radius: 0 0 12px 12px; overflow: hidden;
-}
-#alert-progress-fill {
-  height: 100%; background: #ffaa44;
-  transition: width 1s linear;
-}
+#alert-progress-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 4px; background: rgba(255,170,68,0.2); border-radius: 0 0 12px 12px; overflow: hidden; }
+#alert-progress-fill { height: 100%; background: #ffaa44; transition: width 1s linear; }
 
 /* TOAST */
 #toast { position: fixed; bottom: 20px; right: 20px; background: var(--surface); border: 1px solid var(--accent); color: var(--accent); font-family: var(--font-mono); font-size: 11px; padding: 8px 16px; border-radius: 3px; z-index: 999; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
 #toast.show { opacity: 1; }
 #file-import { display: none; }
 
-/* ═══════════════════════════════════════════
-   TV / LARGE SCREEN scaling (>= 1600px)
-═══════════════════════════════════════════ */
+/* TV >= 1600px */
 @media (min-width: 1600px) {
-  :root { --scale: 1.35; }
-  #timeline-view  { padding-top: calc(52px * var(--scale)); }
-  #right-panel { width: calc(210px * var(--scale)); min-width: calc(210px * var(--scale)); }
-  .ptitle { font-size: calc(9px * var(--scale)); }
-  .leg-item { font-size: calc(10px * var(--scale)); }
-  .leg-dot { width: calc(9px * var(--scale)); height: calc(9px * var(--scale)); }
-  .progbar { height: calc(4px * var(--scale)); }
-  .progtxt { font-size: calc(10px * var(--scale)); }
+  :root { --scale: 1.45; }
+  #timeline-view { padding-top: calc(52px * var(--scale)); }
+  #right-panel { width: calc(230px * var(--scale)); min-width: calc(230px * var(--scale)); }
+  .eb-flight { font-size: calc(18px * var(--scale)) !important; }
+  .eb-time   { font-size: calc(13px * var(--scale)) !important; }
+  .eb-type   { font-size: calc(12px * var(--scale)) !important; }
+  .eb-airline{ font-size: calc(11px * var(--scale)) !important; }
 }
 @media (min-width: 2200px) {
-  :root { --scale: 1.8; }
+  :root { --scale: 2; }
 }
 
-/* ═══════════════════════════════════════════
-   MOBILE <= 768px
-═══════════════════════════════════════════ */
+/* MOBILE */
 @media (max-width: 768px) {
   :root { --scale: 1; }
   #topbar { height: 48px; }
@@ -424,19 +238,13 @@
   #status-bar { display: none; }
   #nav-tabs { display: none; }
   #tl-filters { display: none !important; }
-
   #date-picker-wrap { padding: 0 6px; gap: 4px; flex: 1; justify-content: flex-end; border-right: none; }
   #date-picker-wrap .dp-lbl { display: none; }
   #date-display { font-size: 10px; min-width: 68px; padding: 2px 5px; }
   #date-nav-prev, #date-nav-next { width: 26px; height: 26px; font-size: 15px; font-weight: 700; }
   #date-today-btn { font-size: 8px; padding: 2px 5px; }
 
-  /* Mobile nav */
-  #mob-nav {
-    display: flex !important;
-    position: fixed; top: 48px; left: 0; right: 0; z-index: 195;
-    background: #181c26; border-bottom: 1px solid var(--border); height: 40px;
-  }
+  #mob-nav { display: flex !important; position: fixed; top: 48px; left: 0; right: 0; z-index: 195; background: #181c26; border-bottom: 1px solid var(--border); height: 40px; }
   .mob-ntab { flex: 1; display: flex; align-items: center; justify-content: center; font-family: var(--font-ui); font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-dim); cursor: pointer; border-right: 1px solid var(--border); user-select: none; transition: all 0.15s; }
   .mob-ntab:last-child { border-right: none; }
   .mob-ntab.active { color: var(--accent); background: #001820; }
@@ -444,12 +252,9 @@
   #timeline-view { padding-top: 88px; padding-bottom: 60px; }
   #right-panel { display: none !important; }
 
-  /* Mobile cards */
-  .eblock { left: 0 !important; right: 0 !important; width: auto !important; position: relative !important; top: auto !important; margin: 0 8px 6px 8px; height: auto !important; min-height: unset !important; border-radius: 6px; border-left-width: 4px; background: rgba(32,38,54,0.99) !important; box-shadow: 0 2px 12px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04); }
-  .eblock.done { background: var(--done-bg) !important; box-shadow: none !important; }
+  .eblock { left: 0 !important; right: 0 !important; width: auto !important; position: relative !important; top: auto !important; margin: 0 8px 6px 8px; height: auto !important; min-height: unset !important; border-radius: 6px; border-left-width: 4px; background: rgba(32,38,54,0.99) !important; box-shadow: 0 2px 12px rgba(0,0,0,0.5); }
   #tl-inner { position: relative; height: auto !important; min-height: unset !important; min-width: unset !important; }
-  .hour-tick { display: none; }
-  .hour-lbl  { display: none; }
+  .hour-tick { display: none; } .hour-lbl { display: none; }
   .now-line-abs { display: none !important; }
 
   .eb { padding: 9px 12px; height: auto; gap: 3px; justify-content: flex-start; }
@@ -460,13 +265,11 @@
   .type-seal  .eb-type-badge { color: #ffaa44; border-color: rgba(255,170,68,0.4);  background: rgba(255,170,68,0.10); }
   .type-truck .eb-type-badge { color: #ff6b6b; border-color: rgba(255,107,107,0.4); background: rgba(255,107,107,0.10); }
   .type-etd   .eb-type-badge { color: #66aaff; border-color: rgba(102,170,255,0.4); background: rgba(102,170,255,0.10); }
-  .eb-type   { display: none; }
-  .eb-flight  { font-family: var(--font-mono); font-size: 17px; font-weight: 700; line-height: 1; letter-spacing: 0.5px; color: #eef0fa; }
+  .eb-type { display: none; }
+  .eb-flight { font-family: var(--font-mono); font-size: 17px; font-weight: 700; line-height: 1; letter-spacing: 0.5px; color: #eef0fa; }
   .eb-airline { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.45); line-height: 1; margin-top: 2px; }
   .eb-acts { display: flex; gap: 7px; margin-top: 6px; flex-wrap: wrap; align-items: center; }
-  .btn-done { font-size: 10px; padding: 6px 14px; min-height: 30px; border-radius: 4px; }
   .btn-fr24 { font-size: 9px; padding: 6px 11px; min-height: 30px; border-radius: 4px; }
-  .done-ck  { font-size: 15px; top: 7px; right: 7px; }
 
   .mob-hour-sep { display: flex; align-items: center; gap: 8px; padding: 7px 14px 3px; font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); letter-spacing: 1px; }
   .mob-hour-sep::after { content: ''; flex: 1; height: 1px; background: var(--border); }
@@ -474,11 +277,10 @@
   .mob-now-sep::before { content: '▶ NOW'; }
   .mob-now-sep::after { content: ''; flex: 1; height: 2px; background: var(--now-line); box-shadow: 0 0 8px var(--now-line); }
 
-  /* Mobile drawer */
   #mob-drawer { display: block !important; position: fixed; bottom: 0; left: 0; right: 0; z-index: 500; background: #181c26; border: 1px solid var(--border); border-bottom: none; border-radius: 16px 16px 0 0; transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.32,0.72,0,1); max-height: 80vh; overflow-y: auto; padding-bottom: 60px; }
   #mob-drawer.open { transform: translateY(0); }
   #mob-drawer-handle { width: 100%; display: flex; flex-direction: column; align-items: center; padding: 12px 0 6px; cursor: grab; user-select: none; -webkit-user-select: none; }
-  #mob-drawer-handle .pill  { width: 44px; height: 4px; background: var(--border); border-radius: 2px; margin-bottom: 4px; }
+  #mob-drawer-handle .pill { width: 44px; height: 4px; background: var(--border); border-radius: 2px; margin-bottom: 4px; }
   #mob-drawer-handle .title { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); }
   #mob-drawer-body { padding: 8px 16px 16px; }
   .dr-section { margin-bottom: 16px; }
@@ -487,10 +289,7 @@
   .dr-fchk { display: flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); cursor: pointer; user-select: none; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
   .dr-fchk input { display: none; }
   .dr-fchk.active { border-color: currentColor; background: rgba(255,255,255,0.05); }
-  .dr-fchk-eta   { color: #4dffb4; }
-  .dr-fchk-etd   { color: #66aaff; }
-  .dr-fchk-seal  { color: #ffaa44; }
-  .dr-fchk-truck { color: #ff6b6b; }
+  .dr-fchk-eta { color: #4dffb4; } .dr-fchk-etd { color: #66aaff; } .dr-fchk-seal { color: #ffaa44; } .dr-fchk-truck { color: #ff6b6b; }
   .dr-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
   .dr-row label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim); min-width: 80px; }
   .dr-row input[type=range] { flex: 1; accent-color: var(--accent); }
@@ -502,7 +301,6 @@
   .dr-btn-import { background: #1a1000; border: 1px solid #ffaa44; color: #ffaa44; }
   .dr-btn-test   { background: rgba(255,170,68,0.1); border: 1px solid #ffaa44; color: #ffaa44; }
 
-  /* Bottom bar */
   #mobile-stats { display: flex !important; position: fixed; bottom: 0; left: 0; right: 0; z-index: 600; background: #181c26; border-top: 2px solid var(--border); height: 60px; align-items: stretch; }
   #mobile-stats .spill { flex: 1; height: 100%; padding: 0 10px; border-right: 1px solid var(--border); display: flex; flex-direction: column; justify-content: center; min-width: 0; }
   #mobile-stats .spill:last-child { border-right: none; }
@@ -523,23 +321,20 @@
 /* Tablet */
 @media (min-width: 769px) and (max-width: 1100px) {
   #right-panel { width: 170px; min-width: 170px; }
-  .logo   { font-size: 14px; padding: 0 14px; }
-  #clock  { font-size: 18px; padding: 0 12px; }
+  .logo { font-size: 14px; padding: 0 14px; }
+  #clock { font-size: 18px; padding: 0 12px; }
   .spill .val { max-width: 140px; }
 }
 
-/* Hide mobile-only on desktop */
+/* Desktop hide mobile-only */
 @media (min-width: 769px) {
-  #mob-nav          { display: none !important; }
-  #mob-drawer       { display: none !important; }
+  #mob-nav { display: none !important; }
+  #mob-drawer { display: none !important; }
   #mob-settings-btn { display: none !important; }
-  #mobile-stats     { display: none !important; }
-  .mob-hour-sep     { display: none !important; }
-  .mob-now-sep      { display: none !important; }
-  /* Config view hidden on desktop — settings are in the right panel */
-  #config-view-desktop-note { display: none; }
+  #mobile-stats { display: none !important; }
+  .mob-hour-sep { display: none !important; }
+  .mob-now-sep { display: none !important; }
 }
-/* On desktop, Config tab is hidden */
 @media (min-width: 769px) {
   .ntab[data-view="config"] { display: none !important; }
 }
@@ -551,7 +346,6 @@
   <div class="logo">⬡ JNB CATERING OPS</div>
   <div id="date-str"></div>
   <div id="clock">00:00:00</div>
-
   <div id="date-picker-wrap">
     <span class="dp-lbl">View</span>
     <div id="date-nav-prev" onclick="shiftDate(-1)" title="Previous day">‹</div>
@@ -560,37 +354,23 @@
     <div id="date-today-btn" class="hidden" onclick="resetToToday()">Today</div>
     <input type="date" id="native-date-input" onchange="onNativeDateChange(this.value)">
   </div>
-
   <div id="status-bar">
     <div class="spill"><div class="lbl">Current</div><div class="val cur" id="cur-ev">—</div></div>
     <div class="spill"><div class="lbl">Next</div><div class="val nxt" id="nxt-ev">—</div></div>
-    <div class="spill"><div class="lbl">Done</div><div class="val" id="done-cnt">0 / 0</div></div>
+    <div class="spill"><div class="lbl">Events</div><div class="val" id="done-cnt">0</div></div>
   </div>
-
   <div id="tl-filters">
-    <label class="fchk fchk-eta active" id="fchk-eta">
-      <input type="checkbox" checked onchange="toggleFilter('eta',this.checked)">
-      <span class="fchk-dot" style="background:#4dffb4"></span><span>ETA</span>
-    </label>
-    <label class="fchk fchk-etd active" id="fchk-etd">
-      <input type="checkbox" checked onchange="toggleFilter('etd',this.checked)">
-      <span class="fchk-dot" style="background:#66aaff"></span><span>ETD</span>
-    </label>
-    <label class="fchk fchk-seal active" id="fchk-seal">
-      <input type="checkbox" checked onchange="toggleFilter('seal',this.checked)">
-      <span class="fchk-dot" style="background:#ffaa44"></span><span>Seal</span>
-    </label>
-    <label class="fchk fchk-truck active" id="fchk-truck">
-      <input type="checkbox" checked onchange="toggleFilter('truck',this.checked)">
-      <span class="fchk-dot" style="background:#ff6b6b"></span><span>Truck</span>
-    </label>
+    <label class="fchk fchk-eta active" id="fchk-eta"><input type="checkbox" checked onchange="toggleFilter('eta',this.checked)"><span class="fchk-dot" style="background:#4dffb4"></span><span>ETA</span></label>
+    <label class="fchk fchk-etd active" id="fchk-etd"><input type="checkbox" checked onchange="toggleFilter('etd',this.checked)"><span class="fchk-dot" style="background:#66aaff"></span><span>ETD</span></label>
+    <label class="fchk fchk-seal active" id="fchk-seal"><input type="checkbox" checked onchange="toggleFilter('seal',this.checked)"><span class="fchk-dot" style="background:#ffaa44"></span><span>Seal</span></label>
+    <label class="fchk fchk-truck active" id="fchk-truck"><input type="checkbox" checked onchange="toggleFilter('truck',this.checked)"><span class="fchk-dot" style="background:#ff6b6b"></span><span>Truck</span></label>
   </div>
-
   <div id="nav-tabs">
     <div class="ntab active" onclick="switchView('timeline')">Ops</div>
     <div class="ntab" onclick="switchView('airline')">Airlines</div>
     <div class="ntab" onclick="switchView('production')">Production</div>
     <div class="ntab" data-view="config" onclick="switchView('config')">Config</div>
+    <div class="ntab" id="topbar-panel-btn" onclick="togglePanel()" title="Toggle panel" style="color:var(--accent);min-width:44px;justify-content:center;font-size:16px;">▐</div>
   </div>
 </div>
 
@@ -604,27 +384,26 @@
 
 <!-- TIMELINE VIEW -->
 <div id="timeline-view" class="view active">
-  <div id="tl-scroll">
-    <div id="tl-inner"></div>
-  </div>
+  <div id="tl-scroll"><div id="tl-inner"></div></div>
   <div id="right-panel">
     <div id="panel-toggle" onclick="togglePanel()"><span id="panel-toggle-icon">◀</span></div>
     <div class="psec">
       <div class="ptitle">🔔 Alerts</div>
       <div class="trow"><label>Enable</label><label class="tog"><input type="checkbox" id="alert-on" checked><span class="tog-sl"></span></label></div>
       <div class="zrow" style="margin-top:6px;"><label>Warn</label><input type="range" id="alert-min" min="5" max="60" value="15" step="5"><span id="alert-min-v">15 min</span></div>
-      <div style="font-size:9px;color:var(--text-dim);margin-top:4px;">Alert <span id="alert-min-lbl">15</span> min before event</div>
+      <div style="font-size:9px;color:var(--text-dim);margin-top:4px;">Seal &amp; Truck only · <span id="alert-min-lbl">15</span> min before</div>
       <button class="btn-io btn-import" style="margin-top:8px;font-size:9px;" onclick="testAlert()">⚡ Test Alert</button>
     </div>
     <div class="psec">
       <div class="ptitle">Day Progress</div>
       <div class="progbar"><div class="progfill" id="prog-fill" style="width:0%"></div></div>
-      <div class="progtxt" id="prog-txt">0 / 0 done</div>
+      <div class="progtxt" id="prog-txt">0 events</div>
     </div>
     <div class="psec">
       <div class="ptitle">View</div>
+      <div class="trow"><label>Follow NOW</label><label class="tog"><input type="checkbox" id="follow-now" checked><span class="tog-sl"></span></label></div>
       <div class="zrow"><label>Zoom</label><input type="range" id="zoom-sl" min="1" max="8" value="3" step="0.5"><span id="zoom-v">3x</span></div>
-      <div class="zrow"><label>Height</label><input type="range" id="ht-sl" min="44" max="120" value="72" step="4"><span id="ht-v">72</span></div>
+      <div class="zrow"><label>Height</label><input type="range" id="ht-sl" min="44" max="160" value="88" step="4"><span id="ht-v">88</span></div>
       <div class="trow" style="margin-top:4px;"><label>Airline Name</label><label class="tog"><input type="checkbox" id="show-al" checked><span class="tog-sl"></span></label></div>
     </div>
     <div class="psec">
@@ -661,27 +440,19 @@
   </div>
 </div>
 
-<!-- CONFIG VIEW (mobile: filters + alerts + display; desktop: hidden tab) -->
+<!-- CONFIG VIEW -->
 <div id="config-view" class="view">
   <div class="csec">
     <h2>Filters</h2>
     <div class="cfg-filter-row">
-      <label class="cfg-fchk cfg-fchk-eta active" id="cfg-fchk-eta">
-        <input type="checkbox" checked onchange="toggleFilter('eta',this.checked)"><span>● ETA</span>
-      </label>
-      <label class="cfg-fchk cfg-fchk-etd active" id="cfg-fchk-etd">
-        <input type="checkbox" checked onchange="toggleFilter('etd',this.checked)"><span>● ETD</span>
-      </label>
-      <label class="cfg-fchk cfg-fchk-seal active" id="cfg-fchk-seal">
-        <input type="checkbox" checked onchange="toggleFilter('seal',this.checked)"><span>● Sealing</span>
-      </label>
-      <label class="cfg-fchk cfg-fchk-truck active" id="cfg-fchk-truck">
-        <input type="checkbox" checked onchange="toggleFilter('truck',this.checked)"><span>● Truck Dep</span>
-      </label>
+      <label class="cfg-fchk cfg-fchk-eta active" id="cfg-fchk-eta"><input type="checkbox" checked onchange="toggleFilter('eta',this.checked)"><span>● ETA</span></label>
+      <label class="cfg-fchk cfg-fchk-etd active" id="cfg-fchk-etd"><input type="checkbox" checked onchange="toggleFilter('etd',this.checked)"><span>● ETD</span></label>
+      <label class="cfg-fchk cfg-fchk-seal active" id="cfg-fchk-seal"><input type="checkbox" checked onchange="toggleFilter('seal',this.checked)"><span>● Sealing</span></label>
+      <label class="cfg-fchk cfg-fchk-truck active" id="cfg-fchk-truck"><input type="checkbox" checked onchange="toggleFilter('truck',this.checked)"><span>● Truck Dep</span></label>
     </div>
   </div>
   <div class="csec">
-    <h2>🔔 Alerts</h2>
+    <h2>🔔 Alerts — Sealing &amp; Truck only</h2>
     <div class="cfg-alert-row">
       <label>Enable alerts</label>
       <label class="tog"><input type="checkbox" id="cfg-alert-on" checked onchange="setAlertOn(this.checked)"><span class="tog-sl"></span></label>
@@ -696,7 +467,7 @@
   <div class="csec">
     <h2>Display</h2>
     <div class="drow"><label>Timeline Zoom</label><input type="range" min="1" max="8" value="3" step="0.5" id="cfg-zm" oninput="cfgApply()"><span id="cfg-zm-v">3x</span></div>
-    <div class="drow"><label>Block Height</label><input type="range" min="44" max="120" value="72" step="4" id="cfg-ht" oninput="cfgApply()"><span id="cfg-ht-v">72px</span></div>
+    <div class="drow"><label>Block Height</label><input type="range" min="44" max="160" value="88" step="4" id="cfg-ht" oninput="cfgApply()"><span id="cfg-ht-v">88px</span></div>
     <div class="drow"><label>Show Airline Name</label><label class="tog"><input type="checkbox" id="cfg-al" checked onchange="cfgApply()"><span class="tog-sl"></span></label></div>
   </div>
   <div class="csec">
@@ -734,19 +505,15 @@
 <div id="mobile-stats" style="display:none;">
   <div class="spill"><div class="lbl">Current</div><div class="val cur" id="mob-cur">—</div></div>
   <div class="spill"><div class="lbl">Next</div><div class="val nxt" id="mob-nxt">—</div></div>
-  <div class="spill"><div class="lbl">Done</div><div class="val" id="mob-done">0/0</div></div>
+  <div class="spill"><div class="lbl">Events</div><div class="val" id="mob-done">0</div></div>
   <div id="mob-settings-btn">⚙</div>
 </div>
 
-<!-- DRAWER BACKDROP -->
 <div id="drawer-overlay" style="display:none;position:fixed;inset:0;bottom:60px;z-index:450;" onclick="closeDrawer()"></div>
 
 <!-- MOBILE DRAWER -->
 <div id="mob-drawer" style="display:none;">
-  <div id="mob-drawer-handle">
-    <div class="pill"></div>
-    <div class="title">⚙ Settings</div>
-  </div>
+  <div id="mob-drawer-handle"><div class="pill"></div><div class="title">⚙ Settings</div></div>
   <div id="mob-drawer-body">
     <div class="dr-section">
       <div class="dr-section-title">Filters</div>
@@ -758,22 +525,15 @@
       </div>
     </div>
     <div class="dr-section">
-      <div class="dr-section-title">🔔 Alerts</div>
-      <div class="dr-tog-row">
-        <label>Enable alerts</label>
-        <label class="tog"><input type="checkbox" id="dr-alert-on" checked onchange="setAlertOn(this.checked)"><span class="tog-sl"></span></label>
-      </div>
-      <div class="dr-row">
-        <label>Warn before</label>
-        <input type="range" id="dr-alert-min" min="5" max="60" value="15" step="5" oninput="setAlertMin(this.value)">
-        <span id="dr-alert-min-v">15 min</span>
-      </div>
+      <div class="dr-section-title">🔔 Alerts (Seal &amp; Truck)</div>
+      <div class="dr-tog-row"><label>Enable alerts</label><label class="tog"><input type="checkbox" id="dr-alert-on" checked onchange="setAlertOn(this.checked)"><span class="tog-sl"></span></label></div>
+      <div class="dr-row"><label>Warn before</label><input type="range" id="dr-alert-min" min="5" max="60" value="15" step="5" oninput="setAlertMin(this.value)"><span id="dr-alert-min-v">15 min</span></div>
       <button class="dr-btn dr-btn-test" style="margin-top:4px;" onclick="testAlert()">⚡ Test Alert</button>
     </div>
     <div class="dr-section">
       <div class="dr-section-title">Day Progress</div>
       <div class="progbar" style="height:6px;"><div class="progfill" id="dr-prog-fill" style="width:0%"></div></div>
-      <div class="progtxt" id="dr-prog-txt" style="font-size:12px;margin-top:6px;">0 / 0 done</div>
+      <div class="progtxt" id="dr-prog-txt" style="font-size:12px;margin-top:6px;">0 events</div>
     </div>
     <div class="dr-section">
       <div class="dr-section-title">Background</div>
@@ -785,11 +545,7 @@
         <div class="bg-sw" data-h="30"  style="background:#1a1510;width:36px;height:36px;border-radius:8px;"></div>
         <div class="bg-sw" data-h="200" style="background:#101518;width:36px;height:36px;border-radius:8px;"></div>
       </div>
-      <div class="dr-row">
-        <label>Brightness</label>
-        <input type="range" id="dr-bg-bright" min="0" max="100" value="50" step="1" oninput="setBgBright(this.value)">
-        <span id="dr-bg-bright-v">50</span>
-      </div>
+      <div class="dr-row"><label>Brightness</label><input type="range" id="dr-bg-bright" min="0" max="100" value="50" step="1" oninput="setBgBright(this.value)"><span id="dr-bg-bright-v">50</span></div>
     </div>
     <div class="dr-section">
       <div class="dr-section-title">Data Sync</div>
@@ -806,7 +562,7 @@
   </div>
 </div>
 
-<!-- FULL-SCREEN ALERT MODAL -->
+<!-- ALERT MODAL -->
 <div id="alert-modal">
   <div id="alert-box">
     <div id="alert-icon">⚠️</div>
@@ -823,30 +579,17 @@
 <div id="toast"></div>
 
 <script>
-/* ═══════════════════════════════════════════
-   DATA
-═══════════════════════════════════════════ */
 const DEF_AIRLINES = [
-  {id:'emirates',name:'Emirates',color:'#e31837'},
-  {id:'qantas',name:'Qantas',color:'#ff5500'},
-  {id:'lufthansa',name:'Lufthansa',color:'#8844cc'},
-  {id:'british_airways',name:'British Airways',color:'#2255aa'},
-  {id:'virgin_atlantic',name:'Virgin Atlantic',color:'#cc0055'},
-  {id:'ethiopian',name:'Ethiopian',color:'#078930'},
-  {id:'cathay',name:'Cathay',color:'#006564'},
-  {id:'united',name:'United',color:'#4a6ea8'},
-  {id:'delta',name:'Delta',color:'#003399'},
-  {id:'air_china',name:'Air China',color:'#cc2200'},
-  {id:'etihad',name:'Etihad',color:'#b8973a'},
-  {id:'air_mauritius',name:'Air Mauritius',color:'#009966'},
-  {id:'air_algerie',name:'Air Algerie',color:'#00aa44'},
-  {id:'air_seychelles',name:'Air Seychelles',color:'#1a9fd4'},
-  {id:'latam',name:'Latam',color:'#e61f26'},
-  {id:'uganda',name:'Uganda',color:'#d4aa00'},
-  {id:'egyptair',name:'EgyptAir',color:'#bf0000'},
-  {id:'air_austral',name:'Air Austral',color:'#0066cc'},
-  {id:'asky',name:'Asky',color:'#ee7700'},
-  {id:'air_cote',name:"Air Cote D'Ivoire",color:'#ff7700'},
+  {id:'emirates',name:'Emirates',color:'#e31837'},{id:'qantas',name:'Qantas',color:'#ff5500'},
+  {id:'lufthansa',name:'Lufthansa',color:'#8844cc'},{id:'british_airways',name:'British Airways',color:'#2255aa'},
+  {id:'virgin_atlantic',name:'Virgin Atlantic',color:'#cc0055'},{id:'ethiopian',name:'Ethiopian',color:'#078930'},
+  {id:'cathay',name:'Cathay',color:'#006564'},{id:'united',name:'United',color:'#4a6ea8'},
+  {id:'delta',name:'Delta',color:'#003399'},{id:'air_china',name:'Air China',color:'#cc2200'},
+  {id:'etihad',name:'Etihad',color:'#b8973a'},{id:'air_mauritius',name:'Air Mauritius',color:'#009966'},
+  {id:'air_algerie',name:'Air Algerie',color:'#00aa44'},{id:'air_seychelles',name:'Air Seychelles',color:'#1a9fd4'},
+  {id:'latam',name:'Latam',color:'#e61f26'},{id:'uganda',name:'Uganda',color:'#d4aa00'},
+  {id:'egyptair',name:'EgyptAir',color:'#bf0000'},{id:'air_austral',name:'Air Austral',color:'#0066cc'},
+  {id:'asky',name:'Asky',color:'#ee7700'},{id:'air_cote',name:"Air Cote D'Ivoire",color:'#ff7700'},
   {id:'qantas_perth',name:'Qantas PERTH',color:'#ff8c00'},
 ];
 const DEF_FLIGHTS = [
@@ -885,225 +628,207 @@ const DEF_FLIGHTS = [
   {id:'f33',airline:'Uganda',flight:'UR711',eta:'23:45',etd:'00:45',sealing:'21:15',truck:'22:00',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
 ];
 
-const ALLDAYS    = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
-const DAY_LABELS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-const MON_LABELS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const ALLDAYS=['SUN','MON','TUE','WED','THU','FRI','SAT'];
+const DAY_LABELS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const MON_LABELS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
-let airlines=[], flights=[], completions={}, ds={blockH:72,zoom:3,showAl:true};
-let activeFilters = {eta:true, etd:true, seal:true, truck:true};
-const isMobile = () => window.innerWidth <= 768;
+let airlines=[], flights=[], ds={blockH:88,zoom:3,showAl:true};
+let activeFilters={eta:true,etd:true,seal:true,truck:true};
+const isMobile=()=>window.innerWidth<=768;
 
-/* ═══════════════════════════════════════════
-   DATE NAVIGATION
-═══════════════════════════════════════════ */
-let viewDate = new Date(); viewDate.setHours(0,0,0,0);
-
-function isToday(d){ const n=new Date(); n.setHours(0,0,0,0); return d.getTime()===n.getTime(); }
-function isFuture(d){ const n=new Date(); n.setHours(0,0,0,0); return d.getTime()>n.getTime(); }
-function viewDateKey(){ return viewDate.getFullYear()+'-'+(viewDate.getMonth()+1)+'-'+viewDate.getDate(); }
-function viewDayOfWeek(){ return ALLDAYS[viewDate.getDay()]; }
+/* DATE */
+let viewDate=new Date(); viewDate.setHours(0,0,0,0);
+function isToday(d){const n=new Date();n.setHours(0,0,0,0);return d.getTime()===n.getTime();}
+function isFuture(d){const n=new Date();n.setHours(0,0,0,0);return d.getTime()>n.getTime();}
+function viewDateKey(){return viewDate.getFullYear()+'-'+(viewDate.getMonth()+1)+'-'+viewDate.getDate();}
+function viewDayOfWeek(){return ALLDAYS[viewDate.getDay()];}
 
 function updateDateDisplay(){
-  const dd=document.getElementById('date-display'), todayBtn=document.getElementById('date-today-btn');
-  if(!dd) return;
-  const d=viewDate, dayShort=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()];
+  const dd=document.getElementById('date-display'),todayBtn=document.getElementById('date-today-btn');
+  if(!dd)return;
+  const d=viewDate,dayShort=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()];
   dd.textContent=`${dayShort} ${d.getDate()} ${MON_LABELS[d.getMonth()]}`;
   dd.className=isToday(d)?'is-today':isFuture(d)?'is-future':'is-past';
-  if(todayBtn) todayBtn.classList.toggle('hidden',isToday(d));
-  const ds2=document.getElementById('date-str'); if(ds2) ds2.textContent=`${DAY_LABELS[d.getDay()]} ${d.getDate()} ${MON_LABELS[d.getMonth()]} ${d.getFullYear()}`;
-  const avd=document.getElementById('airline-view-date'); if(avd) avd.textContent=`${dayShort} ${d.getDate()} ${MON_LABELS[d.getMonth()]}`;
+  if(todayBtn)todayBtn.classList.toggle('hidden',isToday(d));
+  const ds2=document.getElementById('date-str');if(ds2)ds2.textContent=`${DAY_LABELS[d.getDay()]} ${d.getDate()} ${MON_LABELS[d.getMonth()]} ${d.getFullYear()}`;
+  const avd=document.getElementById('airline-view-date');if(avd)avd.textContent=`${dayShort} ${d.getDate()} ${MON_LABELS[d.getMonth()]}`;
 }
-
-function shiftDate(delta){
-  viewDate=new Date(viewDate.getTime()+delta*86400000); viewDate.setHours(0,0,0,0);
-  const c=localStorage.getItem('cop_comp_'+viewDateKey()); completions=c?JSON.parse(c):{};
-  updateDateDisplay(); refreshCurrentView();
-}
-function resetToToday(){ viewDate=new Date(); viewDate.setHours(0,0,0,0); const c=localStorage.getItem('cop_comp_'+viewDateKey()); completions=c?JSON.parse(c):{}; updateDateDisplay(); updateClock(); refreshCurrentView(); }
-function openNativeDatePicker(){ const inp=document.getElementById('native-date-input'); const y=viewDate.getFullYear(),m=String(viewDate.getMonth()+1).padStart(2,'0'),d=String(viewDate.getDate()).padStart(2,'0'); inp.value=`${y}-${m}-${d}`; inp.style.pointerEvents='auto'; inp.showPicker?inp.showPicker():inp.click(); inp.style.pointerEvents='none'; }
-function onNativeDateChange(val){ if(!val) return; const[y,m,d]=val.split('-').map(Number); viewDate=new Date(y,m-1,d,0,0,0,0); const c=localStorage.getItem('cop_comp_'+viewDateKey()); completions=c?JSON.parse(c):{}; updateDateDisplay(); refreshCurrentView(); }
+function shiftDate(delta){viewDate=new Date(viewDate.getTime()+delta*86400000);viewDate.setHours(0,0,0,0);updateDateDisplay();refreshCurrentView();}
+function resetToToday(){viewDate=new Date();viewDate.setHours(0,0,0,0);updateDateDisplay();updateClock();refreshCurrentView();}
+function openNativeDatePicker(){const inp=document.getElementById('native-date-input');const y=viewDate.getFullYear(),m=String(viewDate.getMonth()+1).padStart(2,'0'),d=String(viewDate.getDate()).padStart(2,'0');inp.value=`${y}-${m}-${d}`;inp.style.pointerEvents='auto';inp.showPicker?inp.showPicker():inp.click();inp.style.pointerEvents='none';}
+function onNativeDateChange(val){if(!val)return;const[y,m,d]=val.split('-').map(Number);viewDate=new Date(y,m-1,d,0,0,0,0);updateDateDisplay();refreshCurrentView();}
 function refreshCurrentView(){
-  const tv=document.getElementById('timeline-view'), av=document.getElementById('airline-view'), pv=document.getElementById('production-view');
-  if(tv&&tv.classList.contains('active')) buildTimeline();
-  if(av&&av.classList.contains('active')) buildAirlineView();
-  if(pv&&pv.classList.contains('active')) buildProductionView();
+  const tv=document.getElementById('timeline-view'),av=document.getElementById('airline-view'),pv=document.getElementById('production-view');
+  if(tv&&tv.classList.contains('active'))buildTimeline();
+  if(av&&av.classList.contains('active'))buildAirlineView();
+  if(pv&&pv.classList.contains('active'))buildProductionView();
 }
 
-/* ═══════════════════════════════════════════
-   DATA OPS
-═══════════════════════════════════════════ */
+/* DATA */
 function loadData(){
-  const a=localStorage.getItem('cop_airlines'); airlines=a?JSON.parse(a):JSON.parse(JSON.stringify(DEF_AIRLINES));
-  const f=localStorage.getItem('cop_flights');  flights=f?JSON.parse(f):JSON.parse(JSON.stringify(DEF_FLIGHTS));
-  const c=localStorage.getItem('cop_comp_'+viewDateKey()); completions=c?JSON.parse(c):{};
-  const d=localStorage.getItem('cop_display'); if(d) ds={...ds,...JSON.parse(d)};
-  const fi=localStorage.getItem('cop_filters'); if(fi) activeFilters={...activeFilters,...JSON.parse(fi)};
+  const a=localStorage.getItem('cop_airlines');airlines=a?JSON.parse(a):JSON.parse(JSON.stringify(DEF_AIRLINES));
+  const f=localStorage.getItem('cop_flights');flights=f?JSON.parse(f):JSON.parse(JSON.stringify(DEF_FLIGHTS));
+  const d=localStorage.getItem('cop_display');if(d)ds={...ds,...JSON.parse(d)};
+  const fi=localStorage.getItem('cop_filters');if(fi)activeFilters={...activeFilters,...JSON.parse(fi)};
 }
 function saveData(){
   localStorage.setItem('cop_airlines',JSON.stringify(airlines));
   localStorage.setItem('cop_flights',JSON.stringify(flights));
-  localStorage.setItem('cop_comp_'+viewDateKey(),JSON.stringify(completions));
   localStorage.setItem('cop_display',JSON.stringify(ds));
   localStorage.setItem('cop_filters',JSON.stringify(activeFilters));
 }
-function getColor(name){ const a=airlines.find(x=>x.name.toLowerCase()===name.toLowerCase()); return a?a.color:'#4466aa'; }
-function t2m(t){ if(!t) return -1; const[h,m]=t.split(':').map(Number); return h*60+m; }
-function nowMins(){ const n=new Date(); return n.getHours()*60+n.getMinutes()+n.getSeconds()/60; }
+function getColor(name){const a=airlines.find(x=>x.name.toLowerCase()===name.toLowerCase());return a?a.color:'#4466aa';}
+function t2m(t){if(!t)return-1;const[h,m]=t.split(':').map(Number);return h*60+m;}
+function nowMins(){const n=new Date();return n.getHours()*60+n.getMinutes()+n.getSeconds()/60;}
+function fmtMins(m){const h=Math.floor(m/60),mm=Math.floor(m%60);return String(h).padStart(2,'0')+':'+String(mm).padStart(2,'0');}
+
+/* AUTO NIGHT MODE — darker bg between 00h and 06h */
+function applyNightMode(){
+  const h=new Date().getHours();
+  const isNight=h>=0&&h<6;
+  document.documentElement.style.setProperty('--night-dim',isNight?'0.7':'1');
+  if(isNight){
+    const l=2+(bgTheme.bright/100)*6;
+    document.documentElement.style.setProperty('--bg',`hsl(${bgTheme.hue},20%,${l}%)`);
+  } else {
+    hslBg(bgTheme.hue,bgTheme.bright);
+  }
+}
 
 function todayEvents(){
-  const day=viewDayOfWeek(), evs=[];
+  const day=viewDayOfWeek(),evs=[];
   for(const f of flights){
-    if(!f.days.includes(day)) continue;
-    if(f.sealing && activeFilters.seal) evs.push({key:f.id+'_sl',time:f.sealing,type:'seal',lbl:'Sealing',flight:f.flight,airline:f.airline,tc:'type-seal'});
-    if(f.truck   && activeFilters.truck) evs.push({key:f.id+'_tr',time:f.truck,type:'truck',lbl:'Truck Dep',flight:f.flight,airline:f.airline,tc:'type-truck'});
-    if(f.eta     && activeFilters.eta)   evs.push({key:f.id+'_et',time:f.eta,type:'eta',lbl:'ETA',flight:f.flight,airline:f.airline,tc:'type-eta'});
-    if(f.etd     && activeFilters.etd)   evs.push({key:f.id+'_ed',time:f.etd,type:'etd',lbl:'ETD',flight:f.flight,airline:f.airline,tc:'type-etd'});
+    if(!f.days.includes(day))continue;
+    if(f.sealing&&activeFilters.seal)evs.push({key:f.id+'_sl',time:f.sealing,type:'seal',lbl:'Sealing',flight:f.flight,airline:f.airline,tc:'type-seal'});
+    if(f.truck&&activeFilters.truck)evs.push({key:f.id+'_tr',time:f.truck,type:'truck',lbl:'Truck Dep',flight:f.flight,airline:f.airline,tc:'type-truck'});
+    if(f.eta&&activeFilters.eta)evs.push({key:f.id+'_et',time:f.eta,type:'eta',lbl:'ETA',flight:f.flight,airline:f.airline,tc:'type-eta'});
+    if(f.etd&&activeFilters.etd)evs.push({key:f.id+'_ed',time:f.etd,type:'etd',lbl:'ETD',flight:f.flight,airline:f.airline,tc:'type-etd'});
   }
   evs.sort((a,b)=>t2m(a.time)-t2m(b.time));
   return evs;
 }
 
-/* ═══════════════════════════════════════════
-   FR24 BUTTONS
-═══════════════════════════════════════════ */
-const IATA_TO_ICAO = {
-  'EK':'UAE','QF':'QFA','LH':'DLH','BA':'BAW','VS':'VIR',
-  'ET':'ETH','CX':'CPA','UA':'UAL','DL':'DAL','CA':'CCA',
-  'EY':'ETD','MK':'MAU','AH':'DAH','HM':'SEY','LA':'LAN',
-  'UR':'UGA','MS':'MSR','UU':'REU','KP':'KPE','HF':'VUN',
-};
-function makeFR24Btns(flight, type){
-  if(type!=='eta'&&type!=='etd') return '';
+/* FR24 */
+const IATA_TO_ICAO={'EK':'UAE','QF':'QFA','LH':'DLH','BA':'BAW','VS':'VIR','ET':'ETH','CX':'CPA','UA':'UAL','DL':'DAL','CA':'CCA','EY':'ETD','MK':'MAU','AH':'DAH','HM':'SEY','LA':'LAN','UR':'UGA','MS':'MSR','UU':'REU','KP':'KPE','HF':'VUN'};
+function makeFR24Btns(flight,type){
+  if(type!=='eta'&&type!=='etd')return'';
   const code=flight.replace(/\s+/g,'').toUpperCase();
   const match=code.match(/^([A-Z]{2,3})(\d+)$/);
   let icaoCode=code;
-  if(match){ const icaoPrefix=IATA_TO_ICAO[match[1]]||match[1]; icaoCode=icaoPrefix+match[2]; }
-  const liveUrl=`https://flightaware.com/live/flight/${icaoCode}`;
-  const histUrl=`https://flightaware.com/live/flight/${icaoCode}/history`;
-  return `<a class="btn-fr24 btn-fr24-live" href="${liveUrl}" target="_blank"><span class="fr-dot"></span>Live</a><a class="btn-fr24 btn-fr24-hist" href="${histUrl}" target="_blank">History</a>`;
+  if(match){const icaoPrefix=IATA_TO_ICAO[match[1]]||match[1];icaoCode=icaoPrefix+match[2];}
+  return`<a class="btn-fr24 btn-fr24-live" href="https://flightaware.com/live/flight/${icaoCode}" target="_blank"><span class="fr-dot"></span>Live</a><a class="btn-fr24 btn-fr24-hist" href="https://flightaware.com/live/flight/${icaoCode}/history" target="_blank">History</a>`;
 }
 
-/* ═══════════════════════════════════════════
-   TIMELINE
-═══════════════════════════════════════════ */
+/* TIMELINE */
 function buildTimeline(){
   const inner=document.getElementById('tl-inner');
   inner.innerHTML='';
-  const evs=todayEvents(), nm=isToday(viewDate)?nowMins():-1;
-  if(isMobile()) buildTimelineMobile(inner,evs,nm);
+  const evs=todayEvents(),nm=isToday(viewDate)?nowMins():-1;
+  if(isMobile())buildTimelineMobile(inner,evs,nm);
   else buildTimelineDesktop(inner,evs,nm);
-  updateStatus(evs); updateProg(evs); updateLeg();
+  updateStatus(evs);updateProg(evs);updateLeg();
 }
 
 function buildTimelineDesktop(inner,evs,nm){
-  const pxpm=ds.zoom, bh=ds.blockH, total=24*60*pxpm;
-  inner.style.height=total+'px'; inner.style.position='relative';
+  const pxpm=ds.zoom,bh=ds.blockH,total=24*60*pxpm;
+  inner.style.height=total+'px';inner.style.position='relative';
   for(let h=0;h<24;h++){
     const y=h*60*pxpm;
-    const tick=document.createElement('div'); tick.className='hour-tick'; tick.style.top=y+'px'; inner.appendChild(tick);
-    const lbl=document.createElement('div'); lbl.className='hour-lbl'; lbl.style.top=(y+2)+'px'; lbl.textContent=String(h).padStart(2,'0')+':00'; inner.appendChild(lbl);
+    const tick=document.createElement('div');tick.className='hour-tick';tick.style.top=y+'px';inner.appendChild(tick);
+    const lbl=document.createElement('div');lbl.className='hour-lbl';lbl.style.top=(y+2)+'px';lbl.textContent=String(h).padStart(2,'0')+':00';inner.appendChild(lbl);
   }
   if(nm>=0){
-    const yNow=nm*pxpm;
     const nowWrap=document.createElement('div');
-    nowWrap.className='now-line-abs'; nowWrap.id='now-line-el';
-    nowWrap.style.cssText=`top:${yNow}px;position:absolute;left:0;right:0;height:3px;`;
+    nowWrap.className='now-line-abs';nowWrap.id='now-line-el';
+    nowWrap.style.cssText=`top:${nm*pxpm}px;position:absolute;left:0;right:0;height:3px;`;
     nowWrap.innerHTML=`<span class="now-label">NOW — ${fmtMins(nm)}</span><span class="now-dot"></span>`;
     inner.appendChild(nowWrap);
   }
-  const BW=178, LANE=60, GAP=4, cols=[];
-  function assignCol(mins){ const endM=mins+bh/pxpm; for(let c=0;c<cols.length;c++){if(cols[c]<=mins){cols[c]=endM;return c;}} cols.push(endM); return cols.length-1; }
+  const BW=200,LANE=60,GAP=4,cols=[];
+  function assignCol(mins){const endM=mins+bh/pxpm;for(let c=0;c<cols.length;c++){if(cols[c]<=mins){cols[c]=endM;return c;}}cols.push(endM);return cols.length-1;}
   for(const ev of evs){
-    const mins=t2m(ev.time); if(mins<0) continue;
-    const col=assignCol(mins), y=mins*pxpm, color=getColor(ev.airline);
-    const isDone=!!completions[ev.key], isPast=nm>=0&&mins<nm;
+    const mins=t2m(ev.time);if(mins<0)continue;
+    const col=assignCol(mins),y=mins*pxpm,color=getColor(ev.airline);
+    const isPast=nm>=0&&mins<nm;
     const b=document.createElement('div');
-    b.className=`eblock ${ev.tc}${isDone?' done':''}${isPast&&!isDone?' past':''}`;
+    b.className=`eblock ${ev.tc}${isPast?' past':''}`;
     b.style.cssText=`left:${LANE+col*(BW+GAP)}px;top:${y}px;width:${BW}px;height:${bh}px;border-left-color:${color};`;
-    b.dataset.key=ev.key;
     const fr24Btns=makeFR24Btns(ev.flight,ev.type);
-    const doneBtn=`<button class="btn-done" onclick="toggleDone('${ev.key}')">${isDone?'✓ Done':'Done'}</button>`;
     const alPart=ds.showAl?`<div class="eb-airline">${ev.airline}</div>`:'';
-    b.innerHTML=`<div class="eb"><div class="eb-time">${ev.time}</div><div class="eb-type">${ev.lbl}</div><div class="eb-flight">${ev.flight}</div>${alPart}<div class="eb-acts">${doneBtn}${fr24Btns}</div>${isDone?'<div class="done-ck">✓</div>':''}</div>`;
+    b.innerHTML=`<div class="eb"><div class="eb-time">${ev.time}</div><div class="eb-type">${ev.lbl}</div><div class="eb-flight">${ev.flight}</div>${alPart}<div class="eb-acts">${fr24Btns}</div></div>`;
     inner.appendChild(b);
   }
   inner.style.minWidth=`${LANE+(cols.length||1)*(BW+GAP)+20}px`;
 }
 
 function buildTimelineMobile(inner,evs,nm){
-  inner.style.height='auto'; inner.style.minWidth='unset'; inner.style.position='relative';
-  inner.style.paddingTop='8px'; inner.style.paddingBottom='8px';
-  let nowInserted=false, lastHour=-1;
+  inner.style.height='auto';inner.style.minWidth='unset';inner.style.position='relative';
+  inner.style.paddingTop='8px';inner.style.paddingBottom='8px';
+  let nowInserted=false,lastHour=-1;
   for(const ev of evs){
-    const mins=t2m(ev.time); if(mins<0) continue;
-    const isDone=!!completions[ev.key], isPast=nm>=0&&mins<nm;
-    if(nm>=0&&!nowInserted&&!isPast){ nowInserted=true; const nd=document.createElement('div'); nd.className='mob-now-sep'; inner.appendChild(nd); }
+    const mins=t2m(ev.time);if(mins<0)continue;
+    const isPast=nm>=0&&mins<nm;
+    if(nm>=0&&!nowInserted&&!isPast){nowInserted=true;const nd=document.createElement('div');nd.className='mob-now-sep';inner.appendChild(nd);}
     const hour=Math.floor(mins/60);
-    if(hour!==lastHour){ lastHour=hour; const sep=document.createElement('div'); sep.className='mob-hour-sep'; sep.textContent=String(hour).padStart(2,'0')+':00'; inner.appendChild(sep); }
+    if(hour!==lastHour){lastHour=hour;const sep=document.createElement('div');sep.className='mob-hour-sep';sep.textContent=String(hour).padStart(2,'0')+':00';inner.appendChild(sep);}
     const color=getColor(ev.airline);
     const b=document.createElement('div');
-    b.className=`eblock ${ev.tc}${isDone?' done':''}${isPast&&!isDone?' past':''}`;
-    b.style.borderLeftColor=color; b.dataset.key=ev.key;
+    b.className=`eblock ${ev.tc}${isPast?' past':''}`;
+    b.style.borderLeftColor=color;
     const fr24Btns=makeFR24Btns(ev.flight,ev.type);
-    const doneBtn=`<button class="btn-done" onclick="toggleDone('${ev.key}')">${isDone?'✓ Done':'Mark Done'}</button>`;
-    b.innerHTML=`<div class="eb"><div class="eb-top-row"><span class="eb-time">${ev.time}</span><span class="eb-type-badge">${ev.lbl}</span><span class="eb-flight" style="color:${color}">${ev.flight}</span></div><div class="eb-airline">${ev.airline}</div><div class="eb-acts">${doneBtn}${fr24Btns}</div>${isDone?'<div class="done-ck">✓</div>':''}</div>`;
+    b.innerHTML=`<div class="eb"><div class="eb-top-row"><span class="eb-time">${ev.time}</span><span class="eb-type-badge">${ev.lbl}</span><span class="eb-flight" style="color:${color}">${ev.flight}</span></div><div class="eb-airline">${ev.airline}</div><div class="eb-acts">${fr24Btns}</div></div>`;
     inner.appendChild(b);
   }
-  if(nm>=0&&!nowInserted){ const nd=document.createElement('div'); nd.className='mob-now-sep'; inner.appendChild(nd); }
+  if(nm>=0&&!nowInserted){const nd=document.createElement('div');nd.className='mob-now-sep';inner.appendChild(nd);}
 }
-
-function fmtMins(m){ const h=Math.floor(m/60), mm=Math.floor(m%60); return String(h).padStart(2,'0')+':'+String(mm).padStart(2,'0'); }
 
 function updateNowLine(){
   const nl=document.getElementById('now-line-el');
-  if(!nl||!isToday(viewDate)) return;
+  if(!nl||!isToday(viewDate))return;
   const nm=nowMins();
   nl.style.top=(nm*ds.zoom)+'px';
-  const lbl=nl.querySelector('.now-label'); if(lbl) lbl.textContent='NOW \u2014 '+fmtMins(nm);
+  const lbl=nl.querySelector('.now-label');if(lbl)lbl.textContent='NOW \u2014 '+fmtMins(nm);
 }
 
 function updateStatus(evs){
-  if(!isToday(viewDate)){ ['cur-ev','nxt-ev','mob-cur','mob-nxt'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='—';}); return; }
-  const nm=nowMins(); let cur=null,nxt=null;
-  for(const e of evs){ const m=t2m(e.time); if(m<=nm) cur=e; else if(!nxt) nxt=e; }
+  if(!isToday(viewDate)){['cur-ev','nxt-ev','mob-cur','mob-nxt'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='—';});return;}
+  const nm=nowMins();let cur=null,nxt=null;
+  for(const e of evs){const m=t2m(e.time);if(m<=nm)cur=e;else if(!nxt)nxt=e;}
   const curTxt=cur?`${cur.time} ${cur.lbl} ${cur.flight}`:'—';
   const nxtTxt=nxt?`${nxt.time} ${nxt.lbl} ${nxt.flight}`:'None';
   document.getElementById('cur-ev').textContent=curTxt;
   document.getElementById('nxt-ev').textContent=nxtTxt;
-  const mc=document.getElementById('mob-cur'); if(mc) mc.textContent=curTxt;
-  const mn=document.getElementById('mob-nxt'); if(mn) mn.textContent=nxtTxt;
+  const mc=document.getElementById('mob-cur');if(mc)mc.textContent=curTxt;
+  const mn=document.getElementById('mob-nxt');if(mn)mn.textContent=nxtTxt;
 }
 
 function updateProg(evs){
-  const tot=evs.length, done=evs.filter(e=>completions[e.key]).length;
-  const pct=tot?Math.round(done/tot*100):0;
-  ['prog-fill','dr-prog-fill'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.width=pct+'%';});
-  ['prog-txt','dr-prog-txt'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=`${done} / ${tot} done`;});
-  document.getElementById('done-cnt').textContent=`${done} / ${tot}`;
-  const md=document.getElementById('mob-done'); if(md) md.textContent=`${done}/${tot}`;
+  const tot=evs.length;
+  const pct=100; // no done tracking — full bar always
+  ['prog-fill','dr-prog-fill'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.width='100%';});
+  ['prog-txt','dr-prog-txt'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=`${tot} events today`;});
+  document.getElementById('done-cnt').textContent=tot;
+  const md=document.getElementById('mob-done');if(md)md.textContent=tot;
 }
 
 function updateLeg(){
-  const leg=document.getElementById('leg'); if(!leg) return;
+  const leg=document.getElementById('leg');if(!leg)return;
   const used=new Set(todayEvents().map(e=>e.airline));
   leg.innerHTML='';
-  for(const a of airlines){ if(!used.has(a.name)) continue; const d2=document.createElement('div'); d2.className='leg-item'; d2.innerHTML=`<div class="leg-dot" style="background:${a.color}"></div><span>${a.name}</span>`; leg.appendChild(d2); }
+  for(const a of airlines){if(!used.has(a.name))continue;const d2=document.createElement('div');d2.className='leg-item';d2.innerHTML=`<div class="leg-dot" style="background:${a.color}"></div><span>${a.name}</span>`;leg.appendChild(d2);}
 }
-
-function toggleDone(key){ completions[key]=!completions[key]; if(!completions[key]) delete completions[key]; saveData(); buildTimeline(); }
 
 function toggleFilter(type,checked){
   activeFilters[type]=checked;
-  const allIds=['fchk-','dr-fchk-','cfg-fchk-'];
-  allIds.forEach(pfx=>{ const el=document.getElementById(pfx+type); if(el){el.classList.toggle('active',checked); const cb=el.querySelector('input'); if(cb) cb.checked=checked;} });
-  saveData(); buildTimeline();
+  ['fchk-','dr-fchk-','cfg-fchk-'].forEach(pfx=>{const el=document.getElementById(pfx+type);if(el){el.classList.toggle('active',checked);const cb=el.querySelector('input');if(cb)cb.checked=checked;}});
+  saveData();buildTimeline();
 }
 
 function updateClock(){
-  const n=new Date(), pad=v=>String(v).padStart(2,'0');
+  const n=new Date(),pad=v=>String(v).padStart(2,'0');
   document.getElementById('clock').textContent=`${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`;
   if(isToday(viewDate)){
-    if(!isMobile()){ const ds2=document.getElementById('date-str'); if(ds2) ds2.textContent=`${DAY_LABELS[n.getDay()]} ${n.getDate()} ${MON_LABELS[n.getMonth()]} ${n.getFullYear()}`; }
+    if(!isMobile()){const ds2=document.getElementById('date-str');if(ds2)ds2.textContent=`${DAY_LABELS[n.getDay()]} ${n.getDate()} ${MON_LABELS[n.getMonth()]} ${n.getFullYear()}`;}
     updateNowLine();
   }
 }
@@ -1114,38 +839,34 @@ function switchView(v){
   document.getElementById(v+'-view').classList.add('active');
   document.querySelectorAll('.ntab,.mob-ntab').forEach(el=>{
     const lbl=el.textContent.trim().toLowerCase();
-    if(lbl===v||(v==='timeline'&&lbl==='ops')||(v==='production'&&lbl==='prod')) el.classList.add('active');
+    if(lbl===v||(v==='timeline'&&lbl==='ops')||(v==='production'&&lbl==='prod'))el.classList.add('active');
   });
-  if(v==='timeline') buildTimeline();
-  if(v==='airline')  buildAirlineView();
-  if(v==='production') buildProductionView();
-  if(v==='config')   renderConfig();
+  if(v==='timeline')buildTimeline();
+  if(v==='airline')buildAirlineView();
+  if(v==='production')buildProductionView();
+  if(v==='config')renderConfig();
   closeDrawer();
 }
 
-document.getElementById('zoom-sl').addEventListener('input',function(){ document.getElementById('zoom-v').textContent=this.value+'x'; ds.zoom=parseFloat(this.value); saveData(); buildTimeline(); });
-document.getElementById('ht-sl').addEventListener('input',function(){ document.getElementById('ht-v').textContent=this.value; ds.blockH=parseInt(this.value); saveData(); buildTimeline(); });
-document.getElementById('show-al').addEventListener('change',function(){ ds.showAl=this.checked; saveData(); buildTimeline(); });
+document.getElementById('zoom-sl').addEventListener('input',function(){document.getElementById('zoom-v').textContent=this.value+'x';ds.zoom=parseFloat(this.value);saveData();buildTimeline();});
+document.getElementById('ht-sl').addEventListener('input',function(){document.getElementById('ht-v').textContent=this.value;ds.blockH=parseInt(this.value);saveData();buildTimeline();});
+document.getElementById('show-al').addEventListener('change',function(){ds.showAl=this.checked;saveData();buildTimeline();});
 
 function cfgApply(){
-  const z=parseFloat(document.getElementById('cfg-zm').value), h=parseInt(document.getElementById('cfg-ht').value), sa=document.getElementById('cfg-al').checked;
-  document.getElementById('cfg-zm-v').textContent=z+'x'; document.getElementById('cfg-ht-v').textContent=h+'px';
+  const z=parseFloat(document.getElementById('cfg-zm').value),h=parseInt(document.getElementById('cfg-ht').value),sa=document.getElementById('cfg-al').checked;
+  document.getElementById('cfg-zm-v').textContent=z+'x';document.getElementById('cfg-ht-v').textContent=h+'px';
   ds={zoom:z,blockH:h,showAl:sa};
-  document.getElementById('zoom-sl').value=z; document.getElementById('zoom-v').textContent=z+'x';
-  document.getElementById('ht-sl').value=h; document.getElementById('ht-v').textContent=h;
+  document.getElementById('zoom-sl').value=z;document.getElementById('zoom-v').textContent=z+'x';
+  document.getElementById('ht-sl').value=h;document.getElementById('ht-v').textContent=h;
   document.getElementById('show-al').checked=sa;
-  saveData(); buildTimeline();
+  saveData();buildTimeline();
 }
 
 function renderConfig(){
-  document.getElementById('cfg-zm').value=ds.zoom; document.getElementById('cfg-zm-v').textContent=ds.zoom+'x';
-  document.getElementById('cfg-ht').value=ds.blockH; document.getElementById('cfg-ht-v').textContent=ds.blockH+'px';
+  document.getElementById('cfg-zm').value=ds.zoom;document.getElementById('cfg-zm-v').textContent=ds.zoom+'x';
+  document.getElementById('cfg-ht').value=ds.blockH;document.getElementById('cfg-ht-v').textContent=ds.blockH+'px';
   document.getElementById('cfg-al').checked=ds.showAl;
-  // sync filter checkboxes
-  ['eta','etd','seal','truck'].forEach(f=>{
-    const el=document.getElementById('cfg-fchk-'+f); if(el){el.classList.toggle('active',activeFilters[f]); const cb=el.querySelector('input'); if(cb) cb.checked=activeFilters[f];}
-  });
-  // sync alert settings
+  ['eta','etd','seal','truck'].forEach(f=>{const el=document.getElementById('cfg-fchk-'+f);if(el){el.classList.toggle('active',activeFilters[f]);const cb=el.querySelector('input');if(cb)cb.checked=activeFilters[f];}});
   document.getElementById('cfg-alert-on').checked=alertSettings.on;
   document.getElementById('cfg-alert-min').value=alertSettings.min;
   document.getElementById('cfg-alert-min-v').textContent=alertSettings.min+' min';
@@ -1153,149 +874,127 @@ function renderConfig(){
   document.getElementById('cfg-bg-bright-v').textContent=bgTheme.bright;
 }
 
-/* ═══════════════════════════════════════════
-   ALERTS — full screen + sound
-═══════════════════════════════════════════ */
-let alertSettings={on:true,min:15}, alertedKeys=new Set();
-let _alertDismissTimer=null, _alertProgressTimer=null;
+/* ALERTS — Sealing & Truck ONLY */
+let alertSettings={on:true,min:15},alertedKeys=new Set(),_alertDismissTimer=null;
 
 function loadAlertSettings(){
-  const s=localStorage.getItem('cop_alerts'); if(s) alertSettings={...alertSettings,...JSON.parse(s)};
+  const s=localStorage.getItem('cop_alerts');if(s)alertSettings={...alertSettings,...JSON.parse(s)};
   ['alert-on','dr-alert-on','cfg-alert-on'].forEach(id=>{const el=document.getElementById(id);if(el)el.checked=alertSettings.on;});
   ['alert-min','dr-alert-min','cfg-alert-min'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=alertSettings.min;});
   updateAlertMinLabel();
 }
-function saveAlertSettings(){ localStorage.setItem('cop_alerts',JSON.stringify(alertSettings)); }
+function saveAlertSettings(){localStorage.setItem('cop_alerts',JSON.stringify(alertSettings));}
 function updateAlertMinLabel(){
   const v=alertSettings.min;
   ['alert-min-v','dr-alert-min-v','cfg-alert-min-v'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=v+' min';});
-  const lbl=document.getElementById('alert-min-lbl'); if(lbl) lbl.textContent=v;
+  const lbl=document.getElementById('alert-min-lbl');if(lbl)lbl.textContent=v;
 }
-function setAlertOn(v){
-  alertSettings.on=v;
-  ['alert-on','dr-alert-on','cfg-alert-on'].forEach(id=>{const el=document.getElementById(id);if(el)el.checked=v;});
-  saveAlertSettings();
-}
-function setAlertMin(v){
-  alertSettings.min=parseInt(v);
-  ['alert-min','dr-alert-min','cfg-alert-min'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=v;});
-  updateAlertMinLabel(); saveAlertSettings();
-}
-document.getElementById('alert-on').addEventListener('change',function(){ setAlertOn(this.checked); });
-document.getElementById('alert-min').addEventListener('input',function(){ setAlertMin(this.value); });
+function setAlertOn(v){alertSettings.on=v;['alert-on','dr-alert-on','cfg-alert-on'].forEach(id=>{const el=document.getElementById(id);if(el)el.checked=v;});saveAlertSettings();}
+function setAlertMin(v){alertSettings.min=parseInt(v);['alert-min','dr-alert-min','cfg-alert-min'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=v;});updateAlertMinLabel();saveAlertSettings();}
+document.getElementById('alert-on').addEventListener('change',function(){setAlertOn(this.checked);});
+document.getElementById('alert-min').addEventListener('input',function(){setAlertMin(this.value);});
 
 function playAlertSound(duration=3000){
-  try {
-    const ctx=new (window.AudioContext||window.webkitAudioContext)();
+  try{
+    const ctx=new(window.AudioContext||window.webkitAudioContext)();
     const endAt=ctx.currentTime+duration/1000;
     let t=ctx.currentTime;
-    const beepEvery=0.7, beepDuration=0.18;
+    const beepEvery=0.7,beepDuration=0.18;
     while(t<endAt-beepDuration){
-      const osc=ctx.createOscillator(), gain=ctx.createGain();
-      osc.connect(gain); gain.connect(ctx.destination);
-      osc.type='sine'; osc.frequency.setValueAtTime(880,t);
-      osc.frequency.setValueAtTime(660,t+beepDuration*0.5);
-      gain.gain.setValueAtTime(0,t);
-      gain.gain.linearRampToValueAtTime(0.7,t+0.02);
-      gain.gain.setValueAtTime(0.7,t+beepDuration-0.04);
-      gain.gain.linearRampToValueAtTime(0,t+beepDuration);
-      osc.start(t); osc.stop(t+beepDuration);
-      t+=beepEvery;
+      const osc=ctx.createOscillator(),gain=ctx.createGain();
+      osc.connect(gain);gain.connect(ctx.destination);
+      osc.type='sine';osc.frequency.setValueAtTime(880,t);osc.frequency.setValueAtTime(660,t+beepDuration*0.5);
+      gain.gain.setValueAtTime(0,t);gain.gain.linearRampToValueAtTime(0.7,t+0.02);
+      gain.gain.setValueAtTime(0.7,t+beepDuration-0.04);gain.gain.linearRampToValueAtTime(0,t+beepDuration);
+      osc.start(t);osc.stop(t+beepDuration);t+=beepEvery;
     }
-    // Auto-close audio context after
-    setTimeout(()=>{ try{ctx.close();}catch(e){} }, duration+500);
-  } catch(e){ console.warn('Audio not supported',e); }
+    setTimeout(()=>{try{ctx.close();}catch(e){}},duration+500);
+  }catch(e){console.warn('Audio not supported',e);}
 }
 
-function showAlertModal(ev, minsLeft){
+function showAlertModal(ev,minsLeft){
   const modal=document.getElementById('alert-modal');
   document.getElementById('alert-flight-num').textContent=ev.flight;
   document.getElementById('alert-event-type').textContent=ev.lbl.toUpperCase();
   document.getElementById('alert-time-left').textContent=`in ${minsLeft} min \u2014 ${ev.time}`;
   document.getElementById('alert-airline-name').textContent=ev.airline.toUpperCase();
-  document.getElementById('alert-icon').textContent=ev.type==='truck'?'🚚':ev.type==='seal'?'✂️':ev.type==='eta'?'✈️':'🛫';
-
-  // Progress bar countdown (30s auto-dismiss)
+  document.getElementById('alert-icon').textContent=ev.type==='truck'?'🚚':'✂️';
   const fill=document.getElementById('alert-progress-fill');
-  fill.style.transition='none'; fill.style.width='100%';
-  setTimeout(()=>{ fill.style.transition='width 30s linear'; fill.style.width='0%'; },50);
-
+  fill.style.transition='none';fill.style.width='100%';
+  setTimeout(()=>{fill.style.transition='width 30s linear';fill.style.width='0%';},50);
   modal.classList.add('show');
-  playAlertSound(5000);
-
+  playAlertSound(3000);
   clearTimeout(_alertDismissTimer);
   _alertDismissTimer=setTimeout(dismissAlert,30000);
 }
-
-function dismissAlert(){
-  document.getElementById('alert-modal').classList.remove('show');
-  clearTimeout(_alertDismissTimer);
-}
+function dismissAlert(){document.getElementById('alert-modal').classList.remove('show');clearTimeout(_alertDismissTimer);}
 
 function checkAlerts(){
-  if(!alertSettings.on||!isToday(viewDate)) return;
-  const nm=nowMins(), warn=alertSettings.min, evs=todayEvents();
+  if(!alertSettings.on||!isToday(viewDate))return;
+  const nm=nowMins(),warn=alertSettings.min,evs=todayEvents();
   for(const ev of evs){
-    const m=t2m(ev.time), diff=m-nm;
-    if(diff>0&&diff<=warn&&!completions[ev.key]&&!alertedKeys.has(ev.key)){
-      alertedKeys.add(ev.key);
-      showAlertModal(ev,Math.round(diff));
-      return;
+    // ALERTS ONLY FOR SEALING AND TRUCK
+    if(ev.type!=='seal'&&ev.type!=='truck')continue;
+    const m=t2m(ev.time),diff=m-nm;
+    if(diff>0&&diff<=warn&&!alertedKeys.has(ev.key)){
+      alertedKeys.add(ev.key);showAlertModal(ev,Math.round(diff));return;
     }
   }
 }
 
 function testAlert(){
-  // Use next upcoming event if possible, else a fake one
   const evs=todayEvents();
   const nm=isToday(viewDate)?nowMins():0;
-  const upcoming=evs.find(e=>t2m(e.time)>nm&&!completions[e.key]);
+  const upcoming=evs.find(e=>(e.type==='seal'||e.type==='truck')&&t2m(e.time)>nm);
   const testEv=upcoming||{flight:'QF064',lbl:'Truck Dep',type:'truck',time:'14:30',airline:'Qantas',key:'_test'};
-  showAlertModal(testEv, alertSettings.min);
+  showAlertModal(testEv,alertSettings.min);
 }
 
-/* ═══════════════════════════════════════════
-   MOBILE DRAWER
-═══════════════════════════════════════════ */
-let drawerOpen=false, drawerStartY=0, drawerCurrentY=0;
-function toggleDrawer(){ const d=document.getElementById('mob-drawer'), btn=document.getElementById('mob-settings-btn'), ov=document.getElementById('drawer-overlay'); drawerOpen=!drawerOpen; d.classList.toggle('open',drawerOpen); if(btn) btn.classList.toggle('active',drawerOpen); if(ov) ov.style.display=drawerOpen?'block':'none'; if(drawerOpen){ const evs=todayEvents(); updateProg(evs); } }
-function closeDrawer(){ const d=document.getElementById('mob-drawer'), btn=document.getElementById('mob-settings-btn'), ov=document.getElementById('drawer-overlay'); drawerOpen=false; d.classList.remove('open'); if(btn) btn.classList.remove('active'); if(ov) ov.style.display='none'; }
+/* MOBILE DRAWER */
+let drawerOpen=false,drawerStartY=0,drawerCurrentY=0;
+function toggleDrawer(){const d=document.getElementById('mob-drawer'),btn=document.getElementById('mob-settings-btn'),ov=document.getElementById('drawer-overlay');drawerOpen=!drawerOpen;d.classList.toggle('open',drawerOpen);if(btn)btn.classList.toggle('active',drawerOpen);if(ov)ov.style.display=drawerOpen?'block':'none';if(drawerOpen){const evs=todayEvents();updateProg(evs);}}
+function closeDrawer(){const d=document.getElementById('mob-drawer'),btn=document.getElementById('mob-settings-btn'),ov=document.getElementById('drawer-overlay');drawerOpen=false;d.classList.remove('open');if(btn)btn.classList.remove('active');if(ov)ov.style.display='none';}
 const drawerHandle=document.getElementById('mob-drawer-handle');
-drawerHandle.addEventListener('touchstart',e=>{ drawerStartY=e.touches[0].clientY; },{passive:true});
-drawerHandle.addEventListener('touchmove',e=>{ drawerCurrentY=e.touches[0].clientY; const dy=drawerCurrentY-drawerStartY; if(dy>0){ const dr=document.getElementById('mob-drawer'); dr.style.transform=`translateY(${dy}px)`; dr.style.transition='none'; } },{passive:true});
-drawerHandle.addEventListener('touchend',()=>{ const dy=drawerCurrentY-drawerStartY; const dr=document.getElementById('mob-drawer'); dr.style.transition=''; if(dy>80){ closeDrawer(); dr.style.transform=''; } else { dr.style.transform=''; } });
+drawerHandle.addEventListener('touchstart',e=>{drawerStartY=e.touches[0].clientY;},{passive:true});
+drawerHandle.addEventListener('touchmove',e=>{drawerCurrentY=e.touches[0].clientY;const dy=drawerCurrentY-drawerStartY;if(dy>0){const dr=document.getElementById('mob-drawer');dr.style.transform=`translateY(${dy}px)`;dr.style.transition='none';}},{passive:true});
+drawerHandle.addEventListener('touchend',()=>{const dy=drawerCurrentY-drawerStartY;const dr=document.getElementById('mob-drawer');dr.style.transition='';if(dy>80){closeDrawer();dr.style.transform='';}else{dr.style.transform='';}});
 
-/* ═══════════════════════════════════════════
-   AIRLINE VIEW
-═══════════════════════════════════════════ */
+/* AIRLINE VIEW — no Done button */
 function buildAirlineView(){
-  const day=viewDayOfWeek(), nm=isToday(viewDate)?nowMins():-1;
+  const day=viewDayOfWeek(),nm=isToday(viewDate)?nowMins():-1;
   const container=document.getElementById('airline-cards');
-  updateDateDisplay(); container.innerHTML='';
+  updateDateDisplay();container.innerHTML='';
   const byAirline={};
-  for(const f of flights){ if(!f.days.includes(day)) continue; if(!byAirline[f.airline]) byAirline[f.airline]=[]; byAirline[f.airline].push(f); }
+  for(const f of flights){if(!f.days.includes(day))continue;if(!byAirline[f.airline])byAirline[f.airline]=[];byAirline[f.airline].push(f);}
   let totalMeals=0;
   const airlineOrder=airlines.map(a=>a.name).filter(n=>byAirline[n]);
   for(const alName of airlineOrder){
-    const al=airlines.find(a=>a.name===alName), flList=byAirline[alName], alMeals=flList.reduce((s,f)=>(s+(parseInt(f.meals)||0)),0);
+    const al=airlines.find(a=>a.name===alName),flList=byAirline[alName],alMeals=flList.reduce((s,f)=>(s+(parseInt(f.meals)||0)),0);
     totalMeals+=alMeals;
-    const card=document.createElement('div'); card.className='al-card';
+    const card=document.createElement('div');card.className='al-card';
     const head=`<div class="al-card-head"><div class="al-card-dot" style="background:${al?al.color:'#4466aa'}"></div><div class="al-card-name">${alName}</div><div class="al-card-meals">${alMeals>0?'🍽 '+alMeals+' meals':''}</div></div>`;
-    const rows=flList.map(f=>{ const sealKey=f.id+'_sl', isDone=!!completions[sealKey], sealM=t2m(f.sealing||''), isPast=nm>=0&&sealM>=0&&sealM<nm; const chips=[f.sealing?`<span class="al-fl-chip" style="color:#ffaa44;border-color:rgba(255,170,68,0.3)">✂ ${f.sealing}</span>`:'',f.truck?`<span class="al-fl-chip" style="color:#ff6b6b;border-color:rgba(255,107,107,0.3)">🚚 ${f.truck}</span>`:'',f.eta?`<span class="al-fl-chip" style="color:#4dffb4;border-color:rgba(77,255,180,0.3)">▼ ${f.eta}</span>`:'',f.etd?`<span class="al-fl-chip" style="color:#66aaff;border-color:rgba(102,170,255,0.3)">▲ ${f.etd}</span>`:''].filter(Boolean).join(''); const mealBadge=(f.meals>0)?`<span class="al-fl-meals">${f.meals}</span>`:''; const doneClass=isDone?'is-done':''; const rowClass=isDone?'done-row':(isPast?'past-row':''); return `<div class="al-fl-row ${rowClass}"><div class="al-fl-num" style="color:${al?al.color:'#fff'}">${f.flight}</div><div class="al-fl-times">${chips}</div>${mealBadge}<button class="al-done-btn ${doneClass}" onclick="toggleDoneAl('${f.id}',this)">${isDone?'✓ Done':'Done'}</button></div>`; }).join('');
+    const rows=flList.map(f=>{
+      const sealM=t2m(f.sealing||''),isPast=nm>=0&&sealM>=0&&sealM<nm;
+      const chips=[
+        f.sealing?`<span class="al-fl-chip" style="color:#ffaa44;border-color:rgba(255,170,68,0.3)">✂ ${f.sealing}</span>`:'',
+        f.truck?`<span class="al-fl-chip" style="color:#ff6b6b;border-color:rgba(255,107,107,0.3)">🚚 ${f.truck}</span>`:'',
+        f.eta?`<span class="al-fl-chip" style="color:#4dffb4;border-color:rgba(77,255,180,0.3)">▼ ${f.eta}</span>`:'',
+        f.etd?`<span class="al-fl-chip" style="color:#66aaff;border-color:rgba(102,170,255,0.3)">▲ ${f.etd}</span>`:''
+      ].filter(Boolean).join('');
+      const mealBadge=(f.meals>0)?`<span class="al-fl-meals">${f.meals}</span>`:'';
+      const rowClass=isPast?'past-row':'';
+      return`<div class="al-fl-row ${rowClass}"><div class="al-fl-num" style="color:${al?al.color:'#fff'}">${f.flight}</div><div class="al-fl-times">${chips}</div>${mealBadge}</div>`;
+    }).join('');
     card.innerHTML=head+`<div class="al-card-body">${rows}</div>`;
     container.appendChild(card);
   }
-  const tm=document.getElementById('total-meals'); if(tm) tm.textContent=totalMeals;
+  const tm=document.getElementById('total-meals');if(tm)tm.textContent=totalMeals;
 }
 
-function toggleDoneAl(flightId,btn){ const key=flightId+'_sl'; completions[key]=!completions[key]; if(!completions[key]) delete completions[key]; saveData(); const isDone=!!completions[key]; btn.textContent=isDone?'✓ Done':'Done'; btn.classList.toggle('is-done',isDone); const row=btn.closest('.al-fl-row'); if(row){row.classList.toggle('done-row',isDone); row.classList.remove('past-row');} const evs=todayEvents(); updateProg(evs); }
-
-/* ═══════════════════════════════════════════
-   BACKGROUND THEME
-═══════════════════════════════════════════ */
+/* BACKGROUND */
 let bgTheme={hue:220,bright:50};
 function hslBg(hue,bright){
-  const l=4+(bright/100)*10, s=20;
+  const l=4+(bright/100)*10,s=20;
   const bg=`hsl(${hue},${s}%,${l}%)`;
   const r=document.documentElement;
   r.style.setProperty('--bg',bg);
@@ -1303,180 +1002,152 @@ function hslBg(hue,bright){
   r.style.setProperty('--surface2',`hsl(${hue},${s}%,${l+5}%)`);
   r.style.setProperty('--border',`hsl(${hue},${s}%,${l+8}%)`);
   r.style.setProperty('--block-bg',`hsla(${hue},${s+5}%,${l+6}%,0.98)`);
-  const topbar=document.getElementById('topbar'); if(topbar) topbar.style.background=bg+'ee';
-  const ms=document.getElementById('mobile-stats'); if(ms) ms.style.background=`hsl(${hue},${s}%,${l+1}%)`;
-  const md=document.getElementById('mob-drawer'); if(md) md.style.background=`hsl(${hue},${s}%,${l+1}%)`;
-  const mn=document.getElementById('mob-nav'); if(mn) mn.style.background=`hsl(${hue},${s}%,${l+1}%)`;
+  const topbar=document.getElementById('topbar');if(topbar)topbar.style.background=bg+'ee';
+  const ms=document.getElementById('mobile-stats');if(ms)ms.style.background=`hsl(${hue},${s}%,${l+1}%)`;
+  const md=document.getElementById('mob-drawer');if(md)md.style.background=`hsl(${hue},${s}%,${l+1}%)`;
+  const mn=document.getElementById('mob-nav');if(mn)mn.style.background=`hsl(${hue},${s}%,${l+1}%)`;
 }
 function applyBgTheme(){
   hslBg(bgTheme.hue,bgTheme.bright);
   ['bg-bright-v','dr-bg-bright-v','cfg-bg-bright-v'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=bgTheme.bright;});
-  document.querySelectorAll('.bg-sw').forEach(sw=>{ sw.classList.toggle('active',parseInt(sw.dataset.h)===bgTheme.hue); });
+  document.querySelectorAll('.bg-sw').forEach(sw=>{sw.classList.toggle('active',parseInt(sw.dataset.h)===bgTheme.hue);});
   localStorage.setItem('cop_bg',JSON.stringify(bgTheme));
+  applyNightMode();
 }
 function loadBgTheme(){
-  const saved=localStorage.getItem('cop_bg'); if(saved) bgTheme={...bgTheme,...JSON.parse(saved)};
+  const saved=localStorage.getItem('cop_bg');if(saved)bgTheme={...bgTheme,...JSON.parse(saved)};
   ['bg-bright','dr-bg-bright','cfg-bg-bright'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=bgTheme.bright;});
   applyBgTheme();
 }
-function setBgBright(v){
-  bgTheme.bright=parseInt(v);
-  ['bg-bright','dr-bg-bright','cfg-bg-bright'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=v;});
-  applyBgTheme();
-}
+function setBgBright(v){bgTheme.bright=parseInt(v);['bg-bright','dr-bg-bright','cfg-bg-bright'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=v;});applyBgTheme();}
 
-/* ═══════════════════════════════════════════
-   PRODUCTION VIEW
-═══════════════════════════════════════════ */
+/* PRODUCTION VIEW — no Done button */
 const PROD_SLOTS=[
-  {si:1,airline:"Air Cote D'Ivoire",flight:'HF903',day:'D-1',time:'05:00'},
-  {si:1,airline:'Asky',flight:'KP0073',day:'D-1',time:'05:40'},
-  {si:2,airline:'Air Algerie',flight:'AH5361',day:'D-1',time:'09:55'},
-  {si:2,airline:"Air Cote D'Ivoire",flight:'HF903',day:'D-1',time:'06:55'},
-  {si:2,airline:'Ethiopian',flight:'ET848',day:'D-1',time:'10:20'},
-  {si:3,airline:'Air Seychelles',flight:'HM062',day:'D-1',time:'11:00'},
-  {si:4,airline:'Lufthansa',flight:'LH579',day:'D-1',time:'12:10'},
-  {si:5,airline:'Air China',flight:'CA868',day:'D-1',time:'12:10'},
-  {si:6,airline:'Emirates',flight:'EK768',day:'D-1',time:'12:25'},
-  {si:6,airline:'Air Seychelles',flight:'HM062',day:'D-1',time:'11:00'},
-  {si:7,airline:'Etihad',flight:'EY748',day:'D-1',time:'11:50'},
-  {si:8,airline:'Cathay',flight:'CX748',day:'D-1',time:'13:00'},
-  {si:9,airline:'Emirates',flight:'EK762',day:'D-1',time:'15:25'},
-  {si:10,airline:'Air Mauritius',flight:'MK852',day:'D-1',time:'15:10'},
-  {si:11,airline:'Uganda',flight:'UR711',day:'D-1',time:'14:50'},
-  {si:12,airline:'Air Seychelles',flight:'HM060',day:'D-1',time:'15:50'},
-  {si:13,airline:'Latam',flight:'LA8059',day:'D-1',time:'17:25'},
-  {si:15,airline:'Qantas',flight:'QF064',day:'D-1',time:'19:15'},
-  {si:14,airline:'Qantas',flight:'QF064',day:'D-1',time:'19:30'},
-  {si:15,airline:'Emirates',flight:'EK764',day:'D-1',time:'20:50'},
-  {si:16,airline:'British Airways',flight:'BA056',day:'D',time:'10:00'},
-  {si:17,airline:'Lufthansa',flight:'LH573',day:'D',time:'10:45'},
-  {si:18,airline:'Virgin Atlantic',flight:'VS450',day:'D',time:'12:30'},
-  {si:19,airline:'Qantas PERTH',flight:'QF066',day:'D',time:'14:20'},
-  {si:20,airline:'Delta',flight:'DL201',day:'D',time:'12:30'},
-  {si:21,airline:'Uganda',flight:'UR713',day:'D',time:'14:10'},
-  {si:22,airline:'Virgin Atlantic',flight:'VS450',day:'D',time:'13:00'},
-  {si:23,airline:'British Airways',flight:'BA054',day:'D',time:'13:00'},
-  {si:24,airline:'EgyptAir',flight:'MS840',day:'D',time:'14:25'},
-  {si:25,airline:'United',flight:'UA187',day:'D',time:'13:30'},
-  {si:26,airline:'Emirates',flight:'EK766',day:'D',time:'14:00'},
-  {si:27,airline:'Air Algerie',flight:'AH5361',day:'D',time:'16:00'},
-  {si:28,airline:'Ethiopian',flight:'ET858',day:'D',time:'15:20'},
-  {si:29,airline:'Air Austral',flight:'UU344',day:'D',time:'15:30'},
+  {si:1,airline:"Air Cote D'Ivoire",flight:'HF903',day:'D-1',time:'05:00'},{si:1,airline:'Asky',flight:'KP0073',day:'D-1',time:'05:40'},
+  {si:2,airline:'Air Algerie',flight:'AH5361',day:'D-1',time:'09:55'},{si:2,airline:"Air Cote D'Ivoire",flight:'HF903',day:'D-1',time:'06:55'},
+  {si:2,airline:'Ethiopian',flight:'ET848',day:'D-1',time:'10:20'},{si:3,airline:'Air Seychelles',flight:'HM062',day:'D-1',time:'11:00'},
+  {si:4,airline:'Lufthansa',flight:'LH579',day:'D-1',time:'12:10'},{si:5,airline:'Air China',flight:'CA868',day:'D-1',time:'12:10'},
+  {si:6,airline:'Emirates',flight:'EK768',day:'D-1',time:'12:25'},{si:6,airline:'Air Seychelles',flight:'HM062',day:'D-1',time:'11:00'},
+  {si:7,airline:'Etihad',flight:'EY748',day:'D-1',time:'11:50'},{si:8,airline:'Cathay',flight:'CX748',day:'D-1',time:'13:00'},
+  {si:9,airline:'Emirates',flight:'EK762',day:'D-1',time:'15:25'},{si:10,airline:'Air Mauritius',flight:'MK852',day:'D-1',time:'15:10'},
+  {si:11,airline:'Uganda',flight:'UR711',day:'D-1',time:'14:50'},{si:12,airline:'Air Seychelles',flight:'HM060',day:'D-1',time:'15:50'},
+  {si:13,airline:'Latam',flight:'LA8059',day:'D-1',time:'17:25'},{si:15,airline:'Qantas',flight:'QF064',day:'D-1',time:'19:15'},
+  {si:14,airline:'Qantas',flight:'QF064',day:'D-1',time:'19:30'},{si:15,airline:'Emirates',flight:'EK764',day:'D-1',time:'20:50'},
+  {si:16,airline:'British Airways',flight:'BA056',day:'D',time:'10:00'},{si:17,airline:'Lufthansa',flight:'LH573',day:'D',time:'10:45'},
+  {si:18,airline:'Virgin Atlantic',flight:'VS450',day:'D',time:'12:30'},{si:19,airline:'Qantas PERTH',flight:'QF066',day:'D',time:'14:20'},
+  {si:20,airline:'Delta',flight:'DL201',day:'D',time:'12:30'},{si:21,airline:'Uganda',flight:'UR713',day:'D',time:'14:10'},
+  {si:22,airline:'Virgin Atlantic',flight:'VS450',day:'D',time:'13:00'},{si:23,airline:'British Airways',flight:'BA054',day:'D',time:'13:00'},
+  {si:24,airline:'EgyptAir',flight:'MS840',day:'D',time:'14:25'},{si:25,airline:'United',flight:'UA187',day:'D',time:'13:30'},
+  {si:26,airline:'Emirates',flight:'EK766',day:'D',time:'14:00'},{si:27,airline:'Air Algerie',flight:'AH5361',day:'D',time:'16:00'},
+  {si:28,airline:'Ethiopian',flight:'ET858',day:'D',time:'15:20'},{si:29,airline:'Air Austral',flight:'UU344',day:'D',time:'15:30'},
   {si:30,airline:'Uganda',flight:'UR711',day:'D',time:'17:15'},
 ];
 
-let prodCompletions={};
-function loadProdCompletions(){ const s=localStorage.getItem('cop_prod_'+viewDateKey()); prodCompletions=s?JSON.parse(s):{}; }
-function saveProdCompletions(){ localStorage.setItem('cop_prod_'+viewDateKey(),JSON.stringify(prodCompletions)); }
-function toggleProdDone(idx,btn){ const key='slot_'+idx; prodCompletions[key]=!prodCompletions[key]; if(!prodCompletions[key]) delete prodCompletions[key]; saveProdCompletions(); const isDone=!!prodCompletions[key]; btn.textContent=isDone?'✓ Done':'Done'; btn.classList.toggle('is-done',isDone); const b=btn.closest('.eblock'); if(b) b.classList.toggle('done',isDone); }
-
 function buildProductionView(){
-  loadProdCompletions();
-  const inner=document.getElementById('prod-inner-main'), scroll=document.getElementById('prod-tl-main');
-  if(!inner) return; inner.innerHTML='';
-  const pxpm=ds.zoom, bh=ds.blockH, total=24*60*pxpm;
-  inner.style.height=total+'px'; inner.style.position='relative';
+  const inner=document.getElementById('prod-inner-main'),scroll=document.getElementById('prod-tl-main');
+  if(!inner)return;inner.innerHTML='';
+  const pxpm=ds.zoom,bh=ds.blockH,total=24*60*pxpm;
+  inner.style.height=total+'px';inner.style.position='relative';
   for(let h=0;h<24;h++){
     const y=h*60*pxpm;
-    const tick=document.createElement('div'); tick.className='hour-tick'; tick.style.top=y+'px'; inner.appendChild(tick);
-    const lbl=document.createElement('div'); lbl.className='hour-lbl'; lbl.style.top=(y+2)+'px'; lbl.textContent=String(h).padStart(2,'0')+':00'; inner.appendChild(lbl);
+    const tick=document.createElement('div');tick.className='hour-tick';tick.style.top=y+'px';inner.appendChild(tick);
+    const lbl=document.createElement('div');lbl.className='hour-lbl';lbl.style.top=(y+2)+'px';lbl.textContent=String(h).padStart(2,'0')+':00';inner.appendChild(lbl);
   }
   const nm=isToday(viewDate)?nowMins():-1;
   if(nm>=0){
-    const yNow=nm*pxpm;
     const nowWrap=document.createElement('div');
-    nowWrap.className='now-line-abs'; nowWrap.id='prod-now-line';
-    nowWrap.style.cssText=`top:${yNow}px;position:absolute;left:0;right:0;height:3px;`;
+    nowWrap.className='now-line-abs';nowWrap.id='prod-now-line';
+    nowWrap.style.cssText=`top:${nm*pxpm}px;position:absolute;left:0;right:0;height:3px;`;
     nowWrap.innerHTML=`<span class="now-label">NOW \u2014 ${fmtMins(nm)}</span><span class="now-dot"></span>`;
     inner.appendChild(nowWrap);
   }
-  const LANE=58,GAP=4,BW=178,mobile=isMobile();
+  const LANE=58,GAP=4,BW=200,mobile=isMobile();
   const colEnds=[];
-  function assignCol(yPx){ const endPx=yPx+bh+2; for(let c=0;c<colEnds.length;c++){if(colEnds[c]<=yPx){colEnds[c]=endPx;return c;}} colEnds.push(endPx); return colEnds.length-1; }
+  function assignCol(yPx){const endPx=yPx+bh+2;for(let c=0;c<colEnds.length;c++){if(colEnds[c]<=yPx){colEnds[c]=endPx;return c;}}colEnds.push(endPx);return colEnds.length-1;}
   const sorted=[...PROD_SLOTS].sort((a,b)=>t2m(a.time)-t2m(b.time));
-  const assignments=sorted.map(s=>{ const mins=t2m(s.time); if(mins<0) return null; return {s,mins,yPx:mins*pxpm,col:assignCol(mins*pxpm)}; });
+  const assignments=sorted.map(s=>{const mins=t2m(s.time);if(mins<0)return null;return{s,mins,yPx:mins*pxpm,col:assignCol(mins*pxpm)};});
   const numCols=colEnds.length||1;
   const AVAIL=(scroll.offsetWidth||window.innerWidth)-LANE-6;
   for(const a of assignments){
-    if(!a) continue;
-    const {s,mins,yPx,col}=a;
+    if(!a)continue;
+    const{s,mins,yPx,col}=a;
     const blockW=mobile?Math.floor((AVAIL-(numCols-1)*GAP)/numCols):BW;
     const blockLeft=LANE+col*(blockW+GAP);
-    const isD=s.day==='D', accentC=isD?'#66aaff':'#ffaa44', borderC=getColor(s.airline);
-    const globalIdx=PROD_SLOTS.indexOf(s), key='slot_'+globalIdx, isDone=!!prodCompletions[key];
+    const isD=s.day==='D',accentC=isD?'#66aaff':'#ffaa44',borderC=getColor(s.airline);
     const isPast=isD&&nm>=0&&mins<nm;
     const b=document.createElement('div');
-    b.className=`eblock${isDone?' done':''}${isPast&&!isDone?' past':''}`;
-    b.style.cssText=`left:${blockLeft}px;top:${yPx}px;width:${blockW}px;height:${bh}px;border-left:${mobile?4:3}px solid ${borderC};opacity:${!isD&&!isDone?'0.65':'1'};`;
+    b.className=`eblock${isPast?' past':''}`;
+    b.style.cssText=`left:${blockLeft}px;top:${yPx}px;width:${blockW}px;height:${bh}px;border-left:${mobile?4:3}px solid ${borderC};opacity:${!isD?'0.65':'1'};`;
     const badge=`<span style="font-size:9px;font-weight:700;font-family:var(--font-mono);padding:1px 5px;border-radius:2px;background:${isD?'rgba(102,170,255,0.2)':'rgba(255,170,68,0.2)'};color:${accentC};border:1px solid ${accentC}44;letter-spacing:1px;">${s.day}</span>`;
-    const doneBtn=`<button class="btn-done" onclick="toggleProdDone(${globalIdx},this)">${isDone?'✓ Done':'Done'}</button>`;
     const alPart=ds.showAl?`<div class="eb-airline">${s.airline}</div>`:'';
-    b.innerHTML=`<div class="eb"><div class="eb-time" style="display:flex;align-items:center;gap:5px;">${s.time} ${badge}</div><div class="eb-type" style="color:${accentC};">Box Time</div><div class="eb-flight">${s.flight}</div>${alPart}<div class="eb-acts">${doneBtn}</div>${isDone?'<div class="done-ck">✓</div>':''}</div>`;
+    b.innerHTML=`<div class="eb"><div class="eb-time" style="display:flex;align-items:center;gap:5px;">${s.time} ${badge}</div><div class="eb-type" style="color:${accentC};">Box Time</div><div class="eb-flight">${s.flight}</div>${alPart}</div>`;
     inner.appendChild(b);
   }
   inner.style.minWidth=mobile?'100%':`${LANE+numCols*(BW+GAP)+20}px`;
-  if(nm>=0) setTimeout(()=>{ if(scroll) scroll.scrollTop=Math.max(0,nm*pxpm-220); },50);
+  if(nm>=0)setTimeout(()=>{if(scroll)scroll.scrollTop=Math.max(0,nm*pxpm-220);},50);
 }
 
-/* ═══════════════════════════════════════════
-   DATA I/O
-═══════════════════════════════════════════ */
-function exportData(){ const payload={airlines,flights,display:ds}; const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='jnb-ops-config.json'; a.click(); URL.revokeObjectURL(url); showToast('Config exported!'); }
-function importData(input){ const file=input.files[0]; if(!file) return; const reader=new FileReader(); reader.onload=e=>{ try{ const data=JSON.parse(e.target.result); if(data.airlines) airlines=data.airlines; if(data.flights) flights=data.flights; if(data.display) ds={...ds,...data.display}; saveData(); buildTimeline(); showToast('Config imported!'); }catch(err){showToast('Import error!');} }; reader.readAsText(file); input.value=''; }
-function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1800); }
-function togglePanel(){ const p=document.getElementById('right-panel'), icon=document.getElementById('panel-toggle-icon'); p.classList.toggle('collapsed'); icon.textContent=p.classList.contains('collapsed')?'▶':'◀'; }
+/* DATA I/O */
+function exportData(){const payload={airlines,flights,display:ds};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='jnb-ops-config.json';a.click();URL.revokeObjectURL(url);showToast('Config exported!');}
+function importData(input){const file=input.files[0];if(!file)return;const reader=new FileReader();reader.onload=e=>{try{const data=JSON.parse(e.target.result);if(data.airlines)airlines=data.airlines;if(data.flights)flights=data.flights;if(data.display)ds={...ds,...data.display};saveData();buildTimeline();showToast('Config imported!');}catch(err){showToast('Import error!');}};reader.readAsText(file);input.value='';}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800);}
+function togglePanel(){const p=document.getElementById('right-panel'),icon=document.getElementById('panel-toggle-icon');p.classList.toggle('collapsed');const collapsed=p.classList.contains('collapsed');if(icon)icon.textContent=collapsed?'▶':'◀';const tb=document.getElementById('topbar-panel-btn');if(tb){tb.textContent=collapsed?'▌':'▐';tb.style.color=collapsed?'var(--text-dim)':'var(--accent)';}}
 
 function scrollToNow(){
-  if(!isToday(viewDate)) return;
-  if(isMobile()){ const s=document.getElementById('tl-scroll'); const nowEl=s.querySelector('.mob-now-sep'); if(nowEl) nowEl.scrollIntoView({behavior:'smooth',block:'center'}); }
-  else{ const s=document.getElementById('tl-scroll'); if(s) s.scrollTop=Math.max(0,nowMins()*ds.zoom-220); }
+  if(!isToday(viewDate))return;
+  if(isMobile()){const s=document.getElementById('tl-scroll');const nowEl=s.querySelector('.mob-now-sep');if(nowEl)nowEl.scrollIntoView({behavior:'smooth',block:'center'});}
+  else{const s=document.getElementById('tl-scroll');if(s)s.scrollTop=Math.max(0,nowMins()*ds.zoom-220);}
 }
 
-/* ═══════════════════════════════════════════
-   MOBILE SETTINGS BUTTON
-═══════════════════════════════════════════ */
+/* MOBILE SETTINGS BTN */
 (function(){
-  const btn=document.getElementById('mob-settings-btn'); if(!btn) return;
+  const btn=document.getElementById('mob-settings-btn');if(!btn)return;
   let _lastTouch=0;
-  btn.addEventListener('touchend',function(e){ e.preventDefault(); e.stopPropagation(); _lastTouch=Date.now(); toggleDrawer(); },{passive:false});
-  btn.addEventListener('click',function(e){ e.stopPropagation(); if(Date.now()-_lastTouch<300) return; toggleDrawer(); });
+  btn.addEventListener('touchend',function(e){e.preventDefault();e.stopPropagation();_lastTouch=Date.now();toggleDrawer();},{passive:false});
+  btn.addEventListener('click',function(e){e.stopPropagation();if(Date.now()-_lastTouch<300)return;toggleDrawer();});
 })();
 
-/* ═══════════════════════════════════════════
-   BG SWATCHES (all groups)
-═══════════════════════════════════════════ */
-function initBgSwatches(){
-  document.querySelectorAll('.bg-sw').forEach(sw=>{
-    sw.addEventListener('click',()=>{ bgTheme.hue=parseInt(sw.dataset.h); applyBgTheme(); });
-  });
-}
+/* BG SWATCHES */
+function initBgSwatches(){document.querySelectorAll('.bg-sw').forEach(sw=>{sw.addEventListener('click',()=>{bgTheme.hue=parseInt(sw.dataset.h);applyBgTheme();});});}
 
-/* ═══════════════════════════════════════════
-   INIT
-═══════════════════════════════════════════ */
+/* INIT */
 loadData();
-if(!localStorage.getItem('cop_display')){ if(window.innerWidth<=768) ds.zoom=2; else if(window.innerWidth<=1100) ds.zoom=2.5; else ds.zoom=3; }
+if(!localStorage.getItem('cop_display')){if(window.innerWidth<=768)ds.zoom=2;else if(window.innerWidth<=1100)ds.zoom=2.5;else ds.zoom=3;}
 
 ['eta','etd','seal','truck'].forEach(f=>{
   ['fchk-','dr-fchk-','cfg-fchk-'].forEach(pfx=>{
-    const el=document.getElementById(pfx+f); if(!el) return;
+    const el=document.getElementById(pfx+f);if(!el)return;
     el.classList.toggle('active',activeFilters[f]);
-    const cb=el.querySelector('input'); if(cb) cb.checked=activeFilters[f];
+    const cb=el.querySelector('input');if(cb)cb.checked=activeFilters[f];
   });
 });
-document.getElementById('zoom-sl').value=ds.zoom; document.getElementById('zoom-v').textContent=ds.zoom+'x';
-document.getElementById('ht-sl').value=ds.blockH; document.getElementById('ht-v').textContent=ds.blockH;
+document.getElementById('zoom-sl').value=ds.zoom;document.getElementById('zoom-v').textContent=ds.zoom+'x';
+document.getElementById('ht-sl').value=ds.blockH;document.getElementById('ht-v').textContent=ds.blockH;
 document.getElementById('show-al').checked=ds.showAl;
 updateDateDisplay();
-buildTimeline(); updateClock();
+buildTimeline();updateClock();
 
 setInterval(updateClock,1000);
 setInterval(()=>{
-  if(isToday(viewDate)) updateNowLine();
-  const e=todayEvents(); updateStatus(e); updateProg(e); checkAlerts();
-  const nl=document.getElementById('prod-now-line'); if(nl&&isToday(viewDate)) { nl.style.top=(nowMins()*ds.zoom)+'px'; const lbl=nl.querySelector('.now-label'); if(lbl) lbl.textContent='NOW \u2014 '+fmtMins(nowMins()); }
+  if(isToday(viewDate))updateNowLine();
+  const e=todayEvents();updateStatus(e);updateProg(e);checkAlerts();
+  const nl=document.getElementById('prod-now-line');if(nl&&isToday(viewDate)){nl.style.top=(nowMins()*ds.zoom)+'px';const lbl=nl.querySelector('.now-label');if(lbl)lbl.textContent='NOW \u2014 '+fmtMins(nowMins());}
+  applyNightMode();
 },30000);
+
+setInterval(()=>{
+  if(!isToday(viewDate))return;
+  updateNowLine();
+  const nl=document.getElementById('prod-now-line');if(nl){nl.style.top=(nowMins()*ds.zoom)+'px';const lbl=nl.querySelector('.now-label');if(lbl)lbl.textContent='NOW \u2014 '+fmtMins(nowMins());}
+  const followCb=document.getElementById('follow-now');
+  if(followCb&&followCb.checked&&!isMobile()){
+    const tv=document.getElementById('timeline-view');
+    if(tv&&tv.classList.contains('active')){const s=document.getElementById('tl-scroll');if(s)s.scrollTop=Math.max(0,nowMins()*ds.zoom-220);}
+    const pv=document.getElementById('production-view');
+    if(pv&&pv.classList.contains('active')){const s=document.getElementById('prod-tl-main');if(s)s.scrollTop=Math.max(0,nowMins()*ds.zoom-220);}
+  }
+},5000);
+
 setInterval(checkAlerts,60000);
 setTimeout(scrollToNow,600);
 loadAlertSettings();
@@ -1486,7 +1157,7 @@ initBgSwatches();
 window.addEventListener('resize',()=>{
   buildTimeline();
   const pv=document.getElementById('production-view');
-  if(pv&&pv.classList.contains('active')) buildProductionView();
+  if(pv&&pv.classList.contains('active'))buildProductionView();
 });
 </script>
 </body>
