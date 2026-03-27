@@ -77,7 +77,7 @@
   margin-left: auto; position: relative; height: 100%;
   display: flex; align-items: center;
   padding: 0 14px; border-left: 1px solid var(--border);
-  flex-shrink: 0; /* NEVER shrink or disappear */
+  flex-shrink: 0;
 }
 #hamburger-btn {
   display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -94,37 +94,48 @@
 #hamburger-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
 #nav-dropdown {
-  display: none; position: absolute; top: calc(100% + 2px); right: 0;
-  background: #181c26; border: 1px solid var(--border); border-radius: 6px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.5); z-index: 9999;
-  min-width: 180px; overflow: hidden;
+  display: none; position: absolute; top: calc(100% + 4px); right: 0;
+  background: #181c26; border: 1px solid var(--border); border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6); z-index: 9999;
+  min-width: 200px; overflow: hidden;
 }
 #nav-dropdown.open { display: block; }
+
+/* Section label inside dropdown */
+.ndrop-section-lbl {
+  padding: 8px 16px 4px;
+  font-family: var(--font-ui); font-size: 9px; font-weight: 700;
+  letter-spacing: 3px; text-transform: uppercase; color: var(--text-dim);
+  border-top: 1px solid var(--border); margin-top: 2px;
+}
+
+/* Nav items — full highlight */
 .ndrop-item {
   display: flex; align-items: center; gap: 12px;
-  padding: 13px 18px; cursor: pointer; font-family: var(--font-ui);
+  padding: 12px 16px; cursor: pointer; font-family: var(--font-ui);
   font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
   color: var(--text-dim); transition: all 0.12s; user-select: none;
-  border-bottom: 1px solid var(--border);
 }
-.ndrop-item:last-child { border-bottom: none; }
-.ndrop-item:hover { background: var(--surface); color: var(--text); }
-.ndrop-item.active { color: var(--accent); background: #001820; }
+.ndrop-item:hover { background: var(--surface2); color: var(--text); }
+.ndrop-item.active { color: var(--accent); background: rgba(0,212,255,0.08); }
 .ndrop-item .ndrop-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+
+/* Separator */
 .ndrop-sep { height: 1px; background: var(--border); margin: 4px 0; }
+
+/* Filter items — smaller, indented, toggle style */
 .ndrop-filter {
   display: flex; align-items: center; gap: 10px;
-  padding: 10px 18px; cursor: pointer; font-family: var(--font-ui);
-  font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
-  color: var(--text-dim); transition: all 0.12s; user-select: none;
-  border-bottom: 1px solid var(--border);
+  padding: 8px 16px 8px 16px; cursor: pointer; font-family: var(--font-mono);
+  font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--text-muted); transition: all 0.12s; user-select: none;
+  opacity: 0.5;
 }
-.ndrop-filter:last-of-type { border-bottom: none; }
-.ndrop-filter:hover { background: var(--surface); color: var(--text); }
-.ndrop-filter.active { color: var(--text); }
-.ndrop-filter .ndrop-filter-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; opacity: 0.3; transition: opacity 0.15s; }
+.ndrop-filter:hover { background: var(--surface); opacity: 0.8; }
+.ndrop-filter.active { color: var(--text); opacity: 1; }
+.ndrop-filter .ndrop-filter-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; opacity: 0.4; transition: all 0.15s; }
 .ndrop-filter.active .ndrop-filter-dot { opacity: 1; box-shadow: 0 0 5px currentColor; }
-.ndrop-check { margin-left: auto; font-size: 12px; color: var(--accent); opacity: 0; transition: opacity 0.15s; }
+.ndrop-check { margin-left: auto; font-size: 11px; color: var(--accent); opacity: 0; transition: opacity 0.15s; }
 .ndrop-filter.active .ndrop-check { opacity: 1; }
 
 /* VIEWS */
@@ -170,7 +181,7 @@
 .type-etd   .eb-type { color: #66aaff; }
 
 /* RIGHT PANEL */
-#right-panel { width: 280px; min-width: 280px; background: var(--surface); border-left: 1px solid var(--border); padding: 16px 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; transition: width 0.25s ease, min-width 0.25s ease, padding 0.25s ease; position: relative; }
+#right-panel { width: 280px; min-width: 280px; background: var(--surface); border-left: 1px solid var(--border); padding: 16px 18px; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; gap: 14px; transition: width 0.25s ease, min-width 0.25s ease, padding 0.25s ease; position: relative; }
 #right-panel.collapsed { width: 28px; min-width: 28px; padding: 0; overflow: hidden; }
 #right-panel.collapsed .psec { opacity: 0; pointer-events: none; }
 #panel-toggle { position: absolute; top: 50%; left: 0; transform: translateY(-50%); width: 14px; height: 48px; background: var(--border); border-radius: 3px 0 0 3px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text-dim); font-size: 9px; transition: background 0.15s, color 0.15s; user-select: none; z-index: 10; border: 1px solid var(--border); border-right: none; }
@@ -416,35 +427,19 @@
       <span></span><span></span><span></span>
     </div>
     <div id="nav-dropdown">
-      <div class="ndrop-item active" data-view="timeline" onclick="switchView('timeline');closeHamburger()">
-        <span class="ndrop-dot" style="background:#00d4ff"></span>Ops
-      </div>
-      <div class="ndrop-item" data-view="airline" onclick="switchView('airline');closeHamburger()">
-        <span class="ndrop-dot" style="background:#44ffaa"></span>Airlines
-      </div>
-      <div class="ndrop-item" data-view="production" onclick="switchView('production');closeHamburger()">
-        <span class="ndrop-dot" style="background:#ffaa44"></span>Production
-      </div>
-      <div class="ndrop-item" data-view="config" onclick="switchView('config');closeHamburger()">
-        <span class="ndrop-dot" style="background:#5a6070"></span>Config
-      </div>
+      <div class="ndrop-section-lbl">Navigation</div>
+      <div class="ndrop-item active" data-view="timeline" onclick="switchView('timeline');closeHamburger()"><span class="ndrop-dot" style="background:#00d4ff"></span>Ops</div>
+      <div class="ndrop-item" data-view="airline" onclick="switchView('airline');closeHamburger()"><span class="ndrop-dot" style="background:#44ffaa"></span>Airlines</div>
+      <div class="ndrop-item" data-view="production" onclick="switchView('production');closeHamburger()"><span class="ndrop-dot" style="background:#ffaa44"></span>Production</div>
+      <div class="ndrop-item" data-view="config" onclick="switchView('config');closeHamburger()"><span class="ndrop-dot" style="background:#5a6070"></span>Config</div>
       <div class="ndrop-sep"></div>
-      <div class="ndrop-filter" onclick="toggleFilter('eta',!activeFilters.eta)" id="drop-fchk-eta">
-        <span class="ndrop-filter-dot" style="background:#4dffb4"></span><span>ETA</span><span class="ndrop-check">✓</span>
-      </div>
-      <div class="ndrop-filter" onclick="toggleFilter('etd',!activeFilters.etd)" id="drop-fchk-etd">
-        <span class="ndrop-filter-dot" style="background:#66aaff"></span><span>ETD</span><span class="ndrop-check">✓</span>
-      </div>
-      <div class="ndrop-filter" onclick="toggleFilter('seal',!activeFilters.seal)" id="drop-fchk-seal">
-        <span class="ndrop-filter-dot" style="background:#ffaa44"></span><span>Sealing</span><span class="ndrop-check">✓</span>
-      </div>
-      <div class="ndrop-filter" onclick="toggleFilter('truck',!activeFilters.truck)" id="drop-fchk-truck">
-        <span class="ndrop-filter-dot" style="background:#ff6b6b"></span><span>Truck Dep</span><span class="ndrop-check">✓</span>
-      </div>
+      <div class="ndrop-section-lbl">Filters</div>
+      <div class="ndrop-filter" onclick="toggleFilter('eta',!activeFilters.eta)" id="drop-fchk-eta"><span class="ndrop-filter-dot" style="background:#4dffb4"></span><span>ETA</span><span class="ndrop-check">✓</span></div>
+      <div class="ndrop-filter" onclick="toggleFilter('etd',!activeFilters.etd)" id="drop-fchk-etd"><span class="ndrop-filter-dot" style="background:#66aaff"></span><span>ETD</span><span class="ndrop-check">✓</span></div>
+      <div class="ndrop-filter" onclick="toggleFilter('seal',!activeFilters.seal)" id="drop-fchk-seal"><span class="ndrop-filter-dot" style="background:#ffaa44"></span><span>Sealing</span><span class="ndrop-check">✓</span></div>
+      <div class="ndrop-filter" onclick="toggleFilter('truck',!activeFilters.truck)" id="drop-fchk-truck"><span class="ndrop-filter-dot" style="background:#ff6b6b"></span><span>Truck Dep</span><span class="ndrop-check">✓</span></div>
       <div class="ndrop-sep"></div>
-      <div class="ndrop-item" onclick="togglePanel();closeHamburger()" style="color:var(--accent);">
-        <span class="ndrop-dot" style="background:var(--accent)"></span>Toggle Panel
-      </div>
+      <div class="ndrop-item" onclick="togglePanel();closeHamburger()" style="color:var(--accent);font-size:11px;"><span class="ndrop-dot" style="background:var(--accent)"></span>Toggle Panel</div>
     </div>
   </div>
   <div id="nav-tabs" style="display:none;"></div>
