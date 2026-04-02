@@ -658,44 +658,41 @@ const DEF_AIRLINES = [
   {id:'latam',name:'Latam',color:'#e61f26'},{id:'uganda',name:'Uganda',color:'#d4aa00'},
   {id:'egyptair',name:'EgyptAir',color:'#bf0000'},{id:'air_austral',name:'Air Austral',color:'#0066cc'},
   {id:'asky',name:'Asky',color:'#ee7700'},{id:'air_cote',name:"Air Cote D'Ivoire",color:'#ff7700'},
-  {id:'qantas_perth',name:'Qantas PERTH',color:'#ff8c00'},{id:'air_congo',name:'Air Congo',color:'#009933'},
+  {id:'qantas_perth',name:'Qantas PERTH',color:'#ff8c00'},
 ];
 const DEF_FLIGHTS = [
   {id:'f1',airline:"Air Cote D'Ivoire",flight:'HF903',eta:'01:25',etd:'03:00',sealing:'00:00',truck:'01:00',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f2',airline:'Asky',flight:'KP0073',eta:'01:35',etd:'03:40',sealing:'00:00',truck:'01:00',days:['MON','WED','THU','FRI','SUN']},
-  {id:'f3',airline:'Air Algerie',flight:'AH5361',eta:'06:25',etd:'07:55',sealing:'04:45',truck:'05:45',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f2',airline:'Asky',flight:'KP0073',eta:'01:35',etd:'03:40',sealing:'00:00',truck:'01:00',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
   {id:'f4',airline:"Air Cote D'Ivoire",flight:'HF903',eta:'01:55',etd:'04:55',sealing:'00:30',truck:'01:30',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f5',airline:'Air Seychelles',flight:'HM062',eta:'18:45',etd:'09:00',sealing:'05:15',truck:'06:15',days:['TUE']},
-  {id:'f6',airline:'Ethiopian',flight:'ET848',eta:'03:55',etd:'08:20',sealing:'05:20',truck:'06:20',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f7',airline:'Lufthansa',flight:'LH579',eta:'06:40',etd:'08:45',sealing:'04:10',truck:'06:10',days:['MON','WED','SAT']},
-  {id:'f8',airline:'Air China',flight:'CA868',eta:'07:40',etd:'10:10',sealing:'06:10',truck:'07:10',days:['MON','WED','FRI']},
-  {id:'f9',airline:'Emirates',flight:'EK768',eta:'05:30',etd:'10:05',sealing:'05:05',truck:'07:05',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f10',airline:'Air Seychelles',flight:'HM062',eta:'19:00',etd:'09:00',sealing:'05:00',truck:'06:00',days:['SUN']},
-  {id:'f11',airline:'Etihad',flight:'EY748',eta:'08:15',etd:'09:45',sealing:'06:45',truck:'07:45',days:['MON','WED','THU','FRI','SAT','SUN']},
-  {id:'f12',airline:'Cathay',flight:'CX748',eta:'07:45',etd:'11:05',sealing:'05:30',truck:'07:30',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f13',airline:'Emirates',flight:'EK762',eta:'10:15',etd:'13:25',sealing:'07:35',truck:'09:35',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f14',airline:'Air Seychelles',flight:'HM060',eta:'10:30',etd:'11:50',sealing:'09:00',truck:'10:00',days:['TUE','FRI','SUN']},
-  {id:'f15',airline:'Air Mauritius',flight:'MK852',eta:'11:25',etd:'13:10',sealing:'09:55',truck:'10:55',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f16',airline:'Uganda',flight:'UR711',eta:'11:45',etd:'12:50',sealing:'10:00',truck:'11:00',days:['WED','FRI','SAT']},
-  {id:'f17',airline:'Latam',flight:'LA8059',eta:'11:55',etd:'14:50',sealing:'10:00',truck:'11:50',days:['MON','TUE','THU','FRI','SUN']},
-  {id:'f18',airline:'Uganda',flight:'UR711',eta:'15:25',etd:'16:25',sealing:'14:00',truck:'15:00',days:['MON']},
-  {id:'f19',airline:'Air Congo',flight:'ET83',eta:'16:20',etd:'17:30',sealing:'14:45',truck:'15:45',days:['WED','FRI','SUN']},
-  {id:'f20',airline:'Emirates',flight:'EK764',eta:'16:15',etd:'19:10',sealing:'13:45',truck:'15:45',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f21',airline:'Qantas',flight:'QF064',eta:'16:25',etd:'18:45',sealing:'13:55',truck:'15:55',days:['MON','WED','THU','SAT']},
-  {id:'f22',airline:'Lufthansa',flight:'LH573',eta:'08:35',etd:'19:00',sealing:'15:00',truck:'16:00',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f23',airline:'British Airways',flight:'BA056',eta:'09:25',etd:'19:25',sealing:'14:25',truck:'16:25',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f24',airline:'Virgin Atlantic',flight:'VS450',eta:'10:25',etd:'20:25',sealing:'16:25',truck:'17:25',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f25',airline:'Air Algerie',flight:'AH5361',eta:'09:20',etd:'20:20',sealing:'17:45',truck:'18:30',days:['MON','WED','SAT']},
-  {id:'f26',airline:'Delta',flight:'DL201',eta:'19:40',etd:'21:55',sealing:'16:55',truck:'18:55',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f27',airline:'Uganda',flight:'UR713',eta:'19:40',etd:'20:40',sealing:'18:10',truck:'19:10',days:['TUE','THU']},
-  {id:'f28',airline:'British Airways',flight:'BA054',eta:'07:00',etd:'21:15',sealing:'17:15',truck:'19:15',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f29',airline:'Qantas PERTH',flight:'QF066',eta:'20:05',etd:'21:55',sealing:'18:25',truck:'19:25',days:['TUE','FRI','SUN']},
-  {id:'f30',airline:'EgyptAir',flight:'MS840',eta:'08:10',etd:'22:25',sealing:'18:25',truck:'19:25',days:['MON','WED','FRI','SUN']},
-  {id:'f31',airline:'United',flight:'UA187',eta:'18:30',etd:'22:00',sealing:'17:30',truck:'19:30',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f32',airline:'Ethiopian',flight:'ET858',eta:'20:10',etd:'22:50',sealing:'18:40',truck:'19:40',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f33',airline:'Emirates',flight:'EK766',eta:'20:35',etd:'22:20',sealing:'18:00',truck:'20:00',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f34',airline:'Air Austral',flight:'UU344',eta:'20:45',etd:'21:45',sealing:'19:30',truck:'20:15',days:['TUE','THU','SUN']},
-  {id:'f35',airline:'Uganda',flight:'UR711',eta:'23:45',etd:'00:45',sealing:'21:15',truck:'22:00',days:['SUN']},
+  {id:'f5',airline:'Ethiopian',flight:'ET848',eta:'03:55',etd:'08:20',sealing:'05:20',truck:'06:20',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f6',airline:'Air Seychelles',flight:'HM062',eta:'19:00',etd:'09:00',sealing:'05:00',truck:'06:00',days:['SUN']},
+  {id:'f7',airline:'Lufthansa',flight:'LH579',eta:'07:05',etd:'10:10',sealing:'04:25',truck:'06:25',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f8',airline:'Air China',flight:'CA868',eta:'07:40',etd:'10:10',sealing:'06:10',truck:'07:10',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f9',airline:'Emirates',flight:'EK768',eta:'05:35',etd:'10:25',sealing:'05:25',truck:'07:25',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f10',airline:'Etihad',flight:'EY748',eta:'08:20',etd:'09:50',sealing:'06:50',truck:'07:50',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f11',airline:'Cathay',flight:'CX748',eta:'07:25',etd:'11:00',sealing:'06:00',truck:'08:30',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f12',airline:'Emirates',flight:'EK762',eta:'10:25',etd:'13:25',sealing:'07:55',truck:'09:55',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f13',airline:'Air Mauritius',flight:'MK852',eta:'11:25',etd:'13:10',sealing:'09:55',truck:'10:55',days:['MON','TUE','WED','FRI','SAT','SUN']},
+  {id:'f14',airline:'Uganda',flight:'UR711',eta:'11:45',etd:'12:50',sealing:'10:15',truck:'11:15',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f15',airline:'Air Seychelles',flight:'HM060',eta:'12:30',etd:'13:50',sealing:'10:45',truck:'11:45',days:['FRI','SAT','SUN']},
+  {id:'f16',airline:'Latam',flight:'LA8059',eta:'12:40',etd:'15:25',sealing:'10:45',truck:'11:45',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f17',airline:'Qantas',flight:'QF064',eta:'15:00',etd:'17:30',sealing:'11:30',truck:'14:30',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f18',airline:'Emirates',flight:'EK764',eta:'16:35',etd:'18:50',sealing:'14:05',truck:'16:05',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f19',airline:'British Airways',flight:'BA056',eta:'09:25',etd:'19:35',sealing:'14:35',truck:'16:35',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f20',airline:'Lufthansa',flight:'LH573',eta:'09:30',etd:'19:45',sealing:'14:45',truck:'16:45',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f21',airline:'Virgin Atlantic',flight:'VS450',eta:'08:35',etd:'21:30',sealing:'16:30',truck:'18:30',days:['THU']},
+  {id:'f22',airline:'Qantas PERTH',flight:'QF066',eta:'18:50',etd:'21:55',sealing:'13:20',truck:'18:20',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f23',airline:'Delta',flight:'DL201',eta:'19:00',etd:'21:55',sealing:'16:30',truck:'18:30',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f24',airline:'Uganda',flight:'UR713',eta:'19:40',etd:'20:40',sealing:'18:10',truck:'19:10',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f25',airline:'Virgin Atlantic',flight:'VS450',eta:'08:35',etd:'22:00',sealing:'17:00',truck:'19:00',days:['MON','TUE','WED','FRI','SAT','SUN']},
+  {id:'f26',airline:'British Airways',flight:'BA054',eta:'07:00',etd:'22:00',sealing:'17:00',truck:'19:00',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f27',airline:'EgyptAir',flight:'MS840',eta:'08:10',etd:'22:25',sealing:'18:25',truck:'19:25',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f28',airline:'United',flight:'UA187',eta:'18:35',etd:'22:00',sealing:'17:30',truck:'19:30',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f29',airline:'Emirates',flight:'EK766',eta:'20:35',etd:'22:20',sealing:'18:00',truck:'20:00',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f30',airline:'Air Algerie',flight:'AH5361',eta:'06:30',etd:'22:30',sealing:'19:30',truck:'20:30',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f31',airline:'Ethiopian',flight:'ET858',eta:'20:10',etd:'22:50',sealing:'19:20',truck:'20:20',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
+  {id:'f32',airline:'Air Austral',flight:'UU344',eta:'20:45',etd:'21:45',sealing:'19:30',truck:'20:15',days:['THU','SUN']},
+  {id:'f33',airline:'Uganda',flight:'UR711',eta:'23:45',etd:'00:45',sealing:'21:15',truck:'22:00',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
 ];
 
 const ALLDAYS=['SUN','MON','TUE','WED','THU','FRI','SAT'];
@@ -1147,41 +1144,24 @@ function setBgBright(v){bgTheme.bright=parseInt(v);['bg-bright','dr-bg-bright','
 
 /* PRODUCTION VIEW — no Done button */
 const PROD_SLOTS=[
-  {si:1,  airline:"Air Cote D'Ivoire", flight:'HF903',  day:'D-1', time:'05:00'},
-  {si:1,  airline:'Asky',              flight:'KP0073', day:'D-1', time:'05:40'},
-  {si:2,  airline:"Air Cote D'Ivoire", flight:'HF903',  day:'D-1', time:'06:55'},
-  {si:2,  airline:'Air Algerie',       flight:'AH5361', day:'D-1', time:'09:55'},
-  {si:3,  airline:'Ethiopian',         flight:'ET848',  day:'D-1', time:'10:20'},
-  {si:2,  airline:'Air Seychelles',    flight:'HM062',  day:'D-1', time:'11:00'},
-  {si:7,  airline:'Etihad',            flight:'EY748',  day:'D-1', time:'11:45'},
-  {si:4,  airline:'Lufthansa',         flight:'LH579',  day:'D-1', time:'11:10'},
-  {si:5,  airline:'Air China',         flight:'CA868',  day:'D-1', time:'12:10'},
-  {si:6,  airline:'Emirates',          flight:'EK768',  day:'D-1', time:'12:05'},
-  {si:6,  airline:'Air Seychelles',    flight:'HM062',  day:'D-1', time:'11:00'},
-  {si:8,  airline:'Cathay',            flight:'CX748',  day:'D-1', time:'12:30'},
-  {si:10, airline:'Air Seychelles',    flight:'HM060',  day:'D-1', time:'14:00'},
-  {si:11, airline:'Air Mauritius',     flight:'MK852',  day:'D-1', time:'14:55'},
-  {si:12, airline:'Uganda',            flight:'UR711',  day:'D-1', time:'15:00'},
-  {si:9,  airline:'Emirates',          flight:'EK762',  day:'D-1', time:'14:35'},
-  {si:13, airline:'Latam',             flight:'LA8059', day:'D-1', time:'15:00'},
-  {si:14, airline:'Uganda',            flight:'UR711',  day:'D-1', time:'19:00'},
-  {si:16, airline:'Emirates',          flight:'EK764',  day:'D',   time:'09:45'},
-  {si:17, airline:'Qantas',            flight:'QF064',  day:'D',   time:'09:55'},
-  {si:19, airline:'British Airways',   flight:'BA056',  day:'D',   time:'10:25'},
-  {si:15, airline:'Air Congo',         flight:'ET83',   day:'D',   time:'10:45'},
-  {si:18, airline:'Lufthansa',         flight:'LH573',  day:'D',   time:'11:00'},
-  {si:20, airline:'Virgin Atlantic',   flight:'VS450',  day:'D',   time:'12:25'},
-  {si:22, airline:'Delta',             flight:'DL201',  day:'D',   time:'12:55'},
-  {si:24, airline:'British Airways',   flight:'BA054',  day:'D',   time:'13:15'},
-  {si:27, airline:'United',            flight:'UA187',  day:'D',   time:'13:30'},
-  {si:21, airline:'Air Algerie',       flight:'AH5361', day:'D',   time:'13:45'},
-  {si:28, airline:'Emirates',          flight:'EK766',  day:'D',   time:'14:00'},
-  {si:23, airline:'Uganda',            flight:'UR713',  day:'D',   time:'14:10'},
-  {si:25, airline:'Qantas PERTH',      flight:'QF066',  day:'D',   time:'14:25'},
-  {si:26, airline:'EgyptAir',          flight:'MS840',  day:'D',   time:'14:25'},
-  {si:29, airline:'Ethiopian',         flight:'ET858',  day:'D',   time:'14:40'},
-  {si:30, airline:'Air Austral',       flight:'UU344',  day:'D',   time:'15:30'},
-  {si:31, airline:'Uganda',            flight:'UR711',  day:'D',   time:'17:15'},
+  {si:1,airline:"Air Cote D'Ivoire",flight:'HF903',day:'D-1',time:'05:00'},{si:1,airline:'Asky',flight:'KP0073',day:'D-1',time:'05:40'},
+  {si:2,airline:'Air Algerie',flight:'AH5361',day:'D-1',time:'09:55'},{si:2,airline:"Air Cote D'Ivoire",flight:'HF903',day:'D-1',time:'06:55'},
+  {si:2,airline:'Ethiopian',flight:'ET848',day:'D-1',time:'10:20'},{si:3,airline:'Air Seychelles',flight:'HM062',day:'D-1',time:'11:00'},
+  {si:4,airline:'Lufthansa',flight:'LH579',day:'D-1',time:'12:10'},{si:5,airline:'Air China',flight:'CA868',day:'D-1',time:'12:10'},
+  {si:6,airline:'Emirates',flight:'EK768',day:'D-1',time:'12:25'},{si:6,airline:'Air Seychelles',flight:'HM062',day:'D-1',time:'11:00'},
+  {si:7,airline:'Etihad',flight:'EY748',day:'D-1',time:'11:50'},{si:8,airline:'Cathay',flight:'CX748',day:'D-1',time:'13:00'},
+  {si:9,airline:'Emirates',flight:'EK762',day:'D-1',time:'15:25'},{si:10,airline:'Air Mauritius',flight:'MK852',day:'D-1',time:'15:10'},
+  {si:11,airline:'Uganda',flight:'UR711',day:'D-1',time:'14:50'},{si:12,airline:'Air Seychelles',flight:'HM060',day:'D-1',time:'15:50'},
+  {si:13,airline:'Latam',flight:'LA8059',day:'D-1',time:'17:25'},{si:15,airline:'Qantas',flight:'QF064',day:'D-1',time:'19:15'},
+  {si:14,airline:'Qantas',flight:'QF064',day:'D-1',time:'19:30'},{si:15,airline:'Emirates',flight:'EK764',day:'D-1',time:'20:50'},
+  {si:16,airline:'British Airways',flight:'BA056',day:'D',time:'10:00'},{si:17,airline:'Lufthansa',flight:'LH573',day:'D',time:'10:45'},
+  {si:18,airline:'Virgin Atlantic',flight:'VS450',day:'D',time:'12:30'},{si:19,airline:'Qantas PERTH',flight:'QF066',day:'D',time:'14:20'},
+  {si:20,airline:'Delta',flight:'DL201',day:'D',time:'12:30'},{si:21,airline:'Uganda',flight:'UR713',day:'D',time:'14:10'},
+  {si:22,airline:'Virgin Atlantic',flight:'VS450',day:'D',time:'13:00'},{si:23,airline:'British Airways',flight:'BA054',day:'D',time:'13:00'},
+  {si:24,airline:'EgyptAir',flight:'MS840',day:'D',time:'14:25'},{si:25,airline:'United',flight:'UA187',day:'D',time:'13:30'},
+  {si:26,airline:'Emirates',flight:'EK766',day:'D',time:'14:00'},{si:27,airline:'Air Algerie',flight:'AH5361',day:'D',time:'16:00'},
+  {si:28,airline:'Ethiopian',flight:'ET858',day:'D',time:'15:20'},{si:29,airline:'Air Austral',flight:'UU344',day:'D',time:'15:30'},
+  {si:30,airline:'Uganda',flight:'UR711',day:'D',time:'17:15'},
 ];
 
 function buildProductionView(){
@@ -1251,8 +1231,129 @@ function scrollToNow(){
 /* BG SWATCHES */
 function initBgSwatches(){document.querySelectorAll('.bg-sw').forEach(sw=>{sw.addEventListener('click',()=>{bgTheme.hue=parseInt(sw.dataset.h);applyBgTheme();});});}
 
+
+/* GOOGLE SHEETS LIVE SYNC */
+const GSHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQKq3odF0k3pgL0sJYP7SZmFNkVVwSun02u79ipbE6qmecOxJinj6iZJxNEhHL0VbHxFYQSqSVQOlxA/pub?output=csv';
+const DAY_NUM_MAP = {'1':'MON','2':'TUE','3':'WED','4':'THU','5':'FRI','6':'SAT','7':'SUN'};
+
+function parseDays(str){
+  if(!str)return[];
+  const s=String(str).trim();
+  if(s.toLowerCase()==='daily'||s==='1234567')return['MON','TUE','WED','THU','FRI','SAT','SUN'];
+  return s.split('').filter(c=>DAY_NUM_MAP[c]).map(c=>DAY_NUM_MAP[c]);
+}
+
+function parseCSVLine(line){
+  const result=[];let cur='',inQ=false;
+  for(let i=0;i<line.length;i++){
+    const c=line[i];
+    if(c==='"'){inQ=!inQ;}
+    else if(c===','&&!inQ){result.push(cur.trim());cur='';}
+    else{cur+=c;}
+  }
+  result.push(cur.trim());
+  return result;
+}
+
+async function loadFromGSheet(){
+  try{
+    const resp=await fetch(GSHEET_URL,{cache:'no-store'});
+    if(!resp.ok)return;
+    const text=await resp.text();
+    const lines=text.split('\n').filter(l=>l.trim());
+    // Skip header rows (rows that don't start with a number)
+    const dataLines=lines.filter(l=>{const first=l.split(',')[0].replace(/"/g,'').trim();return /^\d+$/.test(first);});
+    if(!dataLines.length)return;
+    const newFlights=[];
+    dataLines.forEach((line,i)=>{
+      const cols=parseCSVLine(line);
+      // Columns: SI, Airline, Flight, ETA, ETD, Sealing, Truck, Days
+      if(cols.length<8)return;
+      const airline=cols[1].trim();
+      const flight=cols[2].trim();
+      const eta=cols[3].trim();
+      const etd=cols[4].trim();
+      const seal=cols[5].trim();
+      const truck=cols[6].trim();
+      const daysStr=cols[7].trim();
+      if(!flight||!airline)return;
+      newFlights.push({
+        id:'gs'+i,
+        airline,flight,eta,etd,
+        sealing:seal,truck,
+        days:parseDays(daysStr)
+      });
+    });
+    if(newFlights.length>0){
+      flights=newFlights;
+      showToast('Schedule updated ✓');
+      refreshCurrentView();
+    }
+  }catch(e){
+    console.warn('GSheet load failed, using local data',e);
+  }
+}
+
+
+/* GOOGLE SHEETS SYNC */
+const GSHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQKq3odF0k3pgL0sJYP7SZmFNkVVwSun02u79ipbE6qmecOxJinj6iZJxNEhHL0VbHxFYQSqSVQOlxA/pub?output=csv';
+function parseCSVLine(line) {
+  const result = [], re = /("([^"]*)")|([^,]+)|(?<=,|^)(?=,|$)/g;
+  let m;
+  while ((m = re.exec(line)) !== null) result.push((m[2] !== undefined ? m[2] : m[0]).trim());
+  return result;
+}
+
+function parseDays(str) {
+  str = String(str).replace(/\s/g,'');
+  if(!str || str==='0') return [];
+  return [...str].map(c => DAY_NUM_MAP[c]).filter(Boolean);
+}
+
+function applyGSheetData(csvText) {
+  const lines = csvText.trim().split('\n').filter(l => l.trim());
+  // skip title row (row 1), legend row (row 2), header row (row 3)
+  const dataLines = lines.slice(3);
+  if (!dataLines.length) return;
+  const newFlights = [];
+  dataLines.forEach((line, i) => {
+    const cols = parseCSVLine(line);
+    if (cols.length < 8) return;
+    const [si, airline, flight, eta, etd, seal, truck, daysStr] = cols;
+    if (!flight || !airline) return;
+    const d = parseDays(daysStr);
+    if (!d.length) return;
+    newFlights.push({
+      id: 'gs' + i,
+      airline: airline.trim(),
+      flight: flight.trim(),
+      eta: eta.trim(),
+      etd: etd.trim(),
+      sealing: seal.trim(),
+      truck: truck.trim(),
+      days: d
+    });
+  });
+  if (newFlights.length > 0) {
+    flights = newFlights;
+    showToast('Schedule updated ✓');
+    buildTimeline();
+    const av = document.getElementById('airline-view');
+    if (av && av.classList.contains('active')) buildAirlineView();
+  }
+}
+
+function fetchGSheet() {
+  fetch(GSHEET_CSV + '&t=' + Date.now())
+    .then(r => r.text())
+    .then(applyGSheetData)
+    .catch(() => {}); // silent fail — keeps default data
+}
+
 /* INIT */
 loadData();
+fetchGSheet();
+loadFromGSheet();
 if(!localStorage.getItem('cop_display')){if(window.innerWidth<=768)ds.zoom=2;else if(window.innerWidth<=1100)ds.zoom=2.5;else ds.zoom=3;}
 
 ['eta','etd','seal','truck'].forEach(f=>{
@@ -1295,6 +1396,7 @@ setInterval(()=>{
 },5000);
 
 setInterval(checkAlerts,60000);
+setInterval(fetchGSheet, 5*60*1000);
 setTimeout(scrollToNow,600);
 loadAlertSettings();
 loadBgTheme();
