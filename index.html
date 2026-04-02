@@ -440,6 +440,7 @@
       <div class="ndrop-filter" onclick="toggleFilter('truck',!activeFilters.truck)" id="drop-fchk-truck"><span class="ndrop-filter-dot" style="background:#ff6b6b"></span><span>Truck Dep</span><span class="ndrop-check">✓</span></div>
       <div class="ndrop-sep"></div>
       <div class="ndrop-item" onclick="togglePanel();closeHamburger()" style="color:var(--accent);font-size:11px;"><span class="ndrop-dot" style="background:var(--accent)"></span>Toggle Panel</div>
+      <div class="ndrop-item" onclick="toggleFullscreen();closeHamburger()" id="fullscreen-btn" style="color:#aaaaff;font-size:11px;"><span class="ndrop-dot" style="background:#aaaaff"></span>Fullscreen</div>
     </div>
   </div>
   <div id="nav-tabs" style="display:none;"></div>
@@ -482,11 +483,14 @@
       <div class="ptitle">Background</div>
       <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;" id="bg-swatches">
         <div class="bg-sw active" data-h="220" style="background:#13161e;"></div>
-        <div class="bg-sw" data-h="160" style="background:#101a17;"></div>
-        <div class="bg-sw" data-h="260" style="background:#14101a;"></div>
-        <div class="bg-sw" data-h="0"   style="background:#1a1010;"></div>
-        <div class="bg-sw" data-h="30"  style="background:#1a1510;"></div>
-        <div class="bg-sw" data-h="200" style="background:#101518;"></div>
+        <div class="bg-sw" data-h="200" style="background:#0a1520;"></div>
+        <div class="bg-sw" data-h="160" style="background:#0a1a12;"></div>
+        <div class="bg-sw" data-h="260" style="background:#180a25;"></div>
+        <div class="bg-sw" data-h="0"   style="background:#250a0a;"></div>
+        <div class="bg-sw" data-h="30"  style="background:#1e1400;"></div>
+        <div class="bg-sw" data-h="45"  style="background:#1a1200;"></div>
+        <div class="bg-sw" data-h="180" style="background:#001a1a;"></div>
+        <div class="bg-sw" data-h="999" style="background:#ffffff;border:1px solid #ccc;"></div>
       </div>
       <div class="zrow"><label>Light</label><input type="range" id="bg-bright" min="0" max="100" value="50" step="1"><span id="bg-bright-v">50</span></div>
     </div>
@@ -543,11 +547,14 @@
     <h2 style="margin-top:20px;">Background</h2>
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;" id="cfg-bg-swatches">
       <div class="bg-sw active" data-h="220" style="background:#13161e;width:34px;height:34px;border-radius:6px;"></div>
-      <div class="bg-sw" data-h="160" style="background:#101a17;width:34px;height:34px;border-radius:6px;"></div>
-      <div class="bg-sw" data-h="260" style="background:#14101a;width:34px;height:34px;border-radius:6px;"></div>
-      <div class="bg-sw" data-h="0"   style="background:#1a1010;width:34px;height:34px;border-radius:6px;"></div>
-      <div class="bg-sw" data-h="30"  style="background:#1a1510;width:34px;height:34px;border-radius:6px;"></div>
-      <div class="bg-sw" data-h="200" style="background:#101518;width:34px;height:34px;border-radius:6px;"></div>
+      <div class="bg-sw" data-h="200" style="background:#0a1520;width:34px;height:34px;border-radius:6px;"></div>
+      <div class="bg-sw" data-h="160" style="background:#0a1a12;width:34px;height:34px;border-radius:6px;"></div>
+      <div class="bg-sw" data-h="260" style="background:#180a25;width:34px;height:34px;border-radius:6px;"></div>
+      <div class="bg-sw" data-h="0"   style="background:#250a0a;width:34px;height:34px;border-radius:6px;"></div>
+      <div class="bg-sw" data-h="30"  style="background:#1e1400;width:34px;height:34px;border-radius:6px;"></div>
+      <div class="bg-sw" data-h="45"  style="background:#1a1200;width:34px;height:34px;border-radius:6px;"></div>
+      <div class="bg-sw" data-h="180" style="background:#001a1a;width:34px;height:34px;border-radius:6px;"></div>
+      <div class="bg-sw" data-h="999" style="background:#ffffff;border:1px solid #ccc;width:34px;height:34px;border-radius:6px;"></div>
     </div>
     <div class="drow"><label>Brightness</label><input type="range" id="cfg-bg-bright" min="0" max="100" value="50" step="1" oninput="setBgBright(this.value)"><span id="cfg-bg-bright-v">50</span></div>
     <h2 style="margin-top:20px;">Data Sync</h2>
@@ -607,11 +614,14 @@
       <div class="dr-section-title">Background</div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;" id="dr-bg-swatches">
         <div class="bg-sw active" data-h="220" style="background:#13161e;width:36px;height:36px;border-radius:8px;"></div>
-        <div class="bg-sw" data-h="160" style="background:#101a17;width:36px;height:36px;border-radius:8px;"></div>
-        <div class="bg-sw" data-h="260" style="background:#14101a;width:36px;height:36px;border-radius:8px;"></div>
-        <div class="bg-sw" data-h="0"   style="background:#1a1010;width:36px;height:36px;border-radius:8px;"></div>
-        <div class="bg-sw" data-h="30"  style="background:#1a1510;width:36px;height:36px;border-radius:8px;"></div>
-        <div class="bg-sw" data-h="200" style="background:#101518;width:36px;height:36px;border-radius:8px;"></div>
+        <div class="bg-sw" data-h="200" style="background:#0a1520;width:36px;height:36px;border-radius:8px;"></div>
+        <div class="bg-sw" data-h="160" style="background:#0a1a12;width:36px;height:36px;border-radius:8px;"></div>
+        <div class="bg-sw" data-h="260" style="background:#180a25;width:36px;height:36px;border-radius:8px;"></div>
+        <div class="bg-sw" data-h="0"   style="background:#250a0a;width:36px;height:36px;border-radius:8px;"></div>
+        <div class="bg-sw" data-h="30"  style="background:#1e1400;width:36px;height:36px;border-radius:8px;"></div>
+        <div class="bg-sw" data-h="45"  style="background:#1a1200;width:36px;height:36px;border-radius:8px;"></div>
+        <div class="bg-sw" data-h="180" style="background:#001a1a;width:36px;height:36px;border-radius:8px;"></div>
+        <div class="bg-sw" data-h="999" style="background:#ffffff;border:1px solid #ccc;width:36px;height:36px;border-radius:8px;"></div>
       </div>
       <div class="dr-row"><label>Brightness</label><input type="range" id="dr-bg-bright" min="0" max="100" value="50" step="1" oninput="setBgBright(this.value)"><span id="dr-bg-bright-v">50</span></div>
     </div>
@@ -911,6 +921,24 @@ function updateClock(){
   }
 }
 
+function toggleFullscreen(){
+  if(!document.fullscreenElement){
+    document.documentElement.requestFullscreen().catch(()=>{});
+  } else {
+    document.exitFullscreen();
+  }
+}
+document.addEventListener('fullscreenchange',()=>{
+  const btn=document.getElementById('fullscreen-btn');
+  if(btn){
+    const lbl=btn.querySelector('span:last-child')||btn;
+    btn.innerHTML=document.fullscreenElement
+      ? '<span class="ndrop-dot" style="background:#aaaaff"></span>Exit Fullscreen'
+      : '<span class="ndrop-dot" style="background:#aaaaff"></span>Fullscreen';
+    btn.setAttribute('onclick',"toggleFullscreen();closeHamburger()");
+  }
+});
+
 /* HAMBURGER */
 function toggleHamburger(){
   const btn=document.getElementById('hamburger-btn');
@@ -1115,6 +1143,10 @@ function buildAirlineView(){
 /* BACKGROUND */
 let bgTheme={hue:220,bright:50};
 function hslBg(hue,bright){
+  if(hue===999){
+    document.documentElement.style.setProperty('--bg','#ffffff');
+    return;
+  }
   const l=4+(bright/100)*10,s=20;
   const bg=`hsl(${hue},${s}%,${l}%)`;
   const r=document.documentElement;
@@ -1296,7 +1328,7 @@ async function loadFromGSheet(){
 
 
 /* GOOGLE SHEETS SYNC */
-const GSHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQKq3odF0k3pgL0sJYP7SZmFNkVVwSun02u79ipbE6qmecOxJinj6iZJxNEhHL0VbHxFYQSqSVQOlxA/pub?output=csv';
+const GSHEET_CSV = 'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://docs.google.com/spreadsheets/d/e/2PACX-1vQKq3odF0k3pgL0sJYP7SZmFNkVVwSun02u79ipbE6qmecOxJinj6iZJxNEhHL0VbHxFYQSqSVQOlxA/pub?output=csv');
 function parseCSVLine(line) {
   const result = [], re = /("([^"]*)")|([^,]+)|(?<=,|^)(?=,|$)/g;
   let m;
@@ -1401,6 +1433,8 @@ setTimeout(scrollToNow,600);
 loadAlertSettings();
 loadBgTheme();
 initBgSwatches();
+// Panel fermé par défaut
+(function(){const rp=document.getElementById('right-panel');const pti=document.getElementById('panel-toggle-icon');if(rp){rp.classList.add('collapsed');if(pti)pti.textContent='▶';}})();
 
 window.addEventListener('resize',()=>{
   buildTimeline();
