@@ -490,7 +490,7 @@
         <div class="bg-sw" data-h="30"  style="background:#1e1400;"></div>
         <div class="bg-sw" data-h="45"  style="background:#1a1200;"></div>
         <div class="bg-sw" data-h="180" style="background:#001a1a;"></div>
-        <div class="bg-sw" data-h="999" style="background:#ffffff;border:1px solid #ccc;"></div>
+        <div class="bg-sw" data-h="999" style="background:#e8eaed;border:1px solid #ccc;"></div>
       </div>
       <div class="zrow"><label>Light</label><input type="range" id="bg-bright" min="0" max="100" value="50" step="1"><span id="bg-bright-v">50</span></div>
     </div>
@@ -554,7 +554,7 @@
       <div class="bg-sw" data-h="30"  style="background:#1e1400;width:34px;height:34px;border-radius:6px;"></div>
       <div class="bg-sw" data-h="45"  style="background:#1a1200;width:34px;height:34px;border-radius:6px;"></div>
       <div class="bg-sw" data-h="180" style="background:#001a1a;width:34px;height:34px;border-radius:6px;"></div>
-      <div class="bg-sw" data-h="999" style="background:#ffffff;border:1px solid #ccc;width:34px;height:34px;border-radius:6px;"></div>
+      <div class="bg-sw" data-h="999" style="background:#e8eaed;border:1px solid #ccc;width:34px;height:34px;border-radius:6px;"></div>
     </div>
     <div class="drow"><label>Brightness</label><input type="range" id="cfg-bg-bright" min="0" max="100" value="50" step="1" oninput="setBgBright(this.value)"><span id="cfg-bg-bright-v">50</span></div>
     <h2 style="margin-top:20px;">Data Sync</h2>
@@ -621,7 +621,7 @@
         <div class="bg-sw" data-h="30"  style="background:#1e1400;width:36px;height:36px;border-radius:8px;"></div>
         <div class="bg-sw" data-h="45"  style="background:#1a1200;width:36px;height:36px;border-radius:8px;"></div>
         <div class="bg-sw" data-h="180" style="background:#001a1a;width:36px;height:36px;border-radius:8px;"></div>
-        <div class="bg-sw" data-h="999" style="background:#ffffff;border:1px solid #ccc;width:36px;height:36px;border-radius:8px;"></div>
+        <div class="bg-sw" data-h="999" style="background:#e8eaed;border:1px solid #ccc;width:36px;height:36px;border-radius:8px;"></div>
       </div>
       <div class="dr-row"><label>Brightness</label><input type="range" id="dr-bg-bright" min="0" max="100" value="50" step="1" oninput="setBgBright(this.value)"><span id="dr-bg-bright-v">50</span></div>
     </div>
@@ -1144,7 +1144,7 @@ function buildAirlineView(){
 let bgTheme={hue:220,bright:50};
 function hslBg(hue,bright){
   if(hue===999){
-    document.documentElement.style.setProperty('--bg','#ffffff');
+    document.documentElement.style.setProperty('--bg','#e8eaed');
     return;
   }
   const l=4+(bright/100)*10,s=20;
