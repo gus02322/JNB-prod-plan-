@@ -302,6 +302,7 @@
   .logo { font-size: 11px; letter-spacing: 1.5px; padding: 0 8px; flex-shrink: 0; }
   #date-str { display: none; }
   #clock { font-size: 17px; padding: 0 10px; letter-spacing: 1px; flex-shrink: 0; border-right: 1px solid var(--border); }
+  #sync-status { display: none !important; }
   #status-bar { display: none; }
   #nav-tabs { display: none !important; }
   #mob-nav { display: none !important; }
@@ -410,6 +411,10 @@
   <div class="logo">⬡ JNB CATERING OPS</div>
   <div id="date-str"></div>
   <div id="clock">00:00:00</div>
+  <div id="sync-status" title="Google Sheet sync status" style="display:flex;align-items:center;height:100%;padding:0 10px;border-right:1px solid var(--border);gap:5px;cursor:default;flex-shrink:0;">
+    <div id="sync-dot" style="width:7px;height:7px;border-radius:50%;background:var(--text-muted);flex-shrink:0;transition:background 0.4s;"></div>
+    <div id="sync-lbl" style="font-family:var(--font-mono);font-size:9px;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;white-space:nowrap;transition:color 0.4s;">No sync</div>
+  </div>
   <div id="date-picker-wrap">
     <span class="dp-lbl">View</span>
     <div id="date-nav-prev" onclick="shiftDate(-1)" title="Previous day">‹</div>
@@ -1279,6 +1284,18 @@ function parseCSVRow(line){
   return result;
 }
 
+function setSyncStatus(state, msg){
+  // state: 'ok' | 'error' | 'loading' | 'idle'
+  const dot = document.getElementById('sync-dot');
+  const lbl = document.getElementById('sync-lbl');
+  if(!dot || !lbl) return;
+  const colors = {ok:'#4dffb4', error:'#ff6b6b', loading:'#ffaa44', idle:'var(--text-muted)'};
+  dot.style.background = colors[state] || colors.idle;
+  dot.style.boxShadow = (state==='ok'||state==='loading') ? '0 0 6px '+colors[state] : 'none';
+  lbl.style.color = state==='idle' ? 'var(--text-muted)' : colors[state];
+  lbl.textContent = msg;
+}
+
 function applyCSVData(text){
   const lines=text.split('\n').map(l=>l.trim()).filter(l=>l);
   // Data rows start with a number (SI column)
@@ -1312,6 +1329,9 @@ function applyCSVData(text){
   });
   if(newFlights.length>0){
     flights=newFlights;
+    const now=new Date(),pad=v=>String(v).padStart(2,'0');
+    const ts=pad(now.getHours())+':'+pad(now.getMinutes());
+    setSyncStatus('ok', ts+' ✓ '+newFlights.length+'f');
     showToast('\u2713 '+newFlights.length+' flights loaded');
     refreshCurrentView();
     console.log('GSheet OK:',newFlights.length,'flights loaded');
@@ -1322,7 +1342,7 @@ function applyCSVData(text){
 }
 
 function fetchGSheet(){
-  // Direct fetch — works from GitHub Pages (Google Sheets pub CSV allows CORS)
+  setSyncStatus('loading','Syncing...');
   fetch(GSHEET_CSV_URL+'&cachebust='+Date.now())
     .then(r=>{
       if(!r.ok)throw new Error('HTTP '+r.status);
@@ -1330,10 +1350,13 @@ function fetchGSheet(){
     })
     .then(text=>{
       console.log('GSheet raw CSV (first 300 chars):', text.substring(0,300));
-      applyCSVData(text);
+      if(!applyCSVData(text)){
+        setSyncStatus('error','Parse error');
+      }
     })
     .catch(e=>{
-      console.warn('GSheet direct fetch failed:',e.message);
+      console.warn('GSheet fetch failed:',e.message);
+      setSyncStatus('error','Sync failed');
     });
 }
 
