@@ -278,6 +278,33 @@
 #toast.show { opacity: 1; }
 #file-import { display: none; }
 
+/* WEEK VIEW */
+#week-view { background: var(--bg); }
+.wk-col { border-right: 1px solid var(--border); display: flex; flex-direction: column; min-height: 100%; }
+.wk-col:last-child { border-right: none; }
+.wk-col-head { padding: 8px 10px 6px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--surface); z-index: 5; flex-shrink: 0; }
+.wk-col-head .wk-day { font-family: var(--font-ui); font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); }
+.wk-col-head .wk-date { font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+.wk-col-head.is-today .wk-day { color: var(--accent); }
+.wk-col-head.is-today .wk-date { color: var(--accent); }
+.wk-col-head.is-today { background: rgba(0,212,255,0.06); border-bottom-color: var(--accent); }
+.wk-flight { padding: 6px 8px; border-bottom: 1px solid var(--border); border-left: 3px solid; transition: background 0.1s; cursor: default; }
+.wk-flight:hover { background: var(--surface2); }
+.wk-flight:last-child { border-bottom: none; }
+.wk-flight.past { opacity: 0.4; }
+.wk-fl-num { font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: #e8ecf8; line-height: 1.2; }
+.wk-fl-airline { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.4); line-height: 1.2; margin-top: 1px; }
+.wk-fl-times { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 4px; }
+.wk-fl-chip { font-family: var(--font-mono); font-size: 9px; padding: 1px 4px; border-radius: 2px; border: 1px solid; white-space: nowrap; }
+.wk-fl-meal { font-size: 8px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; padding: 1px 4px; border-radius: 2px; margin-top: 3px; display: inline-block; }
+.wk-empty { padding: 12px 8px; font-family: var(--font-mono); font-size: 9px; color: var(--text-muted); text-align: center; }
+@media (max-width: 768px) {
+  #week-view { padding-top: 48px !important; padding-bottom: 60px; }
+  #week-grid { grid-template-columns: repeat(7, minmax(110px, 1fr)); }
+  .wk-fl-num { font-size: 11px; }
+  .wk-col-head .wk-day { font-size: 10px; letter-spacing: 1px; }
+}
+
 /* TV >= 1600px */
 @media (min-width: 1600px) {
   :root { --scale: 1.45; }
@@ -436,6 +463,7 @@
       <div class="ndrop-item active" data-view="timeline" onclick="switchView('timeline');closeHamburger()"><span class="ndrop-dot" style="background:#00d4ff"></span>Ops</div>
       <div class="ndrop-item" data-view="airline" onclick="switchView('airline');closeHamburger()"><span class="ndrop-dot" style="background:#44ffaa"></span>Airlines</div>
       <div class="ndrop-item" data-view="production" onclick="switchView('production');closeHamburger()"><span class="ndrop-dot" style="background:#ffaa44"></span>Production</div>
+      <div class="ndrop-item" data-view="week" onclick="switchView('week');closeHamburger()"><span class="ndrop-dot" style="background:#aa66ff"></span>Week</div>
       <div class="ndrop-item" data-view="config" onclick="switchView('config');closeHamburger()"><span class="ndrop-dot" style="background:#5a6070"></span>Config</div>
       <div class="ndrop-sep"></div>
       <div class="ndrop-section-lbl">Filters</div>
@@ -503,19 +531,7 @@
       </div>
       <div class="zrow"><label>Light</label><input type="range" id="bg-bright" min="0" max="100" value="50" step="1"><span id="bg-bright-v">50</span></div>
     </div>
-    <div class="psec">
-      <div class="ptitle">Airlines Today</div>
-      <div id="leg"></div>
-    </div>
-    <div class="psec">
-      <div class="ptitle">Event Types</div>
-      <div style="font-size:10px;line-height:1.9;color:var(--text-dim);">
-        <span style="color:#4dffb4;">●</span> ETA Arrival<br>
-        <span style="color:#ffaa44;">●</span> Sealing &amp; Loading<br>
-        <span style="color:#ff6b6b;">●</span> Truck Departure<br>
-        <span style="color:#66aaff;">●</span> ETD Departure
-      </div>
-    </div>
+
     <div class="psec">
       <div class="ptitle">Data Sync</div>
       <button class="btn-io btn-export" onclick="exportData()">⬇ Export Config</button>
@@ -657,6 +673,22 @@
   </div>
 </div>
 
+<!-- WEEK VIEW -->
+<div id="week-view" class="view" style="padding-top:calc(52px * var(--scale));height:100vh;overflow:hidden;flex-direction:column;">
+  <div id="week-header" style="display:flex;align-items:center;gap:12px;padding:10px 16px 8px;border-bottom:1px solid var(--border);flex-shrink:0;flex-wrap:wrap;">
+    <div style="font-family:var(--font-ui);font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--text-dim);">Weekly Schedule</div>
+    <div id="week-range" style="font-family:var(--font-mono);font-size:11px;color:var(--text-dim);"></div>
+    <div style="margin-left:auto;display:flex;gap:6px;align-items:center;">
+      <div id="week-nav-prev" onclick="shiftWeek(-1)" style="width:24px;height:24px;display:flex;align-items:center;justify-content:center;background:var(--surface);border:1px solid var(--border);border-radius:3px;cursor:pointer;color:var(--text-dim);font-size:13px;user-select:none;transition:all 0.15s;" onmouseover="this.style.color='var(--accent)';this.style.borderColor='var(--accent)'" onmouseout="this.style.color='var(--text-dim)';this.style.borderColor='var(--border)'">‹</div>
+      <div id="week-today-btn" onclick="resetWeekToToday()" style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:2px 7px;border-radius:3px;border:1px solid rgba(0,212,255,0.3);background:rgba(0,212,255,0.07);color:rgba(0,212,255,0.6);cursor:pointer;transition:all 0.15s;">This week</div>
+      <div id="week-nav-next" onclick="shiftWeek(1)" style="width:24px;height:24px;display:flex;align-items:center;justify-content:center;background:var(--surface);border:1px solid var(--border);border-radius:3px;cursor:pointer;color:var(--text-dim);font-size:13px;user-select:none;transition:all 0.15s;" onmouseover="this.style.color='var(--accent)';this.style.borderColor='var(--accent)'" onmouseout="this.style.color='var(--text-dim)';this.style.borderColor='var(--border)'">›</div>
+    </div>
+  </div>
+  <div id="week-grid-wrap" style="flex:1;overflow:auto;padding:0;">
+    <div id="week-grid" style="display:grid;grid-template-columns:repeat(7,minmax(130px,1fr));min-width:700px;height:100%;"></div>
+  </div>
+</div>
+
 <!-- ALERT MODAL -->
 <div id="alert-modal">
   <div id="alert-box">
@@ -725,6 +757,8 @@ function refreshCurrentView(){
   if(tv&&tv.classList.contains('active'))buildTimeline();
   if(av&&av.classList.contains('active'))buildAirlineView();
   if(pv&&pv.classList.contains('active'))buildProductionView();
+  const wv=document.getElementById('week-view');
+  if(wv&&wv.classList.contains('active'))buildWeekView();
 }
 
 /* DATA */
@@ -950,6 +984,7 @@ function switchView(v){
   if(v==='timeline')buildTimeline();
   if(v==='airline')buildAirlineView();
   if(v==='production')buildProductionView();
+  if(v==='week')buildWeekView();
   if(v==='config')renderConfig();
   closeDrawer();
 }
@@ -1254,6 +1289,96 @@ function scrollToNow(){
 /* BG SWATCHES */
 function initBgSwatches(){document.querySelectorAll('.bg-sw').forEach(sw=>{sw.addEventListener('click',()=>{bgTheme.hue=parseInt(sw.dataset.h);applyBgTheme();});});}
 
+
+/* WEEK VIEW */
+let weekOffset = 0; // weeks offset from current week
+
+function getWeekStart(offset) {
+  const now = new Date();
+  const day = now.getDay(); // 0=Sun
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - (day === 0 ? 6 : day - 1) + offset * 7);
+  monday.setHours(0,0,0,0);
+  return monday;
+}
+
+function shiftWeek(delta) { weekOffset += delta; buildWeekView(); }
+function resetWeekToToday() { weekOffset = 0; buildWeekView(); }
+
+function buildWeekView() {
+  const grid = document.getElementById('week-grid');
+  const range = document.getElementById('week-range');
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  const weekStart = getWeekStart(weekOffset);
+  const today = new Date(); today.setHours(0,0,0,0);
+  const DAY_NAMES = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const DAY_KEYS  = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
+  const MON_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const nm = nowMins();
+
+  // Week range label
+  const weekEnd = new Date(weekStart); weekEnd.setDate(weekStart.getDate() + 6);
+  if (range) range.textContent =
+    `${weekStart.getDate()} ${MON_SHORT[weekStart.getMonth()]} — ${weekEnd.getDate()} ${MON_SHORT[weekEnd.getMonth()]} ${weekEnd.getFullYear()}`;
+
+  for (let d = 0; d < 7; d++) {
+    const colDate = new Date(weekStart); colDate.setDate(weekStart.getDate() + d);
+    const isToday = colDate.getTime() === today.getTime();
+    const dayKey  = DAY_KEYS[d];
+
+    const col = document.createElement('div');
+    col.className = 'wk-col';
+
+    // Header
+    const head = document.createElement('div');
+    head.className = 'wk-col-head' + (isToday ? ' is-today' : '');
+    head.innerHTML = `<div class="wk-day">${DAY_NAMES[d]}</div><div class="wk-date">${colDate.getDate()} ${MON_SHORT[colDate.getMonth()]}</div>`;
+    col.appendChild(head);
+
+    // Flights for this day sorted by sealing time
+    const dayFlights = flights
+      .filter(f => f.days && f.days.includes(dayKey))
+      .sort((a, b) => t2m(a.sealing || a.eta || '00:00') - t2m(b.sealing || b.eta || '00:00'));
+
+    if (!dayFlights.length) {
+      const empty = document.createElement('div');
+      empty.className = 'wk-empty';
+      empty.textContent = 'No flights';
+      col.appendChild(empty);
+    } else {
+      dayFlights.forEach(f => {
+        const color = getColor(f.airline);
+        // past = today and time already passed (use sealing as reference)
+        const isPast = isToday && t2m(f.sealing || f.eta || '00:00') < nm;
+        const mt = (f.mealType || '').toLowerCase();
+        const mealBadge = (mt === 'halal' || mt === 'western')
+          ? `<div class="wk-fl-meal" style="background:${mt==='halal'?'rgba(255,221,102,0.15)':'rgba(200,170,255,0.15)'};color:${mt==='halal'?'#ffdd66':'#c8aaff'};border:1px solid ${mt==='halal'?'rgba(255,221,102,0.3)':'rgba(200,170,255,0.3)'};">${mt}</div>` : '';
+
+        const chips = [
+          f.sealing ? `<span class="wk-fl-chip" style="color:#ffaa44;border-color:rgba(255,170,68,0.3)">✂ ${f.sealing}</span>` : '',
+          f.truck   ? `<span class="wk-fl-chip" style="color:#ff6b6b;border-color:rgba(255,107,107,0.3)">🚚 ${f.truck}</span>` : '',
+          f.eta     ? `<span class="wk-fl-chip" style="color:#4dffb4;border-color:rgba(77,255,180,0.3)">▼ ${f.eta}</span>` : '',
+          f.etd     ? `<span class="wk-fl-chip" style="color:#66aaff;border-color:rgba(102,170,255,0.3)">▲ ${f.etd}</span>` : '',
+        ].filter(Boolean).join('');
+
+        const card = document.createElement('div');
+        card.className = 'wk-flight' + (isPast ? ' past' : '');
+        card.style.borderLeftColor = color;
+        card.innerHTML = `<div class="wk-fl-num" style="color:${color}">${f.flight}</div><div class="wk-fl-airline">${f.airline}</div>${mealBadge}<div class="wk-fl-times">${chips}</div>`;
+        col.appendChild(card);
+      });
+    }
+    grid.appendChild(col);
+  }
+
+  // Scroll today column into view on mobile
+  const todayCol = grid.children[DAY_KEYS.indexOf(DAY_KEYS[new Date().getDay()===0?6:new Date().getDay()-1])];
+  if (todayCol && window.innerWidth <= 768) {
+    setTimeout(() => todayCol.scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'}), 100);
+  }
+}
 
 /* GOOGLE SHEETS LIVE SYNC */
 const GSHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQKq3odF0k3pgL0sJYP7SZmFNkVVwSun02u79ipbE6qmecOxJinj6iZJxNEhHL0VbHxFYQSqSVQOlxA/pub?output=csv';
