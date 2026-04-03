@@ -69,7 +69,7 @@
 .fchk span { font-size: calc(9px * var(--scale)); font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.35; transition: opacity 0.15s; }
 .fchk.active .fchk-dot { opacity: 1; box-shadow: 0 0 5px currentColor; }
 .fchk.active span { opacity: 1; }
-.fchk-eta { color: #4dffb4; } .fchk-seal { color: #ffaa44; } .fchk-truck { color: #ff6b6b; } .fchk-etd { color: #66aaff; }
+.fchk-eta { color: #4dffb4; } .fchk-seal { color: #ffaa44; } .fchk-truck { color: #ff6b6b; } .fchk-etd { color: #66aaff; } .fchk-western { color: #c8aaff; } .fchk-halal { color: #ffdd66; }
 
 /* HAMBURGER MENU */
 #nav-tabs { display: none; }
@@ -231,7 +231,7 @@
 .cfg-fchk { display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); cursor: pointer; user-select: none; font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
 .cfg-fchk input { display: none; }
 .cfg-fchk.active { border-color: currentColor; background: rgba(255,255,255,0.05); }
-.cfg-fchk-eta { color: #4dffb4; } .cfg-fchk-etd { color: #66aaff; } .cfg-fchk-seal { color: #ffaa44; } .cfg-fchk-truck { color: #ff6b6b; }
+.cfg-fchk-eta { color: #4dffb4; } .cfg-fchk-etd { color: #66aaff; } .cfg-fchk-seal { color: #ffaa44; } .cfg-fchk-truck { color: #ff6b6b; } .cfg-fchk-western { color: #c8aaff; } .cfg-fchk-halal { color: #ffdd66; }
 .cfg-alert-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
 .cfg-alert-row label { font-size: 12px; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; }
 .cfg-range-row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
@@ -356,7 +356,7 @@
   .dr-fchk { display: flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); cursor: pointer; user-select: none; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
   .dr-fchk input { display: none; }
   .dr-fchk.active { border-color: currentColor; background: rgba(255,255,255,0.05); }
-  .dr-fchk-eta { color: #4dffb4; } .dr-fchk-etd { color: #66aaff; } .dr-fchk-seal { color: #ffaa44; } .dr-fchk-truck { color: #ff6b6b; }
+  .dr-fchk-eta { color: #4dffb4; } .dr-fchk-etd { color: #66aaff; } .dr-fchk-seal { color: #ffaa44; } .dr-fchk-truck { color: #ff6b6b; } .dr-fchk-western { color: #c8aaff; } .dr-fchk-halal { color: #ffdd66; }
   .dr-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
   .dr-row label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim); min-width: 80px; }
   .dr-row input[type=range] { flex: 1; accent-color: var(--accent); }
@@ -373,7 +373,7 @@
   #mobile-stats .spill:last-child { border-right: none; }
   #mobile-stats .spill .lbl { font-size: 8px; letter-spacing: 1px; }
   #mobile-stats .spill .val { font-size: 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  #mob-settings-btn { width: 60px; min-width: 60px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border-left: 2px solid var(--accent); font-size: 22px; cursor: pointer; color: var(--accent); background: rgba(0,212,255,0.06); user-select: none; transition: all 0.15s; }
+  #mob-settings-btn { width: 52px; min-width: 52px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border-left: 2px solid var(--accent); font-size: 20px; cursor: pointer; color: var(--accent); background: rgba(0,212,255,0.06); user-select: none; transition: all 0.15s; }
   #mob-settings-btn:active { background: rgba(0,212,255,0.18); }
   #mob-settings-btn.active { color: #fff; background: rgba(0,212,255,0.15); border-color: #fff; }
 
@@ -443,6 +443,10 @@
       <div class="ndrop-filter" onclick="toggleFilter('etd',!activeFilters.etd)" id="drop-fchk-etd"><span class="ndrop-filter-dot" style="background:#66aaff"></span><span>ETD</span><span class="ndrop-check">✓</span></div>
       <div class="ndrop-filter" onclick="toggleFilter('seal',!activeFilters.seal)" id="drop-fchk-seal"><span class="ndrop-filter-dot" style="background:#ffaa44"></span><span>Sealing</span><span class="ndrop-check">✓</span></div>
       <div class="ndrop-filter" onclick="toggleFilter('truck',!activeFilters.truck)" id="drop-fchk-truck"><span class="ndrop-filter-dot" style="background:#ff6b6b"></span><span>Truck Dep</span><span class="ndrop-check">✓</span></div>
+      <div class="ndrop-sep"></div>
+      <div class="ndrop-section-lbl">Meal Type</div>
+      <div class="ndrop-filter" onclick="toggleFilter('western',!activeFilters.western)" id="drop-fchk-western"><span class="ndrop-filter-dot" style="background:#c8aaff"></span><span>Western</span><span class="ndrop-check">✓</span></div>
+      <div class="ndrop-filter" onclick="toggleFilter('halal',!activeFilters.halal)" id="drop-fchk-halal"><span class="ndrop-filter-dot" style="background:#ffdd66"></span><span>Halal</span><span class="ndrop-check">✓</span></div>
       <div class="ndrop-sep"></div>
       <div class="ndrop-item" onclick="togglePanel();closeHamburger()" style="color:var(--accent);font-size:11px;"><span class="ndrop-dot" style="background:var(--accent)"></span>Toggle Panel</div>
       <div class="ndrop-item" onclick="toggleFullscreen();closeHamburger()" id="fullscreen-btn" style="color:#aaaaff;font-size:11px;"><span class="ndrop-dot" style="background:#aaaaff"></span>Fullscreen</div>
@@ -532,6 +536,11 @@
       <label class="cfg-fchk cfg-fchk-seal active" id="cfg-fchk-seal"><input type="checkbox" checked onchange="toggleFilter('seal',this.checked)"><span>● Sealing</span></label>
       <label class="cfg-fchk cfg-fchk-truck active" id="cfg-fchk-truck"><input type="checkbox" checked onchange="toggleFilter('truck',this.checked)"><span>● Truck Dep</span></label>
     </div>
+    <h2 style="margin-top:16px;">Meal Type</h2>
+    <div class="cfg-filter-row">
+      <label class="cfg-fchk cfg-fchk-western active" id="cfg-fchk-western"><input type="checkbox" checked onchange="toggleFilter('western',this.checked)"><span>● Western</span></label>
+      <label class="cfg-fchk cfg-fchk-halal active" id="cfg-fchk-halal"><input type="checkbox" checked onchange="toggleFilter('halal',this.checked)"><span>● Halal</span></label>
+    </div>
     <h2 style="margin-top:20px;">🔔 Alerts — Sealing &amp; Truck only</h2>
     <div class="cfg-alert-row">
       <label>Enable alerts</label>
@@ -583,6 +592,10 @@
   <div class="spill"><div class="lbl">Current</div><div class="val cur" id="mob-cur">—</div></div>
   <div class="spill"><div class="lbl">Next</div><div class="val nxt" id="mob-nxt">—</div></div>
   <div class="spill"><div class="lbl">Events</div><div class="val" id="mob-done">0</div></div>
+  <div id="mob-sync-status" style="display:flex;flex-direction:column;justify-content:center;align-items:center;width:54px;min-width:54px;flex-shrink:0;border-left:1px solid var(--border);gap:2px;padding:0 4px;">
+    <div id="mob-sync-dot" style="width:6px;height:6px;border-radius:50%;background:var(--text-muted);transition:background 0.4s;flex-shrink:0;"></div>
+    <div id="mob-sync-lbl" style="font-family:var(--font-mono);font-size:7px;color:var(--text-muted);letter-spacing:0.5px;text-transform:uppercase;text-align:center;line-height:1.2;white-space:nowrap;overflow:hidden;max-width:48px;"></div>
+  </div>
   <div id="mob-settings-btn">⚙</div>
 </div>
 
@@ -599,6 +612,11 @@
         <label class="dr-fchk dr-fchk-etd active" id="dr-fchk-etd"><input type="checkbox" checked onchange="toggleFilter('etd',this.checked)"><span>● ETD</span></label>
         <label class="dr-fchk dr-fchk-seal active" id="dr-fchk-seal"><input type="checkbox" checked onchange="toggleFilter('seal',this.checked)"><span>● Sealing</span></label>
         <label class="dr-fchk dr-fchk-truck active" id="dr-fchk-truck"><input type="checkbox" checked onchange="toggleFilter('truck',this.checked)"><span>● Truck Dep</span></label>
+      </div>
+      <div class="dr-section-title" style="margin-top:12px;">Meal Type</div>
+      <div class="dr-filters">
+        <label class="dr-fchk dr-fchk-western active" id="dr-fchk-western"><input type="checkbox" checked onchange="toggleFilter('western',this.checked)"><span>● Western</span></label>
+        <label class="dr-fchk dr-fchk-halal active" id="dr-fchk-halal"><input type="checkbox" checked onchange="toggleFilter('halal',this.checked)"><span>● Halal</span></label>
       </div>
     </div>
     <div class="dr-section">
@@ -670,41 +688,7 @@ const DEF_AIRLINES = [
   {id:'qantas_perth',name:'Qantas PERTH',color:'#ff8c00'},{id:'air_congo',name:'Air Congo',color:'#009933'},
 ];
 const DEF_FLIGHTS = [
-  {id:'f1',airline:"Air Cote D'Ivoire",flight:'HF903',eta:'01:25',etd:'03:00',sealing:'00:00',truck:'01:00',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f2',airline:'Asky',flight:'KP0073',eta:'01:35',etd:'03:40',sealing:'00:00',truck:'01:00',days:['MON','WED','THU','FRI','SUN']},
-  {id:'f3',airline:'Air Algerie',flight:'AH5361',eta:'06:25',etd:'07:55',sealing:'04:45',truck:'05:45',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f4',airline:"Air Cote D'Ivoire",flight:'HF903',eta:'01:55',etd:'04:55',sealing:'00:30',truck:'01:30',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f5',airline:'Air Seychelles',flight:'HM062',eta:'18:45',etd:'09:00',sealing:'05:15',truck:'06:15',days:['TUE']},
-  {id:'f6',airline:'Ethiopian',flight:'ET848',eta:'03:55',etd:'08:20',sealing:'05:20',truck:'06:20',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f7',airline:'Lufthansa',flight:'LH579',eta:'06:40',etd:'08:45',sealing:'04:10',truck:'06:10',days:['MON','WED','SAT']},
-  {id:'f8',airline:'Air China',flight:'CA868',eta:'07:40',etd:'10:10',sealing:'06:10',truck:'07:10',days:['MON','WED','FRI']},
-  {id:'f9',airline:'Emirates',flight:'EK768',eta:'05:30',etd:'10:05',sealing:'05:05',truck:'07:05',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f10',airline:'Air Seychelles',flight:'HM062',eta:'19:00',etd:'09:00',sealing:'05:00',truck:'06:00',days:['SUN']},
-  {id:'f11',airline:'Etihad',flight:'EY748',eta:'08:15',etd:'09:45',sealing:'06:45',truck:'07:45',days:['MON','WED','THU','FRI','SAT','SUN']},
-  {id:'f12',airline:'Cathay',flight:'CX748',eta:'07:45',etd:'11:05',sealing:'05:30',truck:'07:30',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f13',airline:'Emirates',flight:'EK762',eta:'10:15',etd:'13:25',sealing:'07:35',truck:'09:35',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f14',airline:'Air Seychelles',flight:'HM060',eta:'10:30',etd:'11:50',sealing:'09:00',truck:'10:00',days:['TUE','FRI','SUN']},
-  {id:'f15',airline:'Air Mauritius',flight:'MK852',eta:'11:25',etd:'13:10',sealing:'09:55',truck:'10:55',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f16',airline:'Uganda',flight:'UR711',eta:'11:45',etd:'12:50',sealing:'10:00',truck:'11:00',days:['WED','FRI','SAT']},
-  {id:'f17',airline:'Latam',flight:'LA8059',eta:'11:55',etd:'14:50',sealing:'10:00',truck:'11:50',days:['MON','TUE','THU','FRI','SUN']},
-  {id:'f18',airline:'Uganda',flight:'UR711',eta:'15:25',etd:'16:25',sealing:'14:00',truck:'15:00',days:['MON']},
-  {id:'f19',airline:'Air Congo',flight:'ET83',eta:'16:20',etd:'17:30',sealing:'14:45',truck:'15:45',days:['WED','FRI','SUN']},
-  {id:'f20',airline:'Emirates',flight:'EK764',eta:'16:15',etd:'19:10',sealing:'13:45',truck:'15:45',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f21',airline:'Qantas',flight:'QF064',eta:'16:25',etd:'18:45',sealing:'13:55',truck:'15:55',days:['MON','WED','THU','SAT']},
-  {id:'f22',airline:'Lufthansa',flight:'LH573',eta:'08:35',etd:'19:00',sealing:'15:00',truck:'16:00',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f23',airline:'British Airways',flight:'BA056',eta:'09:25',etd:'19:25',sealing:'14:25',truck:'16:25',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f24',airline:'Virgin Atlantic',flight:'VS450',eta:'10:25',etd:'20:25',sealing:'16:25',truck:'17:25',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f25',airline:'Air Algerie',flight:'AH5361',eta:'09:20',etd:'20:20',sealing:'17:45',truck:'18:30',days:['MON','WED','SAT']},
-  {id:'f26',airline:'Delta',flight:'DL201',eta:'19:40',etd:'21:55',sealing:'16:55',truck:'18:55',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f27',airline:'Uganda',flight:'UR713',eta:'19:40',etd:'20:40',sealing:'18:10',truck:'19:10',days:['TUE','THU']},
-  {id:'f28',airline:'British Airways',flight:'BA054',eta:'07:00',etd:'21:15',sealing:'17:15',truck:'19:15',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f29',airline:'Qantas PERTH',flight:'QF066',eta:'20:05',etd:'21:55',sealing:'18:25',truck:'19:25',days:['TUE','FRI','SUN']},
-  {id:'f30',airline:'EgyptAir',flight:'MS840',eta:'08:10',etd:'22:25',sealing:'18:25',truck:'19:25',days:['MON','WED','FRI','SUN']},
-  {id:'f31',airline:'United',flight:'UA187',eta:'18:30',etd:'22:00',sealing:'17:30',truck:'19:30',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f32',airline:'Ethiopian',flight:'ET858',eta:'20:10',etd:'22:50',sealing:'18:40',truck:'19:40',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f33',airline:'Emirates',flight:'EK766',eta:'20:35',etd:'22:20',sealing:'18:00',truck:'20:00',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f34',airline:'Air Austral',flight:'UU344',eta:'20:45',etd:'21:45',sealing:'19:30',truck:'20:15',days:['TUE','THU','SUN']},
-  {id:'f35',airline:'Uganda',flight:'UR711',eta:'23:45',etd:'00:45',sealing:'21:15',truck:'22:00',days:['SUN']},
+  {id:'test1',airline:'Emirates',mealType:'halal',flight:'EK768',eta:'10:00',etd:'14:30',sealing:'11:30',truck:'12:30',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
 ];
 
 const ALLDAYS=['SUN','MON','TUE','WED','THU','FRI','SAT'];
@@ -712,7 +696,7 @@ const DAY_LABELS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','S
 const MON_LABELS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
 let airlines=[], flights=[], ds={blockH:88,zoom:3,showAl:true};
-let activeFilters={eta:true,etd:true,seal:true,truck:true};
+let activeFilters={eta:true,etd:true,seal:true,truck:true,western:true,halal:true};
 const isMobile=()=>window.innerWidth<=768;
 
 /* DATE */
@@ -746,13 +730,13 @@ function refreshCurrentView(){
 /* DATA */
 function loadData(){
   const a=localStorage.getItem('cop_airlines');airlines=a?JSON.parse(a):JSON.parse(JSON.stringify(DEF_AIRLINES));
-  const f=localStorage.getItem('cop_flights');flights=f?JSON.parse(f):JSON.parse(JSON.stringify(DEF_FLIGHTS));
+  flights=JSON.parse(JSON.stringify(DEF_FLIGHTS)); // test flight shown until GSheet loads
   const d=localStorage.getItem('cop_display');if(d)ds={...ds,...JSON.parse(d)};
   const fi=localStorage.getItem('cop_filters');if(fi)activeFilters={...activeFilters,...JSON.parse(fi)};
 }
 function saveData(){
   localStorage.setItem('cop_airlines',JSON.stringify(airlines));
-  localStorage.setItem('cop_flights',JSON.stringify(flights));
+  // flights not saved to localStorage — source of truth is Google Sheet
   localStorage.setItem('cop_display',JSON.stringify(ds));
   localStorage.setItem('cop_filters',JSON.stringify(activeFilters));
 }
@@ -774,14 +758,22 @@ function applyNightMode(){
   }
 }
 
+function mealTypeVisible(f){
+  const mt=(f.mealType||'').toLowerCase();
+  if(mt==='halal') return activeFilters.halal;
+  if(mt==='western') return activeFilters.western;
+  return true; // unknown meal type always shown
+}
+
 function todayEvents(){
   const day=viewDayOfWeek(),evs=[];
   for(const f of flights){
     if(!f.days.includes(day))continue;
-    if(f.sealing&&activeFilters.seal)evs.push({key:f.id+'_sl',time:f.sealing,type:'seal',lbl:'Sealing',flight:f.flight,airline:f.airline,tc:'type-seal'});
-    if(f.truck&&activeFilters.truck)evs.push({key:f.id+'_tr',time:f.truck,type:'truck',lbl:'Truck Dep',flight:f.flight,airline:f.airline,tc:'type-truck'});
-    if(f.eta&&activeFilters.eta)evs.push({key:f.id+'_et',time:f.eta,type:'eta',lbl:'ETA',flight:f.flight,airline:f.airline,tc:'type-eta'});
-    if(f.etd&&activeFilters.etd)evs.push({key:f.id+'_ed',time:f.etd,type:'etd',lbl:'ETD',flight:f.flight,airline:f.airline,tc:'type-etd'});
+    if(!mealTypeVisible(f))continue;
+    if(f.sealing&&activeFilters.seal)evs.push({key:f.id+'_sl',time:f.sealing,type:'seal',lbl:'Sealing',flight:f.flight,airline:f.airline,mealType:f.mealType||'',tc:'type-seal'});
+    if(f.truck&&activeFilters.truck)evs.push({key:f.id+'_tr',time:f.truck,type:'truck',lbl:'Truck Dep',flight:f.flight,airline:f.airline,mealType:f.mealType||'',tc:'type-truck'});
+    if(f.eta&&activeFilters.eta)evs.push({key:f.id+'_et',time:f.eta,type:'eta',lbl:'ETA',flight:f.flight,airline:f.airline,mealType:f.mealType||'',tc:'type-eta'});
+    if(f.etd&&activeFilters.etd)evs.push({key:f.id+'_ed',time:f.etd,type:'etd',lbl:'ETD',flight:f.flight,airline:f.airline,mealType:f.mealType||'',tc:'type-etd'});
   }
   evs.sort((a,b)=>t2m(a.time)-t2m(b.time));
   return evs;
@@ -837,7 +829,9 @@ function buildTimelineDesktop(inner,evs,nm){
     b.className=`eblock ${ev.tc}${isPast?' past':''}`;
     b.style.cssText=`left:${LANE+col*(BW+GAP)}px;top:${y}px;width:${BW}px;height:${bh}px;border-left-color:${color};`;
     const fr24Btns=makeFR24Btns(ev.flight,ev.type);
-    const alPart=ds.showAl?`<div class="eb-airline">${ev.airline}</div>`:'';
+    const mt=ev.mealType||'';
+    const mtBadge=(mt==='halal'||mt==='western')?`<span style="font-size:8px;padding:1px 5px;border-radius:3px;font-weight:700;letter-spacing:1px;text-transform:uppercase;background:${mt==='halal'?'rgba(255,221,102,0.15)':'rgba(200,170,255,0.15)'};color:${mt==='halal'?'#ffdd66':'#c8aaff'};border:1px solid ${mt==='halal'?'rgba(255,221,102,0.3)':'rgba(200,170,255,0.3)'};">${mt}</span>`:'';
+    const alPart=ds.showAl?`<div class="eb-airline" style="display:flex;align-items:center;gap:4px;">${ev.airline}${mtBadge?' '+mtBadge:''}</div>`:'';
     b.innerHTML=`<div class="eb"><div class="eb-time">${ev.time}</div><div class="eb-type">${ev.lbl}</div><div class="eb-flight">${ev.flight}</div>${alPart}<div class="eb-acts">${fr24Btns}</div></div>`;
     inner.appendChild(b);
   }
@@ -859,7 +853,9 @@ function buildTimelineMobile(inner,evs,nm){
     b.className=`eblock ${ev.tc}${isPast?' past':''}`;
     b.style.borderLeftColor=color;
     const fr24Btns=makeFR24Btns(ev.flight,ev.type);
-    b.innerHTML=`<div class="eb"><div class="eb-top-row"><span class="eb-time">${ev.time}</span><span class="eb-type-badge">${ev.lbl}</span><span class="eb-flight" style="color:${color}">${ev.flight}</span></div><div class="eb-airline">${ev.airline}</div><div class="eb-acts">${fr24Btns}</div></div>`;
+    const mtm=ev.mealType||'';
+    const mtmBadge=(mtm==='halal'||mtm==='western')?`<span style="font-size:7px;padding:1px 4px;border-radius:3px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;background:${mtm==='halal'?'rgba(255,221,102,0.15)':'rgba(200,170,255,0.15)'};color:${mtm==='halal'?'#ffdd66':'#c8aaff'};border:1px solid ${mtm==='halal'?'rgba(255,221,102,0.3)':'rgba(200,170,255,0.3)'};">${mtm}</span>`:'';
+    b.innerHTML=`<div class="eb"><div class="eb-top-row"><span class="eb-time">${ev.time}</span><span class="eb-type-badge">${ev.lbl}</span><span class="eb-flight" style="color:${color}">${ev.flight}</span></div><div class="eb-airline" style="display:flex;align-items:center;gap:4px;">${ev.airline}${mtmBadge?' '+mtmBadge:''}</div><div class="eb-acts">${fr24Btns}</div></div>`;
     inner.appendChild(b);
   }
   if(nm>=0&&!nowInserted){const nd=document.createElement('div');nd.className='mob-now-sep';inner.appendChild(nd);}
@@ -903,12 +899,10 @@ function updateLeg(){
 
 function toggleFilter(type,checked){
   activeFilters[type]=checked;
-  // sync all checkbox-based filters (config view)
   ['fchk-','dr-fchk-','cfg-fchk-'].forEach(pfx=>{
     const el=document.getElementById(pfx+type);
     if(el){el.classList.toggle('active',checked);const cb=el.querySelector('input');if(cb)cb.checked=checked;}
   });
-  // sync dropdown filters
   const df=document.getElementById('drop-fchk-'+type);
   if(df) df.classList.toggle('active',checked);
   saveData();buildTimeline();
@@ -996,7 +990,7 @@ function renderConfig(){
   const ht=document.getElementById('cfg-ht');if(ht)ht.value=ds.blockH;
   const htv=document.getElementById('cfg-ht-v');if(htv)htv.textContent=ds.blockH+'px';
   const al=document.getElementById('cfg-al');if(al)al.checked=ds.showAl;
-  ['eta','etd','seal','truck'].forEach(f=>{
+  ['eta','etd','seal','truck','western','halal'].forEach(f=>{
     const el=document.getElementById('cfg-fchk-'+f);
     if(el){el.classList.toggle('active',activeFilters[f]);const cb=el.querySelector('input');if(cb)cb.checked=activeFilters[f];}
   });
@@ -1285,15 +1279,19 @@ function parseCSVRow(line){
 }
 
 function setSyncStatus(state, msg){
-  // state: 'ok' | 'error' | 'loading' | 'idle'
-  const dot = document.getElementById('sync-dot');
-  const lbl = document.getElementById('sync-lbl');
-  if(!dot || !lbl) return;
   const colors = {ok:'#4dffb4', error:'#ff6b6b', loading:'#ffaa44', idle:'var(--text-muted)'};
-  dot.style.background = colors[state] || colors.idle;
-  dot.style.boxShadow = (state==='ok'||state==='loading') ? '0 0 6px '+colors[state] : 'none';
-  lbl.style.color = state==='idle' ? 'var(--text-muted)' : colors[state];
-  lbl.textContent = msg;
+  const col = colors[state] || colors.idle;
+  const glow = (state==='ok'||state==='loading') ? '0 0 6px '+col : 'none';
+  // Desktop topbar indicator
+  const dot=document.getElementById('sync-dot');
+  const lbl=document.getElementById('sync-lbl');
+  if(dot){dot.style.background=col;dot.style.boxShadow=glow;}
+  if(lbl){lbl.style.color=state==='idle'?'var(--text-muted)':col;lbl.textContent=msg;}
+  // Mobile bottom bar indicator
+  const mdot=document.getElementById('mob-sync-dot');
+  const mlbl=document.getElementById('mob-sync-lbl');
+  if(mdot){mdot.style.background=col;mdot.style.boxShadow=glow;}
+  if(mlbl){mlbl.style.color=state==='idle'?'var(--text-muted)':col;mlbl.textContent=msg;}
 }
 
 function applyCSVData(text){
@@ -1308,24 +1306,26 @@ function applyCSVData(text){
   const newFlights=[];
   dataLines.forEach((line,i)=>{
     const cols=parseCSVRow(line);
-    if(cols.length<8){
+    // Columns: SI(0) Airline(1) H/W(2) Flight(3) ETA(4) ETD(5) Sealing(6) Truck(7) Days(8)
+    if(cols.length<9){
       console.warn('GSheet: row',i,'only has',cols.length,'cols, skipping:',cols);
       return;
     }
-    const airline=cols[1].replace(/"/g,'').trim();
-    const flight=cols[2].replace(/"/g,'').trim();
-    const eta=cols[3].replace(/"/g,'').trim();
-    const etd=cols[4].replace(/"/g,'').trim();
-    const seal=cols[5].replace(/"/g,'').trim();
-    const truck=cols[6].replace(/"/g,'').trim();
-    const daysRaw=cols[7].replace(/"/g,'').trim();
+    const airline  = cols[1].replace(/"/g,'').trim();
+    const mealType = cols[2].replace(/"/g,'').trim().toLowerCase(); // halal or western
+    const flight   = cols[3].replace(/"/g,'').trim();
+    const eta      = cols[4].replace(/"/g,'').trim();
+    const etd      = cols[5].replace(/"/g,'').trim();
+    const seal     = cols[6].replace(/"/g,'').trim();
+    const truck    = cols[7].replace(/"/g,'').trim();
+    const daysRaw  = cols[8].replace(/"/g,'').trim();
     if(!flight||!airline)return;
     const days=parseDaysStr(daysRaw);
     if(!days.length){
-      console.warn('GSheet: no days for',flight,'raw:',daysRaw);
+      // Days=0 or empty means flight not active — skip silently
       return;
     }
-    newFlights.push({id:'gs'+i,airline,flight,eta,etd,sealing:seal,truck,days});
+    newFlights.push({id:'gs'+i,airline,mealType,flight,eta,etd,sealing:seal,truck,days});
   });
   if(newFlights.length>0){
     flights=newFlights;
@@ -1334,6 +1334,7 @@ function applyCSVData(text){
     setSyncStatus('ok', ts+' ✓ '+newFlights.length+'f');
     showToast('\u2713 '+newFlights.length+' flights loaded');
     refreshCurrentView();
+    setTimeout(scrollToNow, 30000);
     console.log('GSheet OK:',newFlights.length,'flights loaded');
     return true;
   }
@@ -1376,7 +1377,7 @@ loadData();
 fetchGSheet();
 if(!localStorage.getItem('cop_display')){if(window.innerWidth<=768)ds.zoom=2;else if(window.innerWidth<=1100)ds.zoom=2.5;else ds.zoom=3;}
 
-['eta','etd','seal','truck'].forEach(f=>{
+['eta','etd','seal','truck','western','halal'].forEach(f=>{
   ['fchk-','dr-fchk-','cfg-fchk-'].forEach(pfx=>{
     const el=document.getElementById(pfx+f);if(!el)return;
     el.classList.toggle('active',activeFilters[f]);
