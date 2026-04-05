@@ -316,7 +316,8 @@
   .mob-ntab:last-child { border-right: none; }
   .mob-ntab.active { color: var(--accent); background: #001820; }
 
-  #timeline-view { padding-top: 48px; padding-bottom: 60px; }
+  #sync-status { display: none !important; }
+    #timeline-view { padding-top: 48px; padding-bottom: 60px; }
   #right-panel { display: none !important; }
   /* Hamburger always visible on mobile */
   .logo { font-size: 11px !important; letter-spacing: 1px !important; padding: 0 8px !important; flex-shrink: 1 !important; max-width: 100px !important; overflow: hidden !important; }
@@ -471,6 +472,30 @@
   .wk-fl-num { font-size: 11px; }
   .wk-col-head .wk-day { font-size: 10px; letter-spacing: 1px; }
 }
+
+/* FLIGHT SEARCH */
+#search-btn{display:flex;align-items:center;justify-content:center;height:100%;width:44px;min-width:44px;border-left:1px solid var(--border);cursor:pointer;color:var(--text-dim);font-size:18px;transition:all 0.15s;flex-shrink:0;user-select:none;}
+#search-btn:hover{color:var(--accent);background:var(--surface);}
+#search-overlay{display:none;position:fixed;inset:0;z-index:1200;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);align-items:flex-start;justify-content:center;padding-top:80px;}
+#search-overlay.show{display:flex;}
+#search-box{background:#1e2230;border:1px solid var(--border);border-radius:12px;width:90%;max-width:420px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.8);}
+#search-input-wrap{display:flex;align-items:center;padding:0 16px;gap:10px;border-bottom:1px solid var(--border);}
+#search-input-wrap .si-icon{font-size:18px;color:var(--text-dim);flex-shrink:0;}
+#search-input{flex:1;background:transparent;border:none;outline:none;font-family:var(--font-mono);font-size:18px;color:var(--text);padding:16px 0;letter-spacing:1px;text-transform:uppercase;}
+#search-input::placeholder{color:var(--text-muted);text-transform:none;letter-spacing:0;font-size:15px;}
+#search-clear{font-size:18px;color:var(--text-muted);cursor:pointer;padding:4px;flex-shrink:0;display:none;}
+#search-clear.show{display:block;}
+#search-results{max-height:320px;overflow-y:auto;}
+.sr-item{display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;border-bottom:1px solid var(--border);transition:background 0.1s;}
+.sr-item:last-child{border-bottom:none;}
+.sr-item:hover{background:var(--surface2);}
+.sr-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.sr-flight{font-family:var(--font-mono);font-size:16px;font-weight:700;}
+.sr-airline{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--text-dim);}
+.sr-times{display:flex;gap:6px;flex-wrap:wrap;margin-top:3px;}
+.sr-chip{font-family:var(--font-mono);font-size:9px;padding:2px 6px;border-radius:3px;border:1px solid;}
+.sr-empty{padding:20px 16px;font-family:var(--font-mono);font-size:12px;color:var(--text-dim);text-align:center;}
+@media(max-width:768px){#search-overlay{padding-top:56px;}#search-btn{width:40px;min-width:40px;font-size:16px;}}
 </style>
 </head>
 <body>
@@ -479,6 +504,10 @@
   <div class="logo">⬡ JNB CATERING OPS</div>
   <div id="date-str"></div>
   <div id="clock">00:00:00</div>
+  <div id="sync-status" title="Google Sheet sync status" style="display:flex;align-items:center;height:100%;padding:0 10px;border-right:1px solid var(--border);gap:5px;cursor:default;flex-shrink:0;">
+    <div id="sync-dot" style="width:7px;height:7px;border-radius:50%;background:var(--text-muted);flex-shrink:0;transition:background 0.4s;"></div>
+    <div id="sync-lbl" style="font-family:var(--font-mono);font-size:9px;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase;white-space:nowrap;transition:color 0.4s;">No sync</div>
+  </div>
   <div id="date-picker-wrap">
     <span class="dp-lbl">View</span>
     <div id="date-nav-prev" onclick="shiftDate(-1)" title="Previous day">‹</div>
@@ -491,6 +520,7 @@
     <div class="spill"><div class="lbl">Current</div><div class="val cur" id="cur-ev">—</div></div>
     <div class="spill"><div class="lbl">Next</div><div class="val nxt" id="nxt-ev">—</div></div>
   </div>
+  <div id="search-btn" onclick="openSearch()" title="Search flight">🔍</div>
   <div id="hamburger-wrap">
     <div id="hamburger-btn" onclick="toggleHamburger()">
       <span></span><span></span><span></span>
@@ -644,6 +674,10 @@
   <div class="spill"><div class="lbl">Current</div><div class="val cur" id="mob-cur">—</div></div>
   <div class="spill"><div class="lbl">Next</div><div class="val nxt" id="mob-nxt">—</div></div>
   <div class="spill"><div class="lbl">Events</div><div class="val" id="mob-done">0</div></div>
+  <div id="mob-sync-status" style="display:flex;flex-direction:column;justify-content:center;align-items:center;width:54px;min-width:54px;flex-shrink:0;border-left:1px solid var(--border);gap:2px;padding:0 4px;">
+    <div id="mob-sync-dot" style="width:6px;height:6px;border-radius:50%;background:var(--text-muted);transition:background 0.4s;flex-shrink:0;"></div>
+    <div id="mob-sync-lbl" style="font-family:var(--font-mono);font-size:7px;color:var(--text-muted);letter-spacing:0.5px;text-transform:uppercase;text-align:center;line-height:1.2;white-space:nowrap;overflow:hidden;max-width:48px;"></div>
+  </div>
   <div id="mob-settings-btn">⚙</div>
 </div>
 
@@ -697,6 +731,18 @@
 <div id="production-view" class="view" style="padding-top:52px;height:100vh;overflow:hidden;">
   <div id="prod-tl-main" style="flex:1;overflow-y:auto;overflow-x:hidden;position:relative;">
     <div id="prod-inner-main" style="position:relative;"></div>
+  </div>
+</div>
+
+<!-- FLIGHT SEARCH -->
+<div id="search-overlay" onclick="if(event.target===this)closeSearch()">
+  <div id="search-box" onclick="event.stopPropagation()">
+    <div id="search-input-wrap">
+      <span class="si-icon">🔍</span>
+      <input id="search-input" type="text" placeholder="Flight number or airline..." autocomplete="off" autocorrect="off" spellcheck="false" oninput="runSearch(this.value)">
+      <span id="search-clear" onclick="clearSearch()">✕</span>
+    </div>
+    <div id="search-results"></div>
   </div>
 </div>
 
@@ -766,41 +812,8 @@ const DEF_AIRLINES = [
   {id:'qantas_perth',name:'Qantas PERTH',color:'#ff8c00'},{id:'air_congo',name:'Air Congo',color:'#009933'},
 ];
 const DEF_FLIGHTS = [
-  {id:'f1',airline:"Air Cote D'Ivoire",flight:'HF903',eta:'01:25',etd:'03:00',sealing:'00:00',truck:'01:00',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f2',airline:'Asky',flight:'KP0073',eta:'01:35',etd:'03:40',sealing:'00:00',truck:'01:00',days:['MON','WED','THU','FRI','SUN']},
-  {id:'f3',airline:'Air Algerie',flight:'AH5361',eta:'06:25',etd:'07:55',sealing:'04:45',truck:'05:45',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f4',airline:"Air Cote D'Ivoire",flight:'HF903',eta:'01:55',etd:'04:55',sealing:'00:30',truck:'01:30',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f5',airline:'Air Seychelles',flight:'HM062',eta:'18:45',etd:'09:00',sealing:'05:15',truck:'06:15',days:['TUE']},
-  {id:'f6',airline:'Ethiopian',flight:'ET848',eta:'03:55',etd:'08:20',sealing:'05:20',truck:'06:20',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f7',airline:'Lufthansa',flight:'LH579',eta:'06:40',etd:'08:45',sealing:'04:10',truck:'06:10',days:['MON','WED','SAT']},
-  {id:'f8',airline:'Air China',flight:'CA868',eta:'07:40',etd:'10:10',sealing:'06:10',truck:'07:10',days:['MON','WED','FRI']},
-  {id:'f9',airline:'Emirates',flight:'EK768',eta:'05:30',etd:'10:05',sealing:'05:05',truck:'07:05',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f10',airline:'Air Seychelles',flight:'HM062',eta:'19:00',etd:'09:00',sealing:'05:00',truck:'06:00',days:['SUN']},
-  {id:'f11',airline:'Etihad',flight:'EY748',eta:'08:15',etd:'09:45',sealing:'06:45',truck:'07:45',days:['MON','WED','THU','FRI','SAT','SUN']},
-  {id:'f12',airline:'Cathay',flight:'CX748',eta:'07:45',etd:'11:05',sealing:'05:30',truck:'07:30',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f13',airline:'Emirates',flight:'EK762',eta:'10:15',etd:'13:25',sealing:'07:35',truck:'09:35',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f14',airline:'Air Seychelles',flight:'HM060',eta:'10:30',etd:'11:50',sealing:'09:00',truck:'10:00',days:['TUE','FRI','SUN']},
-  {id:'f15',airline:'Air Mauritius',flight:'MK852',eta:'11:25',etd:'13:10',sealing:'09:55',truck:'10:55',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f16',airline:'Uganda',flight:'UR711',eta:'11:45',etd:'12:50',sealing:'10:00',truck:'11:00',days:['WED','FRI','SAT']},
-  {id:'f17',airline:'Latam',flight:'LA8059',eta:'11:55',etd:'14:50',sealing:'10:00',truck:'11:50',days:['MON','TUE','THU','FRI','SUN']},
-  {id:'f18',airline:'Uganda',flight:'UR711',eta:'15:25',etd:'16:25',sealing:'14:00',truck:'15:00',days:['MON']},
-  {id:'f19',airline:'Air Congo',flight:'ET83',eta:'16:20',etd:'17:30',sealing:'14:45',truck:'15:45',days:['WED','FRI','SUN']},
-  {id:'f20',airline:'Emirates',flight:'EK764',eta:'16:15',etd:'19:10',sealing:'13:45',truck:'15:45',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f21',airline:'Qantas',flight:'QF064',eta:'16:25',etd:'18:45',sealing:'13:55',truck:'15:55',days:['MON','WED','THU','SAT']},
-  {id:'f22',airline:'Lufthansa',flight:'LH573',eta:'08:35',etd:'19:00',sealing:'15:00',truck:'16:00',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f23',airline:'British Airways',flight:'BA056',eta:'09:25',etd:'19:25',sealing:'14:25',truck:'16:25',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f24',airline:'Virgin Atlantic',flight:'VS450',eta:'10:25',etd:'20:25',sealing:'16:25',truck:'17:25',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f25',airline:'Air Algerie',flight:'AH5361',eta:'09:20',etd:'20:20',sealing:'17:45',truck:'18:30',days:['MON','WED','SAT']},
-  {id:'f26',airline:'Delta',flight:'DL201',eta:'19:40',etd:'21:55',sealing:'16:55',truck:'18:55',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f27',airline:'Uganda',flight:'UR713',eta:'19:40',etd:'20:40',sealing:'18:10',truck:'19:10',days:['TUE','THU']},
-  {id:'f28',airline:'British Airways',flight:'BA054',eta:'07:00',etd:'21:15',sealing:'17:15',truck:'19:15',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f29',airline:'Qantas PERTH',flight:'QF066',eta:'20:05',etd:'21:55',sealing:'18:25',truck:'19:25',days:['TUE','FRI','SUN']},
-  {id:'f30',airline:'EgyptAir',flight:'MS840',eta:'08:10',etd:'22:25',sealing:'18:25',truck:'19:25',days:['MON','WED','FRI','SUN']},
-  {id:'f31',airline:'United',flight:'UA187',eta:'18:30',etd:'22:00',sealing:'17:30',truck:'19:30',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f32',airline:'Ethiopian',flight:'ET858',eta:'20:10',etd:'22:50',sealing:'18:40',truck:'19:40',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f33',airline:'Emirates',flight:'EK766',eta:'20:35',etd:'22:20',sealing:'18:00',truck:'20:00',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
-  {id:'f34',airline:'Air Austral',flight:'UU344',eta:'20:45',etd:'21:45',sealing:'19:30',truck:'20:15',days:['TUE','THU','SUN']},
-  {id:'f35',airline:'Uganda',flight:'UR711',eta:'23:45',etd:'00:45',sealing:'21:15',truck:'22:00',days:['SUN']},
+  // placeholder shown briefly before GSheet loads
+  {id:'test1',airline:'Emirates',mealType:'halal',flight:'EK768',eta:'10:00',etd:'14:30',sealing:'11:30',truck:'12:30',days:['MON','TUE','WED','THU','FRI','SAT','SUN']},
 ];
 
 const ALLDAYS=['SUN','MON','TUE','WED','THU','FRI','SAT'];
@@ -844,13 +857,13 @@ function refreshCurrentView(){
 /* DATA */
 function loadData(){
   const a=localStorage.getItem('cop_airlines');airlines=a?JSON.parse(a):JSON.parse(JSON.stringify(DEF_AIRLINES));
-  const f=localStorage.getItem('cop_flights');flights=f?JSON.parse(f):JSON.parse(JSON.stringify(DEF_FLIGHTS));
+  flights=JSON.parse(JSON.stringify(DEF_FLIGHTS)); // temp placeholder until GSheet loads
   const d=localStorage.getItem('cop_display');if(d)ds={...ds,...JSON.parse(d)};
   const fi=localStorage.getItem('cop_filters');if(fi)activeFilters={...activeFilters,...JSON.parse(fi)};
 }
 function saveData(){
   localStorage.setItem('cop_airlines',JSON.stringify(airlines));
-  localStorage.setItem('cop_flights',JSON.stringify(flights));
+  // flights not saved - source of truth is Google Sheet
   localStorage.setItem('cop_display',JSON.stringify(ds));
   localStorage.setItem('cop_filters',JSON.stringify(activeFilters));
 }
@@ -1514,6 +1527,60 @@ function closeFlightSheet(){
   sheet.addEventListener('touchend',()=>{sheet.style.transition='';sheet.style.transform='';if(dy>80)closeFlightSheet();});
 })();
 
+/* FLIGHT SEARCH */
+function openSearch(){
+  document.getElementById('search-overlay').classList.add('show');
+  setTimeout(function(){document.getElementById('search-input').focus();},80);
+  runSearch('');
+}
+function closeSearch(){
+  document.getElementById('search-overlay').classList.remove('show');
+  document.getElementById('search-input').value='';
+  document.getElementById('search-clear').classList.remove('show');
+  document.getElementById('search-results').innerHTML='';
+}
+function clearSearch(){
+  document.getElementById('search-input').value='';
+  document.getElementById('search-clear').classList.remove('show');
+  document.getElementById('search-input').focus();
+  runSearch('');
+}
+function runSearch(q){
+  const clr=document.getElementById('search-clear');
+  if(clr)clr.classList.toggle('show',q.length>0);
+  const res=document.getElementById('search-results');
+  if(!res)return;
+  const query=q.trim().toUpperCase();
+  const matched=flights.filter(function(f){
+    return f.flight.toUpperCase().includes(query)||f.airline.toUpperCase().includes(query);
+  }).slice(0,12);
+  if(!matched.length){
+    res.innerHTML='<div class="sr-empty">'+(query?'No flight found':'Type a flight number or airline')+'</div>';
+    return;
+  }
+  res.innerHTML=matched.map(function(f){
+    const color=getColor(f.airline);
+    const chips=[
+      f.eta?'<span class="sr-chip" style="color:#4dffb4;border-color:rgba(77,255,180,0.3)">▼ '+f.eta+'</span>':'',
+      f.sealing?'<span class="sr-chip" style="color:#ffaa44;border-color:rgba(255,170,68,0.3)">✂ '+f.sealing+'</span>':'',
+      f.truck?'<span class="sr-chip" style="color:#ff6b6b;border-color:rgba(255,107,107,0.3)">🚚 '+f.truck+'</span>':'',
+      f.etd?'<span class="sr-chip" style="color:#66aaff;border-color:rgba(102,170,255,0.3)">▲ '+f.etd+'</span>':'',
+    ].filter(Boolean).join('');
+    const days=(f.days||[]).join(' ');
+    return '<div class="sr-item" onclick="pickFlight(\''+f.id+'\')">'+'<div class="sr-dot" style="background:'+color+'"></div>'+'<div style="flex:1;min-width:0;"><div style="display:flex;align-items:center;gap:8px;"><span class="sr-flight" style="color:'+color+'">'+f.flight+'</span><span class="sr-airline">'+f.airline+'</span></div><div class="sr-times">'+chips+'</div><div style="font-family:var(--font-mono);font-size:8px;color:var(--text-muted);margin-top:3px;">'+days+'</div></div></div>';
+  }).join('');
+}
+function pickFlight(id){
+  closeSearch();
+  openFlightSheet(id);
+}
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){
+    if(document.getElementById('search-overlay').classList.contains('show'))closeSearch();
+    else if(document.getElementById('flight-sheet').classList.contains('show'))closeFlightSheet();
+  }
+});
+
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800);}
 function togglePanel(){const p=document.getElementById('right-panel'),icon=document.getElementById('panel-toggle-icon');p.classList.toggle('collapsed');const collapsed=p.classList.contains('collapsed');if(icon)icon.textContent=collapsed?'▶':'◀';}
 
@@ -1555,6 +1622,7 @@ const _hv=document.getElementById('ht-v');if(_hv)_hv.textContent=ds.blockH;
 const _sa=document.getElementById('show-al');if(_sa)_sa.checked=ds.showAl;
 updateDateDisplay();
 buildTimeline();updateClock();
+fetchGSheet();
 
 setInterval(updateClock,1000);
 setInterval(()=>{
