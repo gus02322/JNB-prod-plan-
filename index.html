@@ -496,6 +496,13 @@
 .sr-chip{font-family:var(--font-mono);font-size:9px;padding:2px 6px;border-radius:3px;border:1px solid;}
 .sr-empty{padding:20px 16px;font-family:var(--font-mono);font-size:12px;color:var(--text-dim);text-align:center;}
 @media(max-width:768px){#search-overlay{padding-top:56px;}#search-btn{width:40px;min-width:40px;font-size:16px;}}
+
+/* PRODUCTION PLAN */
+#prod-header{display:flex;align-items:center;gap:10px;padding:6px 16px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--surface);flex-wrap:wrap;}
+.prod-day-btn{font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 10px;border-radius:3px;border:1px solid var(--border);background:var(--surface);color:var(--text-dim);cursor:pointer;user-select:none;transition:all 0.15s;}
+.prod-day-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,0.08);}
+.prod-tsu-chip{font-family:var(--font-mono);font-size:9px;padding:1px 5px;border-radius:2px;border:1px solid;letter-spacing:0.5px;white-space:nowrap;display:inline-block;}
+@media(max-width:768px){#prod-header{padding:5px 10px;gap:7px;}#production-view{padding-bottom:60px;}}
 </style>
 </head>
 <body>
@@ -728,7 +735,21 @@
 </div>
 
 <!-- PRODUCTION VIEW -->
-<div id="production-view" class="view" style="padding-top:52px;height:100vh;overflow:hidden;">
+<div id="production-view" class="view" style="padding-top:52px;height:100vh;overflow:hidden;flex-direction:column;">
+  <div id="prod-header">
+    <div style="font-family:var(--font-ui);font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--text-dim);white-space:nowrap;flex-shrink:0;">Production Plan</div>
+    <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap;">
+      <span style="display:flex;align-items:center;gap:3px;font-family:var(--font-mono);font-size:9px;color:#4dffb4;"><span style="width:7px;height:7px;border-radius:2px;background:#4dffb4;display:inline-block;flex-shrink:0;"></span>YC</span>
+      <span style="display:flex;align-items:center;gap:3px;font-family:var(--font-mono);font-size:9px;color:#44aaff;"><span style="width:7px;height:7px;border-radius:2px;background:#44aaff;display:inline-block;flex-shrink:0;"></span>PYC</span>
+      <span style="display:flex;align-items:center;gap:3px;font-family:var(--font-mono);font-size:9px;color:#ffaa44;"><span style="width:7px;height:7px;border-radius:2px;background:#ffaa44;display:inline-block;flex-shrink:0;"></span>BC</span>
+      <span style="display:flex;align-items:center;gap:3px;font-family:var(--font-mono);font-size:9px;color:#ffdd44;"><span style="width:7px;height:7px;border-radius:2px;background:#ffdd44;display:inline-block;flex-shrink:0;"></span>FC</span>
+      <span style="display:flex;align-items:center;gap:3px;font-family:var(--font-mono);font-size:9px;color:#00d4ff;"><span style="width:7px;height:7px;border-radius:2px;background:#00d4ff;display:inline-block;flex-shrink:0;"></span>BOX</span>
+    </div>
+    <div style="margin-left:auto;display:flex;gap:4px;flex-shrink:0;">
+      <div id="prod-btn-d1" onclick="setProdDayFilter('D-1')" class="prod-day-btn active">D-1</div>
+      <div id="prod-btn-d" onclick="setProdDayFilter('D')" class="prod-day-btn active">D</div>
+    </div>
+  </div>
   <div id="prod-tl-main" style="flex:1;overflow-y:auto;overflow-x:hidden;position:relative;">
     <div id="prod-inner-main" style="position:relative;"></div>
   </div>
@@ -1275,44 +1296,46 @@ function loadBgTheme(){
 }
 function setBgBright(v){bgTheme.bright=parseInt(v);['bg-bright','dr-bg-bright','cfg-bg-bright'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=v;});applyBgTheme();}
 
-/* PRODUCTION VIEW — no Done button */
-const PROD_SLOTS=[
-  {si:1,  airline:"Air Cote D'Ivoire", flight:'HF903',  day:'D-1', time:'05:00'},
-  {si:1,  airline:'Asky',              flight:'KP0073', day:'D-1', time:'05:40'},
-  {si:2,  airline:"Air Cote D'Ivoire", flight:'HF903',  day:'D-1', time:'06:55'},
-  {si:2,  airline:'Air Algerie',       flight:'AH5361', day:'D-1', time:'09:55'},
-  {si:3,  airline:'Ethiopian',         flight:'ET848',  day:'D-1', time:'10:20'},
-  {si:2,  airline:'Air Seychelles',    flight:'HM062',  day:'D-1', time:'11:00'},
-  {si:7,  airline:'Etihad',            flight:'EY748',  day:'D-1', time:'11:45'},
-  {si:4,  airline:'Lufthansa',         flight:'LH579',  day:'D-1', time:'11:10'},
-  {si:5,  airline:'Air China',         flight:'CA868',  day:'D-1', time:'12:10'},
-  {si:6,  airline:'Emirates',          flight:'EK768',  day:'D-1', time:'12:05'},
-  {si:6,  airline:'Air Seychelles',    flight:'HM062',  day:'D-1', time:'11:00'},
-  {si:8,  airline:'Cathay',            flight:'CX748',  day:'D-1', time:'12:30'},
-  {si:10, airline:'Air Seychelles',    flight:'HM060',  day:'D-1', time:'14:00'},
-  {si:11, airline:'Air Mauritius',     flight:'MK852',  day:'D-1', time:'14:55'},
-  {si:12, airline:'Uganda',            flight:'UR711',  day:'D-1', time:'15:00'},
-  {si:9,  airline:'Emirates',          flight:'EK762',  day:'D-1', time:'14:35'},
-  {si:13, airline:'Latam',             flight:'LA8059', day:'D-1', time:'15:00'},
-  {si:14, airline:'Uganda',            flight:'UR711',  day:'D-1', time:'19:00'},
-  {si:16, airline:'Emirates',          flight:'EK764',  day:'D',   time:'09:45'},
-  {si:17, airline:'Qantas',            flight:'QF064',  day:'D',   time:'09:55'},
-  {si:19, airline:'British Airways',   flight:'BA056',  day:'D',   time:'10:25'},
-  {si:15, airline:'Air Congo',         flight:'ET83',   day:'D',   time:'10:45'},
-  {si:18, airline:'Lufthansa',         flight:'LH573',  day:'D',   time:'11:00'},
-  {si:20, airline:'Virgin Atlantic',   flight:'VS450',  day:'D',   time:'12:25'},
-  {si:22, airline:'Delta',             flight:'DL201',  day:'D',   time:'12:55'},
-  {si:24, airline:'British Airways',   flight:'BA054',  day:'D',   time:'13:15'},
-  {si:27, airline:'United',            flight:'UA187',  day:'D',   time:'13:30'},
-  {si:21, airline:'Air Algerie',       flight:'AH5361', day:'D',   time:'13:45'},
-  {si:28, airline:'Emirates',          flight:'EK766',  day:'D',   time:'14:00'},
-  {si:23, airline:'Uganda',            flight:'UR713',  day:'D',   time:'14:10'},
-  {si:25, airline:'Qantas PERTH',      flight:'QF066',  day:'D',   time:'14:25'},
-  {si:26, airline:'EgyptAir',          flight:'MS840',  day:'D',   time:'14:25'},
-  {si:29, airline:'Ethiopian',         flight:'ET858',  day:'D',   time:'14:40'},
-  {si:30, airline:'Air Austral',       flight:'UU344',  day:'D',   time:'15:30'},
-  {si:31, airline:'Uganda',            flight:'UR711',  day:'D',   time:'17:15'},
+/* PRODUCTION VIEW */
+const PROD_DATA=[
+  {si:1,  airline:"Air Cote D'Ivoire",hw:'halal',  flight:'HF903',  tsu:{yc:null,   pyc:null,   bc:null,   fc:null},boxTime:'20:00',boxDay:'D-1',days:'0'},
+  {si:1,  airline:'Asky',             hw:'halal',  flight:'KP0073', tsu:{yc:'19:25',pyc:null,   bc:'19:45',fc:null},boxTime:'20:00',boxDay:'D-1',days:'13457'},
+  {si:2,  airline:"Air Cote D'Ivoire",hw:'halal',  flight:'HF903',  tsu:{yc:null,   pyc:null,   bc:'20:10',fc:null},boxTime:'20:30',boxDay:'D-1',days:'0'},
+  {si:2,  airline:'Air Seychelles',   hw:'halal',  flight:'HM062',  tsu:{yc:'01:35',pyc:null,   bc:'02:05',fc:null},boxTime:'02:15',boxDay:'D',  days:'2'},
+  {si:3,  airline:'Ethiopian',        hw:'halal',  flight:'ET848',  tsu:{yc:'01:05',pyc:null,   bc:'01:50',fc:null},boxTime:'02:20',boxDay:'D',  days:'1234567'},
+  {si:4,  airline:'Lufthansa',        hw:'western',flight:'LH579',  tsu:{yc:'00:40',pyc:null,   bc:'01:25',fc:null},boxTime:'02:10',boxDay:'D',  days:'136'},
+  {si:5,  airline:'Air China',        hw:'western',flight:'CA868',  tsu:{yc:'01:40',pyc:'02:17',bc:'02:25',fc:null},boxTime:'03:10',boxDay:'D',  days:'135'},
+  {si:6,  airline:'Emirates',         hw:'halal',  flight:'EK768',  tsu:{yc:'01:50',pyc:'02:05',bc:'02:20',fc:null},boxTime:'03:05',boxDay:'D',  days:'1234567'},
+  {si:7,  airline:'Etihad',           hw:'halal',  flight:'EY748',  tsu:{yc:'02:45',pyc:null,   bc:'03:30',fc:null},boxTime:'03:45',boxDay:'D',  days:'134567'},
+  {si:8,  airline:'Cathay',           hw:'western',flight:'CX748',  tsu:{yc:'02:00',pyc:'02:30',bc:'02:45',fc:null},boxTime:'03:30',boxDay:'D',  days:'1234567'},
+  {si:9,  airline:'Emirates',         hw:'halal',  flight:'EK762',  tsu:{yc:'04:20',pyc:null,   bc:'04:50',fc:null},boxTime:'05:35',boxDay:'D',  days:'0'},
+  {si:10, airline:'Air Seychelles',   hw:'halal',  flight:'HM060',  tsu:{yc:null,   pyc:null,   bc:'06:00',fc:null},boxTime:'06:00',boxDay:'D',  days:'257'},
+  {si:11, airline:'Air Mauritius',    hw:'halal',  flight:'MK852',  tsu:{yc:'05:45',pyc:null,   bc:'06:15',fc:null},boxTime:'06:55',boxDay:'D',  days:'1234567'},
+  {si:13, airline:'Latam',            hw:'western',flight:'LA8059', tsu:{yc:null,   pyc:null,   bc:'07:35',fc:null},boxTime:'07:50',boxDay:'D',  days:'12457'},
+  {si:15, airline:'Air Congo',        hw:'halal',  flight:'ET83',   tsu:{yc:null,   pyc:null,   bc:'11:00',fc:null},boxTime:'11:45',boxDay:'D',  days:'0'},
+  {si:16, airline:'Emirates',         hw:'halal',  flight:'EK764',  tsu:{yc:'10:30',pyc:'10:45',bc:'11:00',fc:null},boxTime:'11:45',boxDay:'D',  days:'1234567'},
+  {si:17, airline:'Qantas',           hw:'western',flight:'QF064',  tsu:{yc:null,   pyc:'10:40',bc:'11:10',fc:null},boxTime:'11:55',boxDay:'D',  days:'1346'},
+  {si:18, airline:'Lufthansa',        hw:'western',flight:'LH573',  tsu:{yc:null,   pyc:'11:00',bc:'11:15',fc:null},boxTime:'12:00',boxDay:'D',  days:'1234567'},
+  {si:19, airline:'British Airways',  hw:'western',flight:'BA056',  tsu:{yc:'10:55',pyc:'11:25',bc:'11:40',fc:null},boxTime:'12:25',boxDay:'D',  days:'1234567'},
+  {si:20, airline:'Virgin Atlantic',  hw:'western',flight:'VS450',  tsu:{yc:'12:10',pyc:'12:25',bc:'12:40',fc:null},boxTime:'13:25',boxDay:'D',  days:'1234567'},
+  {si:21, airline:'Air Algerie',      hw:'halal',  flight:'AH5361', tsu:{yc:'13:30',pyc:'13:45',bc:'14:00',fc:null},boxTime:'14:30',boxDay:'D',  days:'136'},
+  {si:22, airline:'Delta',            hw:'western',flight:'DL201',  tsu:{yc:'13:40',pyc:'13:55',bc:'14:10',fc:null},boxTime:'14:55',boxDay:'D',  days:'1234567'},
+  {si:23, airline:'Uganda',           hw:'halal',  flight:'UR713',  tsu:{yc:null,   pyc:null,   bc:'14:55',fc:null},boxTime:'15:10',boxDay:'D',  days:'24'},
+  {si:24, airline:'British Airways',  hw:'western',flight:'BA054',  tsu:{yc:'13:45',pyc:'14:15',bc:'14:30',fc:null},boxTime:'15:15',boxDay:'D',  days:'1234567'},
+  {si:25, airline:'Qantas PERTH',     hw:'western',flight:'QF066',  tsu:{yc:null,   pyc:'14:30',bc:'14:45',fc:null},boxTime:'15:25',boxDay:'D',  days:'257'},
+  {si:26, airline:'EgyptAir',         hw:'halal',  flight:'MS840',  tsu:{yc:null,   pyc:null,   bc:'14:50',fc:null},boxTime:'15:25',boxDay:'D',  days:'1357'},
+  {si:27, airline:'United',           hw:'western',flight:'UA187',  tsu:{yc:'14:20',pyc:'14:30',bc:'14:45',fc:null},boxTime:'15:30',boxDay:'D',  days:'1234567'},
+  {si:28, airline:'Ethiopian',        hw:'halal',  flight:'ET858',  tsu:{yc:null,   pyc:null,   bc:'15:10',fc:null},boxTime:'15:40',boxDay:'D',  days:'1234567'},
+  {si:29, airline:'Emirates',         hw:'halal',  flight:'EK766',  tsu:{yc:'14:45',pyc:'15:00',bc:'15:15',fc:null},boxTime:'16:00',boxDay:'D',  days:'1234567'},
+  {si:30, airline:'Air Austral',      hw:'halal',  flight:'UU344',  tsu:{yc:'15:25',pyc:null,   bc:'16:00',fc:null},boxTime:'16:15',boxDay:'D',  days:'247'},
 ];
+
+let prodDayFilter={d:true,d1:true};
+function setProdDayFilter(day){
+  if(day==='D'){prodDayFilter.d=!prodDayFilter.d;const btn=document.getElementById('prod-btn-d');if(btn)btn.classList.toggle('active',prodDayFilter.d);}
+  else{prodDayFilter.d1=!prodDayFilter.d1;const btn=document.getElementById('prod-btn-d1');if(btn)btn.classList.toggle('active',prodDayFilter.d1);}
+  buildProductionView();
+}
 
 function buildProductionView(){
   const inner=document.getElementById('prod-inner-main'),scroll=document.getElementById('prod-tl-main');
@@ -1332,31 +1355,37 @@ function buildProductionView(){
     nowWrap.innerHTML=`<span class="now-label">NOW \u2014 ${fmtMins(nm)}</span><span class="now-dot"></span>`;
     inner.appendChild(nowWrap);
   }
+  const CLS=[{k:'yc',c:'#4dffb4',l:'YC'},{k:'pyc',c:'#44aaff',l:'PYC'},{k:'bc',c:'#ffaa44',l:'BC'},{k:'fc',c:'#ffdd44',l:'FC'}];
+  function firstTsu(p){const ts=CLS.map(cl=>p.tsu[cl.k]).filter(Boolean);return ts.length?ts.reduce((m,t)=>t2m(t)<t2m(m)?t:m,ts[0]):null;}
+  function posTime(p){return firstTsu(p)||p.boxTime;}
+  const filtered=PROD_DATA.filter(p=>(p.boxDay==='D'?prodDayFilter.d:prodDayFilter.d1));
+  const sorted=[...filtered].sort((a,b)=>t2m(posTime(a))-t2m(posTime(b)));
   const LANE=58,GAP=4,BW=200,mobile=isMobile();
   const colEnds=[];
   function assignCol(yPx){const endPx=yPx+bh+2;for(let c=0;c<colEnds.length;c++){if(colEnds[c]<=yPx){colEnds[c]=endPx;return c;}}colEnds.push(endPx);return colEnds.length-1;}
-  const sorted=[...PROD_SLOTS].sort((a,b)=>t2m(a.time)-t2m(b.time));
-  const assignments=sorted.map(s=>{const mins=t2m(s.time);if(mins<0)return null;return{s,mins,yPx:mins*pxpm,col:assignCol(mins*pxpm)};});
+  const assignments=sorted.map(p=>{const pt=posTime(p);const mins=t2m(pt);if(mins<0)return null;return{p,mins,pt,yPx:mins*pxpm,col:assignCol(mins*pxpm)};});
   const numCols=colEnds.length||1;
   const AVAIL=(scroll.offsetWidth||window.innerWidth)-LANE-6;
   for(const a of assignments){
     if(!a)continue;
-    const{s,mins,yPx,col}=a;
+    const{p,mins,pt,yPx,col}=a;
     const blockW=mobile?Math.floor((AVAIL-(numCols-1)*GAP)/numCols):BW;
     const blockLeft=LANE+col*(blockW+GAP);
-    const isD=s.day==='D',accentC=isD?'#66aaff':'#ffaa44',borderC=getColor(s.airline);
+    const isD=p.boxDay==='D',airC=getColor(p.airline);
     const isPast=isD&&nm>=0&&mins<nm;
     const b=document.createElement('div');
     b.className=`eblock${isPast?' past':''}`;
-    b.style.cssText=`left:${blockLeft}px;top:${yPx}px;width:${blockW}px;height:${bh}px;border-left:${mobile?4:3}px solid ${borderC};opacity:${!isD?'0.65':'1'};`;
-    const badge=`<span style="font-size:9px;font-weight:700;font-family:var(--font-mono);padding:1px 5px;border-radius:2px;background:${isD?'rgba(102,170,255,0.2)':'rgba(255,170,68,0.2)'};color:${accentC};border:1px solid ${accentC}44;letter-spacing:1px;">${s.day}</span>`;
-    const alPart=ds.showAl?`<div class="eb-airline">${s.airline}</div>`:'';
-    b.innerHTML=`<div class="eb"><div class="eb-time" style="display:flex;align-items:center;gap:5px;">${s.time} ${badge}</div><div class="eb-type" style="color:${accentC};">Box Time</div><div class="eb-flight">${s.flight}</div>${alPart}</div>`;
-    const flMatch=flights.find(x=>x.flight===s.flight);
+    b.style.cssText=`left:${blockLeft}px;top:${yPx}px;width:${blockW}px;height:${bh}px;border-left:${mobile?4:3}px solid ${airC};opacity:${!isD?'0.65':'1'};`;
+    const dayBadge=`<span style="font-size:9px;font-weight:700;font-family:var(--font-mono);padding:1px 5px;border-radius:2px;background:${isD?'rgba(102,170,255,0.2)':'rgba(255,170,68,0.2)'};color:${isD?'#66aaff':'#ffaa44'};border:1px solid ${isD?'rgba(102,170,255,0.25)':'rgba(255,170,68,0.25)'};letter-spacing:1px;">${p.boxDay}</span>`;
+    const tsuChips=CLS.filter(cl=>p.tsu[cl.k]).map(cl=>`<span class="prod-tsu-chip" style="color:${cl.c};border-color:${cl.c}66;background:${cl.c}1a;">${cl.l}:${p.tsu[cl.k]}</span>`).join('');
+    const boxChip=`<span class="prod-tsu-chip" style="color:#00d4ff;border-color:rgba(0,212,255,0.35);background:rgba(0,212,255,0.1);">BOX:${p.boxTime}</span>`;
+    const alPart=ds.showAl?`<div class="eb-airline">${p.airline}</div>`:'';
+    b.innerHTML=`<div class="eb"><div class="eb-time" style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;">${pt} ${dayBadge}</div><div class="eb-flight" style="color:${airC};">${p.flight}</div>${alPart}<div class="eb-acts">${tsuChips}${boxChip}</div></div>`;
+    const flMatch=flights.find(x=>x.flight===p.flight);
     if(flMatch)b.addEventListener('click',()=>openFlightSheet(flMatch.id));
     inner.appendChild(b);
   }
-  inner.style.minWidth='unset'; inner.style.width='100%';
+  inner.style.minWidth='unset';inner.style.width='100%';
   if(nm>=0)setTimeout(()=>{if(scroll)scroll.scrollTop=Math.max(0,nm*pxpm-220);},50);
 }
 
