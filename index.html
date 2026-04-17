@@ -745,13 +745,18 @@
       <span style="display:flex;align-items:center;gap:3px;font-family:var(--font-mono);font-size:9px;color:#ffdd44;"><span style="width:7px;height:7px;border-radius:2px;background:#ffdd44;display:inline-block;flex-shrink:0;"></span>FC</span>
       <span style="display:flex;align-items:center;gap:3px;font-family:var(--font-mono);font-size:9px;color:#00d4ff;"><span style="width:7px;height:7px;border-radius:2px;background:#00d4ff;display:inline-block;flex-shrink:0;"></span>BOX</span>
     </div>
+    <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;">
+      <span style="font-family:var(--font-mono);font-size:9px;color:var(--text-dim);">ZOOM</span>
+      <input type="range" id="prod-zoom-sl" min="1" max="8" value="3" step="0.5" oninput="setProdZoom(this.value)" style="width:70px;accent-color:var(--accent);">
+      <span id="prod-zoom-v" style="font-family:var(--font-mono);font-size:9px;color:var(--text);min-width:22px;">3x</span>
+    </div>
     <div style="margin-left:auto;display:flex;gap:4px;flex-shrink:0;">
       <div id="prod-btn-d1" onclick="setProdDayFilter('D-1')" class="prod-day-btn active">D-1</div>
       <div id="prod-btn-d" onclick="setProdDayFilter('D')" class="prod-day-btn active">D</div>
     </div>
   </div>
-  <div id="prod-tl-main" style="flex:1;overflow-y:auto;overflow-x:hidden;position:relative;">
-    <div id="prod-inner-main" style="position:relative;"></div>
+  <div id="gantt-scroll" style="flex:1;overflow:auto;position:relative;">
+    <div id="gantt-inner" style="position:relative;"></div>
   </div>
 </div>
 
@@ -1330,63 +1335,125 @@ const PROD_DATA=[
   {si:30, airline:'Air Austral',      hw:'halal',  flight:'UU344',  tsu:{yc:'15:25',pyc:null,   bc:'16:00',fc:null},boxTime:'16:15',boxDay:'D',  days:'247'},
 ];
 
+const GANTT_LABEL_W=165;
 let prodDayFilter={d:true,d1:true};
+let prodZoom=3;
 function setProdDayFilter(day){
   if(day==='D'){prodDayFilter.d=!prodDayFilter.d;const btn=document.getElementById('prod-btn-d');if(btn)btn.classList.toggle('active',prodDayFilter.d);}
   else{prodDayFilter.d1=!prodDayFilter.d1;const btn=document.getElementById('prod-btn-d1');if(btn)btn.classList.toggle('active',prodDayFilter.d1);}
   buildProductionView();
 }
+function setProdZoom(v){
+  prodZoom=parseFloat(v);
+  const el=document.getElementById('prod-zoom-v');if(el)el.textContent=v+'x';
+  buildProductionView();
+}
 
 function buildProductionView(){
-  const inner=document.getElementById('prod-inner-main'),scroll=document.getElementById('prod-tl-main');
+  const inner=document.getElementById('gantt-inner');
+  const scroll=document.getElementById('gantt-scroll');
   if(!inner)return;inner.innerHTML='';
-  const pxpm=ds.zoom,bh=ds.blockH,total=24*60*pxpm;
-  inner.style.height=total+'px';inner.style.position='relative';
-  for(let h=0;h<24;h++){
-    const y=h*60*pxpm;
-    const tick=document.createElement('div');tick.className='hour-tick';tick.style.top=y+'px';inner.appendChild(tick);
-    const lbl=document.createElement('div');lbl.className='hour-lbl';lbl.style.top=(y+2)+'px';lbl.textContent=String(h).padStart(2,'0')+':00';inner.appendChild(lbl);
-  }
-  const nm=isToday(viewDate)?nowMins():-1;
-  if(nm>=0){
-    const nowWrap=document.createElement('div');
-    nowWrap.className='now-line-abs';nowWrap.id='prod-now-line';
-    nowWrap.style.cssText=`top:${nm*pxpm}px;position:absolute;left:0;right:0;height:3px;`;
-    nowWrap.innerHTML=`<span class="now-label">NOW \u2014 ${fmtMins(nm)}</span><span class="now-dot"></span>`;
-    inner.appendChild(nowWrap);
-  }
+  const pxpm=prodZoom;
+  const TOTAL_W=24*60*pxpm;
+  const ROW_H=38,BAR_H=20,BAR_TOP=9;
   const CLS=[{k:'yc',c:'#4dffb4',l:'YC'},{k:'pyc',c:'#44aaff',l:'PYC'},{k:'bc',c:'#ffaa44',l:'BC'},{k:'fc',c:'#ffdd44',l:'FC'}];
+  const nm=isToday(viewDate)?nowMins():-1;
   function firstTsu(p){const ts=CLS.map(cl=>p.tsu[cl.k]).filter(Boolean);return ts.length?ts.reduce((m,t)=>t2m(t)<t2m(m)?t:m,ts[0]):null;}
-  function posTime(p){return firstTsu(p)||p.boxTime;}
-  const filtered=PROD_DATA.filter(p=>(p.boxDay==='D'?prodDayFilter.d:prodDayFilter.d1));
-  const sorted=[...filtered].sort((a,b)=>t2m(posTime(a))-t2m(posTime(b)));
-  const LANE=58,GAP=4,BW=200,mobile=isMobile();
-  const colEnds=[];
-  function assignCol(yPx){const endPx=yPx+bh+2;for(let c=0;c<colEnds.length;c++){if(colEnds[c]<=yPx){colEnds[c]=endPx;return c;}}colEnds.push(endPx);return colEnds.length-1;}
-  const assignments=sorted.map(p=>{const pt=posTime(p);const mins=t2m(pt);if(mins<0)return null;return{p,mins,pt,yPx:mins*pxpm,col:assignCol(mins*pxpm)};});
-  const numCols=colEnds.length||1;
-  const AVAIL=(scroll.offsetWidth||window.innerWidth)-LANE-6;
-  for(const a of assignments){
-    if(!a)continue;
-    const{p,mins,pt,yPx,col}=a;
-    const blockW=mobile?Math.floor((AVAIL-(numCols-1)*GAP)/numCols):BW;
-    const blockLeft=LANE+col*(blockW+GAP);
-    const isD=p.boxDay==='D',airC=getColor(p.airline);
-    const isPast=isD&&nm>=0&&mins<nm;
-    const b=document.createElement('div');
-    b.className=`eblock${isPast?' past':''}`;
-    b.style.cssText=`left:${blockLeft}px;top:${yPx}px;width:${blockW}px;height:${bh}px;border-left:${mobile?4:3}px solid ${airC};opacity:${!isD?'0.65':'1'};`;
-    const dayBadge=`<span style="font-size:9px;font-weight:700;font-family:var(--font-mono);padding:1px 5px;border-radius:2px;background:${isD?'rgba(102,170,255,0.2)':'rgba(255,170,68,0.2)'};color:${isD?'#66aaff':'#ffaa44'};border:1px solid ${isD?'rgba(102,170,255,0.25)':'rgba(255,170,68,0.25)'};letter-spacing:1px;">${p.boxDay}</span>`;
-    const tsuChips=CLS.filter(cl=>p.tsu[cl.k]).map(cl=>`<span class="prod-tsu-chip" style="color:${cl.c};border-color:${cl.c}66;background:${cl.c}1a;">${cl.l}:${p.tsu[cl.k]}</span>`).join('');
-    const boxChip=`<span class="prod-tsu-chip" style="color:#00d4ff;border-color:rgba(0,212,255,0.35);background:rgba(0,212,255,0.1);">BOX:${p.boxTime}</span>`;
-    const alPart=ds.showAl?`<div class="eb-airline">${p.airline}</div>`:'';
-    b.innerHTML=`<div class="eb"><div class="eb-time" style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;">${pt} ${dayBadge}</div><div class="eb-flight" style="color:${airC};">${p.flight}</div>${alPart}<div class="eb-acts">${tsuChips}${boxChip}</div></div>`;
-    const flMatch=flights.find(x=>x.flight===p.flight);
-    if(flMatch)b.addEventListener('click',()=>openFlightSheet(flMatch.id));
-    inner.appendChild(b);
+
+  /* ── Header row (sticky top) ── */
+  const hdr=document.createElement('div');
+  hdr.style.cssText=`display:flex;position:sticky;top:0;z-index:20;background:var(--surface);border-bottom:2px solid var(--border);height:26px;min-width:${GANTT_LABEL_W+TOTAL_W}px;`;
+  const hdrLbl=document.createElement('div');
+  hdrLbl.style.cssText=`width:${GANTT_LABEL_W}px;min-width:${GANTT_LABEL_W}px;flex-shrink:0;border-right:1px solid var(--border);padding:0 10px;font-family:var(--font-ui);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);display:flex;align-items:center;`;
+  hdrLbl.textContent='Flight';
+  hdr.appendChild(hdrLbl);
+  const hdrTime=document.createElement('div');
+  hdrTime.style.cssText=`position:relative;width:${TOTAL_W}px;overflow:visible;`;
+  for(let h=0;h<24;h++){
+    const mk=document.createElement('div');
+    mk.style.cssText=`position:absolute;left:${h*60*pxpm}px;top:0;height:100%;border-left:1px solid var(--border);padding-left:3px;display:flex;align-items:center;font-family:var(--font-mono);font-size:9px;color:var(--text-muted);white-space:nowrap;`;
+    mk.textContent=String(h).padStart(2,'0')+':00';
+    hdrTime.appendChild(mk);
   }
-  inner.style.minWidth='unset';inner.style.width='100%';
-  if(nm>=0)setTimeout(()=>{if(scroll)scroll.scrollTop=Math.max(0,nm*pxpm-220);},50);
+  hdr.appendChild(hdrTime);
+  inner.appendChild(hdr);
+
+  /* ── Flight rows ── */
+  const filtered=PROD_DATA.filter(p=>p.boxDay==='D'?prodDayFilter.d:prodDayFilter.d1);
+  const sorted=[...filtered].sort((a,b)=>t2m((firstTsu(a)||a.boxTime))-t2m((firstTsu(b)||b.boxTime)));
+  for(const p of sorted){
+    const ft=firstTsu(p);
+    const startM=ft?t2m(ft):t2m(p.boxTime);
+    const endM=t2m(p.boxTime);
+    const barW=Math.max((endM-startM)*pxpm,6);
+    const airC=getColor(p.airline);
+    const isD=p.boxDay==='D';
+    const isPast=isD&&nm>=0&&endM<nm;
+    const row=document.createElement('div');
+    row.style.cssText=`display:flex;height:${ROW_H}px;border-bottom:1px solid var(--border);min-width:${GANTT_LABEL_W+TOTAL_W}px;${isPast?'opacity:0.35;':!isD?'opacity:0.65;':''}`;
+    /* label (sticky left) */
+    const lbl=document.createElement('div');
+    lbl.style.cssText=`width:${GANTT_LABEL_W}px;min-width:${GANTT_LABEL_W}px;position:sticky;left:0;background:var(--bg);z-index:5;border-right:1px solid var(--border);display:flex;flex-direction:column;justify-content:center;padding:0 8px;gap:1px;flex-shrink:0;`;
+    const hwBadge=p.hw==='halal'
+      ?`<span style="font-size:7px;padding:1px 3px;border-radius:2px;background:rgba(255,221,102,0.15);color:#ffdd66;border:1px solid rgba(255,221,102,0.3);font-weight:700;">H</span>`
+      :`<span style="font-size:7px;padding:1px 3px;border-radius:2px;background:rgba(200,170,255,0.15);color:#c8aaff;border:1px solid rgba(200,170,255,0.3);font-weight:700;">W</span>`;
+    lbl.innerHTML=`<div style="display:flex;align-items:center;gap:4px;"><span style="font-family:var(--font-mono);font-size:12px;font-weight:700;color:${airC};">${p.flight}</span>${hwBadge}</div><div style="font-size:9px;color:var(--text-dim);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${p.airline}</div>`;
+    /* bar area */
+    const barArea=document.createElement('div');
+    barArea.style.cssText=`position:relative;width:${TOTAL_W}px;overflow:visible;`;
+    for(let h=0;h<24;h++){
+      const gl=document.createElement('div');
+      gl.style.cssText=`position:absolute;left:${h*60*pxpm}px;top:0;width:1px;height:100%;background:var(--border);opacity:0.4;pointer-events:none;`;
+      barArea.appendChild(gl);
+    }
+    /* production bar */
+    const bar=document.createElement('div');
+    bar.style.cssText=`position:absolute;left:${startM*pxpm}px;top:${BAR_TOP}px;width:${barW}px;height:${BAR_H}px;background:${airC}22;border:1px solid ${airC}55;border-radius:3px;overflow:hidden;cursor:pointer;transition:filter 0.15s;`;
+    bar.onmouseenter=()=>{bar.style.filter='brightness(1.35)';};
+    bar.onmouseleave=()=>{bar.style.filter='';};
+    /* TSU class ticks */
+    for(const cl of CLS){
+      if(!p.tsu[cl.k])continue;
+      const tickX=(t2m(p.tsu[cl.k])-startM)*pxpm;
+      const tick=document.createElement('div');
+      tick.style.cssText=`position:absolute;left:${tickX}px;top:0;width:3px;height:100%;background:${cl.c};opacity:0.85;`;
+      /* label above tick */
+      const tlbl=document.createElement('div');
+      tlbl.style.cssText=`position:absolute;left:${tickX+4}px;top:1px;font-family:var(--font-mono);font-size:8px;color:${cl.c};white-space:nowrap;pointer-events:none;font-weight:700;`;
+      tlbl.textContent=cl.l;
+      bar.appendChild(tick);
+      bar.appendChild(tlbl);
+    }
+    /* BOX marker (right edge) */
+    const boxMk=document.createElement('div');
+    boxMk.style.cssText=`position:absolute;right:0;top:0;width:3px;height:100%;background:#00d4ff;`;
+    bar.appendChild(boxMk);
+    /* flight text */
+    const ftxt=document.createElement('div');
+    ftxt.style.cssText=`position:absolute;left:5px;top:50%;transform:translateY(-50%);font-family:var(--font-mono);font-size:10px;font-weight:700;color:${airC};white-space:nowrap;z-index:2;pointer-events:none;`;
+    ftxt.textContent=p.flight;
+    bar.appendChild(ftxt);
+    bar.addEventListener('click',()=>{const f=flights.find(x=>x.flight===p.flight);if(f)openFlightSheet(f.id);});
+    barArea.appendChild(bar);
+    row.appendChild(lbl);row.appendChild(barArea);
+    inner.appendChild(row);
+  }
+
+  /* ── Vertical NOW line ── */
+  if(nm>=0){
+    const totalH=sorted.length*ROW_H+26;
+    const nl=document.createElement('div');
+    nl.id='prod-now-line';
+    nl.style.cssText=`position:absolute;left:${GANTT_LABEL_W+nm*pxpm}px;top:26px;width:2px;height:${totalH}px;background:var(--now-line);z-index:15;pointer-events:none;box-shadow:0 0 8px var(--now-line);`;
+    const nlbl=document.createElement('div');
+    nlbl.className='now-label';
+    nlbl.style.cssText=`position:absolute;top:4px;left:4px;background:var(--now-line);color:#1a1200;font-family:var(--font-mono);font-size:9px;font-weight:700;padding:1px 5px;border-radius:2px;white-space:nowrap;`;
+    nlbl.textContent='NOW \u2014 '+fmtMins(nm);
+    nl.appendChild(nlbl);
+    inner.appendChild(nl);
+    setTimeout(()=>{if(scroll)scroll.scrollLeft=Math.max(0,GANTT_LABEL_W+nm*pxpm-(scroll.clientWidth||window.innerWidth)/2);},60);
+  }
+  inner.style.minWidth=(GANTT_LABEL_W+TOTAL_W)+'px';
 }
 
 /* WEEK VIEW */
@@ -1657,20 +1724,20 @@ setInterval(updateClock,1000);
 setInterval(()=>{
   if(isToday(viewDate))updateNowLine();
   const e=todayEvents();updateStatus(e);updateProg(e);checkAlerts();
-  const nl=document.getElementById('prod-now-line');if(nl&&isToday(viewDate)){nl.style.top=(nowMins()*ds.zoom)+'px';const lbl=nl.querySelector('.now-label');if(lbl)lbl.textContent='NOW \u2014 '+fmtMins(nowMins());}
+  const nl=document.getElementById('prod-now-line');if(nl&&isToday(viewDate)){nl.style.left=(GANTT_LABEL_W+nowMins()*prodZoom)+'px';const lbl=nl.querySelector('.now-label');if(lbl)lbl.textContent='NOW \u2014 '+fmtMins(nowMins());}
   applyNightMode();
 },30000);
 
 setInterval(()=>{
   if(!isToday(viewDate))return;
   updateNowLine();
-  const nl=document.getElementById('prod-now-line');if(nl){nl.style.top=(nowMins()*ds.zoom)+'px';const lbl=nl.querySelector('.now-label');if(lbl)lbl.textContent='NOW \u2014 '+fmtMins(nowMins());}
+  const nl=document.getElementById('prod-now-line');if(nl){nl.style.left=(GANTT_LABEL_W+nowMins()*prodZoom)+'px';const lbl=nl.querySelector('.now-label');if(lbl)lbl.textContent='NOW \u2014 '+fmtMins(nowMins());}
   const followCb=document.getElementById('follow-now');
   if(followCb&&followCb.checked&&!isMobile()){
     const tv=document.getElementById('timeline-view');
     if(tv&&tv.classList.contains('active')){const s=document.getElementById('tl-scroll');if(s)s.scrollTop=Math.max(0,nowMins()*ds.zoom-220);}
     const pv=document.getElementById('production-view');
-    if(pv&&pv.classList.contains('active')){const s=document.getElementById('prod-tl-main');if(s)s.scrollTop=Math.max(0,nowMins()*ds.zoom-220);}
+    if(pv&&pv.classList.contains('active')){const s=document.getElementById('gantt-scroll');if(s)s.scrollLeft=Math.max(0,GANTT_LABEL_W+nowMins()*prodZoom-(s.clientWidth||window.innerWidth)/2);}
   }
 },5000);
 
