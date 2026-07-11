@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  @apply font-body text-slate-700;
+  background: radial-gradient(circle at 20% 0%, #eafcff 0%, #fdf6ec 45%, #fef1e6 100%);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Empêche le double-tap zoom sur les boutons du "jeu" mobile */
+button {
+  touch-action: manipulation;
+}
