@@ -1,5 +1,8 @@
 import { useState } from 'react'
 import { NIVEAU_META } from '../utils/menu'
+import { scoreMeal } from '../utils/score'
+import Macros from './Macros'
+import ScoreBadge from './ScoreBadge'
 
 // Palette par niveau de déblocage (verrouillé / à un pas / prêt).
 const TINTS = {
@@ -27,6 +30,7 @@ export default function RecipeCard({ recette }) {
   const total = recette.ingredients.length
   const present = total - recette.manquants
   const locked = recette.niveau === 'ambitieuse'
+  const score = scoreMeal(recette)
 
   return (
     <div
@@ -64,6 +68,12 @@ export default function RecipeCard({ recette }) {
           className={`h-full rounded-full ${tint.bar}`}
           style={{ width: `${total ? (present / total) * 100 : 0}%` }}
         />
+      </div>
+
+      {/* Nutrition + score d'équilibre du repas */}
+      <div className="flex flex-wrap items-center gap-2 px-3 pt-2.5">
+        <ScoreBadge score={score} size="sm" />
+        <Macros recette={recette} />
       </div>
 
       {open && (

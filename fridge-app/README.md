@@ -1,7 +1,7 @@
-# Frigo virtuel 🧊 — App complète (3 / 3)
+# Frigo virtuel 🧊 — App complète (4 / 4)
 
-Un frigo virtuel gamifié pour cuisiner.
-**Étape 1 : l'inventaire. Étape 2 : le menu par IA. Étape 3 : planning & cuisine.**
+Un frigo virtuel gamifié pour cuisiner. Inventaire → menu par IA →
+planning & cuisine → **nutrition & score**.
 React + Vite + Tailwind, état React + `localStorage`, pas de backend applicatif.
 
 ## Lancer
@@ -71,7 +71,29 @@ Fichiers clés : `src/api/anthropic.js` (appel + parse sécurisé),
 Fichiers clés étape 3 : `src/utils/planning.js` (semaine, mise à l'échelle,
 consommation), `src/components/WeekView.jsx`.
 
-## Modèle de données (réutilisé sur les 3 étapes)
+## Ce que contient l'étape 4 — nutrition & score
+
+- **Profil utilisateur** (onglet Profil) `{ sexe, age, poids, taille, activite }`
+  avec `activite = "sedentaire" | "actif" | "sportif"`. Besoin calorique
+  quotidien calculé par **Mifflin-St Jeor** et **stocké** dans le profil.
+- **Valeur nutritionnelle des recettes** : l'IA estime aussi
+  `{ calories, proteines, lipides, glucides }` par portion (ajoutés au format
+  recette, réponse toujours JSON strict). Affichés sur chaque recette.
+- **Couverture** : sur le planning, chaque repas indique
+  « ce repas couvre ~X% de ton besoin » (+ total par journée). Indicatif.
+- **Système de points ludique et de RÉCOMPENSE** : note l'**équilibre** et la
+  **variété** d'un repas / d'une journée / du frigo (jamais les aliments un
+  par un). Un repas légumes + protéines + bons lipides marque haut ; un frigo
+  mono-catégorie marque peu. Aucun message culpabilisant. Feedback de jeu
+  (« +N » qui monte, pop du badge) quand le score augmente.
+- **Mention discrète** : « estimations ludiques, pas un conseil médical ni un
+  régime ».
+
+Fichiers clés étape 4 : `src/utils/nutrition.js` (Mifflin-St Jeor, couverture),
+`src/utils/score.js` (équilibre/variété, récompense),
+`src/components/{ProfileView,ScoreBadge,Macros}.jsx`.
+
+## Modèle de données (réutilisé sur les 4 étapes)
 
 ```
 Item : { id, nom, categorie, zone, type, quantite, unite, peremption?, present? }

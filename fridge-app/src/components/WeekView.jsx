@@ -7,8 +7,12 @@ import {
   scaleRecette,
 } from '../utils/planning'
 import { NIVEAU_META } from '../utils/menu'
+import { besoinCalorique, couverture } from '../utils/nutrition'
+import { scoreDay } from '../utils/score'
 import { playCollect } from '../utils/sound'
 import CollectBurst from './CollectBurst'
+import Macros from './Macros'
+import ScoreBadge from './ScoreBadge'
 
 const NIVEAU_DOT = {
   cuisinable: 'bg-emerald-400',
@@ -21,6 +25,8 @@ const NIVEAU_DOT = {
 export default function WeekView({ onCook, muted }) {
   const [week, setWeek] = useLocalStorage('frigo.planning.v1', initWeek())
   const [menu] = useLocalStorage('frigo.menu.v1', [])
+  const [profil] = useLocalStorage('frigo.profil.v1', null)
+  const besoin = profil?.besoin ?? besoinCalorique(profil)
   const [picker, setPicker] = useState(null) // { di, mi }
   const [flash, setFlash] = useState(null) // { di, mi, count }
 
@@ -66,17 +72,31 @@ export default function WeekView({ onCook, muted }) {
         </div>
       </div>
 
-      {week.map((day, di) => (
+      {week.map((day, di) => {
+        const recettesJour = day.repas.map((m) => m.recette).filter(Boolean)
+        const dayScore = scoreDay(recettesJour)
+        const dayCouv =
+          besoin &&
+          recettesJour.reduce((s, r) => s + (couverture(r.calories, besoin) || 0), 0)
+        return (
         <div
           key={day.date}
           className="rounded-2xl border-2 border-white bg-white/70 p-3 shadow-tile"
         >
-          <div className="mb-2 flex items-baseline gap-2 px-1">
+          <div className="mb-2 flex flex-wrap items-center gap-2 px-1">
             <span className="font-display text-base font-800 text-slate-700">
               {day.jour}
             </span>
             <span className="font-body text-xs font-700 text-slate-400">
               {formatShort(day.date)}
+            </span>
+            <span className="ml-auto flex items-center gap-2">
+              {dayCouv ? (
+                <span className="rounded-full bg-orange-50 px-2 py-0.5 font-display text-[11px] font-800 text-orange-500">
+                  ≈{dayCouv}% du besoin
+                </span>
+              ) : null}
+              {dayScore && <ScoreBadge score={dayScore} size="sm" />}
             </span>
           </div>
 
@@ -166,6 +186,23 @@ export default function WeekView({ onCook, muted }) {
                         ))}
                       </div>
 
+                      {/* Nutrition + couverture du besoin (par portion) */}
+                      <Macros recette={scaled} />
+                      {scaled.calories != null &&
+                        (besoin ? (
+                          <p className="text-[11px] font-700 text-slate-400">
+                            🔥 Ce repas couvre ~
+                            <span className="text-orange-500">
+                              {couverture(scaled.calories, besoin)}%
+                            </span>{' '}
+                            de ton besoin
+                          </p>
+                        ) : (
+                          <p className="text-[11px] font-700 text-slate-300">
+                            Renseigne ton profil pour la couverture
+                          </p>
+                        ))}
+
                       <div className="flex items-center gap-1.5">
                         {meal.cuisine ? (
                           <span className="flex-1 rounded-lg bg-emerald-50 py-1.5 text-center font-display text-xs font-800 text-emerald-500">
@@ -201,7 +238,8 @@ export default function WeekView({ onCook, muted }) {
             })}
           </div>
         </div>
-      ))}
+        )
+      })}
 
       {picker && (
         <AssignModal menu={menu} onPick={assigner} onClose={() => setPicker(null)} />

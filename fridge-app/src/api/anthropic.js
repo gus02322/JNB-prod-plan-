@@ -23,6 +23,7 @@ RÈGLES STRICTES :
   - "presque"    : exactement 1 ingrédient manquant.
   - "ambitieuse" : 2 ingrédients manquants ou plus.
 - Unités ludiques uniquement : "pièce", "portion", "paquet", ou un niveau "peu"/"moyen"/"beaucoup". Jamais de grammes précis.
+- Estime aussi la valeur nutritionnelle approximative PAR PORTION : calories (kcal), proteines (g), lipides (g), glucides (g). Valeurs entières, réalistes.
 - Propose 6 à 8 recettes variées, avec un mélange des trois niveaux (au moins 1 ou 2 "cuisinable").
 
 FORMAT EXACT (réponds avec cet objet et rien d'autre) :
@@ -36,7 +37,11 @@ FORMAT EXACT (réponds avec cet objet et rien d'autre) :
       ],
       "etapes": ["string", "string"],
       "temps_min": 20,
-      "portions_base": 2
+      "portions_base": 2,
+      "calories": 450,
+      "proteines": 30,
+      "lipides": 15,
+      "glucides": 40
     }
   ]
 }`

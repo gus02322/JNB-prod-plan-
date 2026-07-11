@@ -4,6 +4,7 @@ import { normNom } from './utils/planning'
 import InventoryView from './components/InventoryView'
 import MenuView from './components/MenuView'
 import WeekView from './components/WeekView'
+import ProfileView from './components/ProfileView'
 
 const STORAGE_KEY = 'frigo.items.v1'
 
@@ -11,6 +12,7 @@ const TABS = [
   { id: 'frigo', label: 'Frigo', emoji: '🧊' },
   { id: 'cuisine', label: 'Cuisine', emoji: '🍳' },
   { id: 'semaine', label: 'Semaine', emoji: '📅' },
+  { id: 'profil', label: 'Profil', emoji: '👤' },
 ]
 
 export default function App() {
@@ -117,7 +119,7 @@ export default function App() {
               Mon Frigo
             </h1>
             <p className="text-xs font-700 uppercase tracking-wide text-slate-400">
-              Frigo · cuisine · semaine
+Frigo · cuisine · semaine · nutrition
             </p>
           </div>
         </div>
@@ -167,6 +169,12 @@ export default function App() {
       )}
       {view === 'cuisine' && <MenuView items={items} muted={muted} />}
       {view === 'semaine' && <WeekView onCook={cookRecette} muted={muted} />}
+      {view === 'profil' && <ProfileView />}
+
+      {/* Mention discrète */}
+      <p className="mt-8 text-center text-[10px] font-600 text-slate-300">
+        Estimations ludiques, pas un conseil médical ni un régime.
+      </p>
     </div>
   )
 }

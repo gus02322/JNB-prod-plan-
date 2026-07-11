@@ -1,7 +1,9 @@
 import { useMemo, useState } from 'react'
 import { ZONES } from '../data/catalog'
+import { scoreFridge } from '../utils/score'
 import ZoneColumn from './ZoneColumn'
 import AddItemFlow from './AddItemFlow'
+import ScoreBadge from './ScoreBadge'
 
 // Vue inventaire (étape 1) : les 3 zones + l'ajout façon petit jeu.
 export default function InventoryView({ items, actions, collect, muted }) {
@@ -13,8 +15,20 @@ export default function InventoryView({ items, actions, collect, muted }) {
     return map
   }, [items])
 
+  const score = useMemo(() => scoreFridge(items), [items])
+
   return (
     <>
+      {/* Score d'équilibre du frigo (récompense la variété) */}
+      <div className="mb-3 flex items-center gap-2 rounded-2xl border-2 border-white bg-white/70 p-2.5 shadow-tile">
+        <span className="font-display text-xs font-800 uppercase tracking-wide text-slate-400">
+          Équilibre du frigo
+        </span>
+        <span className="ml-auto">
+          <ScoreBadge score={score} size="sm" />
+        </span>
+      </div>
+
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         {ZONES.map((zone) => (
           <ZoneColumn

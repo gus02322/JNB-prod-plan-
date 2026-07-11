@@ -33,8 +33,15 @@ export function normalizeRecette(r, index) {
     etapes: (Array.isArray(r?.etapes) ? r.etapes : []).map(String).filter(Boolean),
     temps_min: Number.isFinite(+r?.temps_min) ? +r.temps_min : null,
     portions_base: Number.isFinite(+r?.portions_base) ? +r.portions_base : null,
+    // Nutrition estimée par portion (étape 4). Null si absent.
+    calories: num(r?.calories),
+    proteines: num(r?.proteines),
+    lipides: num(r?.lipides),
+    glucides: num(r?.glucides),
   }
 }
+
+const num = (v) => (Number.isFinite(+v) && v != null && v !== '' ? Math.round(+v) : null)
 
 // Recettes triées : cuisinable en haut, puis presque, puis ambitieuse.
 export function normalizeMenu(recettesBrutes) {
