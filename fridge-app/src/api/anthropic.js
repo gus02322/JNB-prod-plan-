@@ -66,8 +66,22 @@ function safeParseJson(text) {
   return JSON.parse(t.slice(start, end + 1))
 }
 
+// Contraintes de génération → instructions supplémentaires pour l'IA.
+function contraintesText({ tempsMax, express }) {
+  const c = []
+  if (express) {
+    c.push(
+      'Mode EXPRESS : propose UNIQUEMENT des recettes de niveau "cuisinable" (0 ingrédient manquant) avec temps_min <= 20 minutes.',
+    )
+  } else if (tempsMax) {
+    c.push(`Chaque recette doit avoir temps_min <= ${tempsMax} minutes.`)
+  }
+  return c.length ? `\n\nContraintes supplémentaires :\n- ${c.join('\n- ')}` : ''
+}
+
 // Appelle l'IA et renvoie le tableau brut de recettes (non normalisé).
-export async function genererMenu(items) {
+// options : { tempsMax?:number, express?:boolean }
+export async function genererMenu(items, options = {}) {
   const inventaire = toPayload(items)
   if (inventaire.length === 0) {
     throw new Error('Frigo vide — ajoute des ingrédients avant de cuisiner !')
@@ -83,7 +97,7 @@ export async function genererMenu(items) {
       messages: [
         {
           role: 'user',
-          content: `Voici mon inventaire :\n${JSON.stringify(inventaire)}\n\nGénère le menu en JSON.`,
+          content: `Voici mon inventaire :\n${JSON.stringify(inventaire)}${contraintesText(options)}\n\nGénère le menu en JSON.`,
         },
       ],
     }),

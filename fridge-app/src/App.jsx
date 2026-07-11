@@ -1,13 +1,16 @@
 import { useMemo, useState } from 'react'
 import { useLocalStorage } from './hooks/useLocalStorage'
+import { normNom } from './utils/planning'
 import InventoryView from './components/InventoryView'
 import MenuView from './components/MenuView'
+import WeekView from './components/WeekView'
 
 const STORAGE_KEY = 'frigo.items.v1'
 
 const TABS = [
   { id: 'frigo', label: 'Frigo', emoji: '🧊' },
   { id: 'cuisine', label: 'Cuisine', emoji: '🍳' },
+  { id: 'semaine', label: 'Semaine', emoji: '📅' },
 ]
 
 export default function App() {
@@ -75,6 +78,34 @@ export default function App() {
     remove: (id) => setItems((prev) => prev.filter((x) => x.id !== id)),
   }
 
+  // "J'ai cuisiné" : décrémente du frigo les ingrédients TRACKÉS consommés
+  // par une recette (déjà mise à l'échelle). Les staples ne bougent pas.
+  // Renvoie le nombre d'items du frigo réellement touchés (pour le feedback).
+  function cookRecette(scaled) {
+    const besoins = scaled.ingredients.filter((i) => i.present)
+    const touched = items.filter(
+      (it) =>
+        it.type === 'tracke' &&
+        besoins.some((ing) => normNom(ing.nom) === normNom(it.nom)),
+    ).length
+
+    setItems((prev) => {
+      let next = prev
+      for (const ing of besoins) {
+        const key = normNom(ing.nom)
+        next = next.flatMap((it) => {
+          if (it.type !== 'tracke' || normNom(it.nom) !== key) return [it]
+          const conso = it.unite === 'niveau' ? 1 : ing.quantite ?? 1
+          const q = it.quantite - conso
+          return q > 0 ? [{ ...it, quantite: q }] : []
+        })
+      }
+      return next
+    })
+
+    return touched
+  }
+
   return (
     <div className="mx-auto flex min-h-full max-w-6xl flex-col px-4 pb-28 pt-5">
       {/* Bandeau */}
@@ -86,7 +117,7 @@ export default function App() {
               Mon Frigo
             </h1>
             <p className="text-xs font-700 uppercase tracking-wide text-slate-400">
-              Frigo & cuisine · niveau 2
+              Frigo · cuisine · semaine
             </p>
           </div>
         </div>
@@ -126,16 +157,16 @@ export default function App() {
         ))}
       </div>
 
-      {view === 'frigo' ? (
+      {view === 'frigo' && (
         <InventoryView
           items={items}
           actions={actions}
           collect={collect}
           muted={muted}
         />
-      ) : (
-        <MenuView items={items} muted={muted} />
       )}
+      {view === 'cuisine' && <MenuView items={items} muted={muted} />}
+      {view === 'semaine' && <WeekView onCook={cookRecette} muted={muted} />}
     </div>
   )
 }

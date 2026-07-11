@@ -12,16 +12,34 @@ export default function MenuView({ items, muted }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
+  // Paramètres de génération.
+  const [tempsMax, setTempsMax] = useLocalStorage('frigo.tempsMax.v1', 45)
+  const [express, setExpress] = useState(false)
+
   const courses = useMemo(() => buildListeCourses(recettes), [recettes])
   const cuisinables = recettes.filter((r) => r.niveau === 'cuisinable').length
 
-  async function handleGenerer() {
+  async function handleGenerer(opts = {}) {
+    const isExpress = opts.express ?? express
     setLoading(true)
     setError(null)
     try {
-      const brutes = await genererMenu(items)
-      setRecettes(normalizeMenu(brutes))
-      if (!muted) playCollect()
+      const brutes = await genererMenu(items, { tempsMax, express: isExpress })
+      let menu = normalizeMenu(brutes)
+      // Garde-fou : on applique la contrainte même si l'IA la relâche.
+      if (isExpress) {
+        menu = menu.filter(
+          (r) => r.niveau === 'cuisinable' && (r.temps_min == null || r.temps_min <= 20),
+        )
+      } else {
+        menu = menu.filter((r) => r.temps_min == null || r.temps_min <= tempsMax)
+      }
+      if (menu.length === 0) {
+        setError('Aucune recette ne respecte la contrainte de temps. Réessaie ou augmente le temps.')
+      } else if (!muted) {
+        playCollect()
+      }
+      setRecettes(menu)
     } catch (e) {
       setError(e.message || 'Une erreur est survenue')
     } finally {
@@ -43,7 +61,7 @@ export default function MenuView({ items, muted }) {
           </p>
         </div>
         <button
-          onClick={handleGenerer}
+          onClick={() => handleGenerer()}
           disabled={loading}
           className="flex items-center gap-2 rounded-full bg-emerald-400 px-5 py-3 font-display text-base font-800 text-white shadow-chunky transition hover:bg-emerald-500 active:translate-y-0.5 disabled:opacity-60"
         >
@@ -58,6 +76,48 @@ export default function MenuView({ items, muted }) {
               {recettes.length > 0 ? 'Régénérer' : 'Générer le menu'}
             </>
           )}
+        </button>
+      </div>
+
+      {/* Paramètres de génération */}
+      <div className="flex flex-wrap items-center gap-4 rounded-2xl border-2 border-white bg-white/70 p-3 shadow-tile">
+        <div className="flex min-w-[220px] flex-1 items-center gap-3">
+          <span className="text-xl">⏱</span>
+          <div className="flex-1">
+            <div className="flex items-center justify-between font-display text-sm font-800 text-slate-700">
+              <span>Temps de prépa max</span>
+              <span className={express ? 'text-slate-300 line-through' : 'text-emerald-600'}>
+                {tempsMax} min
+              </span>
+            </div>
+            <input
+              type="range"
+              min="10"
+              max="90"
+              step="5"
+              value={tempsMax}
+              disabled={express}
+              onChange={(e) => setTempsMax(Number(e.target.value))}
+              className="mt-1 w-full accent-emerald-400 disabled:opacity-40"
+            />
+          </div>
+        </div>
+
+        <button
+          onClick={() => {
+            const next = !express
+            setExpress(next)
+            handleGenerer({ express: next })
+          }}
+          disabled={loading}
+          className={`flex items-center gap-2 rounded-2xl px-4 py-2.5 font-display text-sm font-800 shadow-chunky transition active:translate-y-0.5 disabled:opacity-60 ${
+            express
+              ? 'bg-amber-400 text-white'
+              : 'bg-white text-slate-600 hover:bg-amber-50'
+          }`}
+        >
+          <span className="text-lg">⚡</span>
+          J'ai 20 min
         </button>
       </div>
 

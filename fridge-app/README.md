@@ -1,7 +1,7 @@
-# Frigo virtuel 🧊 — Étapes 1 & 2 / 3
+# Frigo virtuel 🧊 — App complète (3 / 3)
 
 Un frigo virtuel gamifié pour cuisiner.
-**Étape 1 : l'inventaire. Étape 2 : la génération de menu par IA.**
+**Étape 1 : l'inventaire. Étape 2 : le menu par IA. Étape 3 : planning & cuisine.**
 React + Vite + Tailwind, état React + `localStorage`, pas de backend applicatif.
 
 ## Lancer
@@ -53,7 +53,25 @@ Fichiers clés : `src/api/anthropic.js` (appel + parse sécurisé),
 `src/utils/menu.js` (normalisation, tri, liste de courses),
 `src/components/{MenuView,RecipeCard,ShoppingList}.jsx`.
 
-## Modèle de données (réutilisé aux étapes 2 & 3)
+## Ce que contient l'étape 3
+
+- **Paramètres de génération** envoyés à l'IA en plus de l'inventaire :
+  curseur de **temps de prépa max** (minutes) et **mode express**
+  (« ⚡ J'ai 20 min ») qui force `temps_min <= 20` et niveau `cuisinable`
+  (contrainte appliquée aussi en garde-fou côté client).
+- **Planning hebdo** (onglet Semaine) : 7 jours, 2 repas/jour, avec un
+  nombre de **convives réglable par repas**. Modèle
+  `Jour : { date, jour, repas:[{ type:"dej"|"diner", convives, recette?, cuisine? }] }`.
+- **Calendrier** : chaque repas affiche le plat assigné et ses quantités
+  **mises à l'échelle** selon les convives (`convives / portions_base`).
+- **Boucle « J'ai cuisiné »** : décrémente automatiquement du frigo les
+  ingrédients **trackés** consommés (les **staples** ne bougent pas), avec
+  un petit feedback de jeu (burst + son). Le stock diminue dans l'onglet Frigo.
+
+Fichiers clés étape 3 : `src/utils/planning.js` (semaine, mise à l'échelle,
+consommation), `src/components/WeekView.jsx`.
+
+## Modèle de données (réutilisé sur les 3 étapes)
 
 ```
 Item : { id, nom, categorie, zone, type, quantite, unite, peremption?, present? }
