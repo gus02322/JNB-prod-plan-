@@ -1,22 +1,19 @@
 import { useMemo, useState } from 'react'
-import { ZONES } from './data/catalog'
 import { useLocalStorage } from './hooks/useLocalStorage'
-import ZoneColumn from './components/ZoneColumn'
-import AddItemFlow from './components/AddItemFlow'
+import InventoryView from './components/InventoryView'
+import MenuView from './components/MenuView'
 
 const STORAGE_KEY = 'frigo.items.v1'
+
+const TABS = [
+  { id: 'frigo', label: 'Frigo', emoji: '🧊' },
+  { id: 'cuisine', label: 'Cuisine', emoji: '🍳' },
+]
 
 export default function App() {
   const [items, setItems] = useLocalStorage(STORAGE_KEY, [])
   const [muted, setMuted] = useLocalStorage('frigo.muted.v1', false)
-  const [adding, setAdding] = useState(false)
-
-  // Répartition des items par zone.
-  const byZone = useMemo(() => {
-    const map = { frigo: [], sec: [], epices: [] }
-    items.forEach((it) => map[it.zone]?.push(it))
-    return map
-  }, [items])
+  const [view, setView] = useState('frigo')
 
   // Total "collecté" affiché dans le compteur du bandeau.
   const total = useMemo(
@@ -81,7 +78,7 @@ export default function App() {
   return (
     <div className="mx-auto flex min-h-full max-w-6xl flex-col px-4 pb-28 pt-5">
       {/* Bandeau */}
-      <header className="mb-5 flex flex-wrap items-center gap-3">
+      <header className="mb-4 flex flex-wrap items-center gap-3">
         <div className="flex items-center gap-2">
           <span className="text-3xl">🧊</span>
           <div>
@@ -89,7 +86,7 @@ export default function App() {
               Mon Frigo
             </h1>
             <p className="text-xs font-700 uppercase tracking-wide text-slate-400">
-              Inventaire · niveau 1
+              Frigo & cuisine · niveau 2
             </p>
           </div>
         </div>
@@ -111,33 +108,33 @@ export default function App() {
         </div>
       </header>
 
-      {/* Les 3 zones */}
-      <div className="grid flex-1 grid-cols-1 gap-4 md:grid-cols-3">
-        {ZONES.map((zone) => (
-          <ZoneColumn
-            key={zone.id}
-            zone={zone}
-            items={byZone[zone.id]}
-            actions={actions}
-          />
+      {/* Onglets */}
+      <div className="mb-5 flex gap-2">
+        {TABS.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setView(tab.id)}
+            className={`flex items-center gap-2 rounded-2xl px-4 py-2 font-display text-sm font-800 shadow-chunky transition active:translate-y-0.5 ${
+              view === tab.id
+                ? 'bg-slate-800 text-white'
+                : 'bg-white/80 text-slate-500 hover:bg-white'
+            }`}
+          >
+            <span className="text-base">{tab.emoji}</span>
+            {tab.label}
+          </button>
         ))}
       </div>
 
-      {/* Bouton d'ajout flottant */}
-      <button
-        onClick={() => setAdding(true)}
-        className="fixed bottom-5 left-1/2 z-30 flex -translate-x-1/2 items-center gap-2 rounded-full bg-emerald-400 px-6 py-3.5 font-display text-lg font-800 text-white shadow-lg transition hover:-translate-x-1/2 hover:-translate-y-0.5 hover:bg-emerald-500 active:translate-y-0"
-      >
-        <span className="text-2xl leading-none">＋</span>
-        Ranger des courses
-      </button>
-
-      {adding && (
-        <AddItemFlow
+      {view === 'frigo' ? (
+        <InventoryView
+          items={items}
+          actions={actions}
+          collect={collect}
           muted={muted}
-          onClose={() => setAdding(false)}
-          onCollect={collect}
         />
+      ) : (
+        <MenuView items={items} muted={muted} />
       )}
     </div>
   )

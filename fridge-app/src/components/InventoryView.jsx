@@ -1,0 +1,46 @@
+import { useMemo, useState } from 'react'
+import { ZONES } from '../data/catalog'
+import ZoneColumn from './ZoneColumn'
+import AddItemFlow from './AddItemFlow'
+
+// Vue inventaire (étape 1) : les 3 zones + l'ajout façon petit jeu.
+export default function InventoryView({ items, actions, collect, muted }) {
+  const [adding, setAdding] = useState(false)
+
+  const byZone = useMemo(() => {
+    const map = { frigo: [], sec: [], epices: [] }
+    items.forEach((it) => map[it.zone]?.push(it))
+    return map
+  }, [items])
+
+  return (
+    <>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        {ZONES.map((zone) => (
+          <ZoneColumn
+            key={zone.id}
+            zone={zone}
+            items={byZone[zone.id]}
+            actions={actions}
+          />
+        ))}
+      </div>
+
+      <button
+        onClick={() => setAdding(true)}
+        className="fixed bottom-5 left-1/2 z-30 flex -translate-x-1/2 items-center gap-2 rounded-full bg-emerald-400 px-6 py-3.5 font-display text-lg font-800 text-white shadow-lg transition hover:-translate-x-1/2 hover:-translate-y-0.5 hover:bg-emerald-500 active:translate-y-0"
+      >
+        <span className="text-2xl leading-none">＋</span>
+        Ranger des courses
+      </button>
+
+      {adding && (
+        <AddItemFlow
+          muted={muted}
+          onClose={() => setAdding(false)}
+          onCollect={collect}
+        />
+      )}
+    </>
+  )
+}
